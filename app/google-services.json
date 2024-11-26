@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "18566477413",
+    "project_id": "sat-finder-aa6ef",
+    "storage_bucket": "sat-finder-aa6ef.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18566477413:android:1876a761d85cc157ac388c",
+        "android_client_info": {
+          "package_name": "com.example.satfinder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaUtf95KWItvahIBZhJ5a7vP-VgsaCSEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
