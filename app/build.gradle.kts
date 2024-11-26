@@ -14,6 +14,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -23,6 +28,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY")}\"")
+        }
+        debug {
+            buildConfigField("String", "API_KEY", "\"${project.findProperty("API_KEY")}\"")
         }
     }
     compileOptions {
