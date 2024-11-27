@@ -4,15 +4,47 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
+    android:gravity="center|top"
     android:orientation="vertical"
-    android:gravity="center">
+    tools:context=".LoginActivity">
+
 
     <TextView
-        android:id="@+id/tv_test_login"
+        android:id="@+id/tv_login_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NOTHING"
-        android:textSize="45sp"
-        android:textAlignment="center"/>
+        android:background="@color/primary"
+        android:padding="20dp"
+        android:text=""
+        android:textAlignment="center"
+        android:textSize="48sp" />
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:textSize="24sp"
+        android:hint="Enter your E-mail"
+        android:textColor="@color/secondary"/>
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:textSize="24sp"
+        android:hint="Enter your password"
+        android:textColor="@color/secondary" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        android:textColor="@color/secondary"/>
 </LinearLayout>
