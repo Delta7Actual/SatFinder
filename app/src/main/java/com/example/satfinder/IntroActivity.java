@@ -114,6 +114,7 @@ public class IntroActivity extends AppCompatActivity {
         }
     }
 
+    // TODO upgrade to local storage with SQLite?
     private void saveLocationToSharedPreferences(Location location) {
         SharedPreferences sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
