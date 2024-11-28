@@ -8,43 +8,33 @@
     android:orientation="vertical"
     tools:context=".LoginActivity">
 
-
+    <!-- Header Text -->
     <TextView
         android:id="@+id/tv_login_signup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary"
         android:padding="20dp"
-        android:text=""
+        android:text="SIGN UP"
         android:textAlignment="center"
         android:textSize="48sp" />
 
-    <EditText
-        android:id="@+id/et_email"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        android:textSize="24sp"
-        android:hint="Enter your E-mail"
-        android:textColor="@color/secondary"/>
-
-    <EditText
-        android:id="@+id/et_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:textSize="24sp"
-        android:hint="Enter your password"
-        android:textColor="@color/secondary" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="5dp"
+        tools:layout="@layout/fragment_sign_up" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        android:textColor="@color/secondary"/>
+        android:layout_marginBottom="20dp"
+        android:padding="10dp"
+        android:text="Already have an account?"
+        android:layout_gravity="center"
+        android:textSize="16sp" />
+
 </LinearLayout>
