@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
-
         tvPlaceholder = findViewById(R.id.tv_placeholder);
         tvPlaceholder.setText(mAuth.getCurrentUser().getDisplayName());
 
