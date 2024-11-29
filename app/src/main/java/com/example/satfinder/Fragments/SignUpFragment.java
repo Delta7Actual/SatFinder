@@ -1,4 +1,4 @@
-package com.example.satfinder;
+package com.example.satfinder.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+
+import com.example.satfinder.Activities.LoginActivity;
+import com.example.satfinder.R;
 
 public class SignUpFragment extends Fragment {
 

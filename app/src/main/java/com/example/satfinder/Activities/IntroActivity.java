@@ -1,4 +1,4 @@
-package com.example.satfinder;
+package com.example.satfinder.Activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+import com.example.satfinder.R;
 
 public class IntroActivity extends AppCompatActivity {
 

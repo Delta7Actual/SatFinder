@@ -1,4 +1,4 @@
-package com.example.satfinder;
+package com.example.satfinder.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.satfinder.Fragments.LoginFragment;
+import com.example.satfinder.Fragments.SignUpFragment;
+import com.example.satfinder.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -78,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                 .commit();
     }
 
-    protected void signUpUser(String name, String email, String password) {
+    public void signUpUser(String name, String email, String password) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
                 task -> {
                     if (task.isSuccessful()) {
@@ -106,7 +109,7 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    protected void loginUser(String email, String password) {
+    public void loginUser(String email, String password) {
 
     }
 }
