@@ -17,10 +17,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SatelliteManager {
+
+    private static SatelliteManager instance;
     private final N2YOClientService clientService;
 
-    public SatelliteManager() {
-        clientService = new N2YOClientService();
+    private SatelliteManager() {
+        this.clientService = N2YOClientService.getInstance();
+    }
+
+    public static synchronized SatelliteManager getInstance() {
+        if (instance == null) {
+            instance = new SatelliteManager();
+        }
+        return instance;
     }
 
     // Fetch satellite visual passes
@@ -103,8 +112,8 @@ public class SatelliteManager {
     }
 
     private void handlePositionResponse(SatellitePositionsResponse response) {
-        if (response != null && response.getPosition() != null) {
-            SatellitePosition position = response.getPosition();
+        if (response != null && response.getPositions() != null) {
+            List<SatellitePosition> position = response.getPositions();
             // Process and update UI with position data
         } else {
             handleErrorResponse("No satellite position data available.");

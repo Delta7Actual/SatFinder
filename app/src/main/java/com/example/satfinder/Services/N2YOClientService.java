@@ -9,15 +9,23 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class N2YOClientService {
-    private final IN2YOApiService apiService;
+    private static N2YOClientService instance;
+    private static final IN2YOApiService apiService;
 
-    public N2YOClientService() {
+    static {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.n2yo.com/rest/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         apiService = retrofit.create(IN2YOApiService.class);
+    }
+
+    public static synchronized N2YOClientService getInstance() {
+        if (instance == null) {
+            instance = new N2YOClientService();
+        }
+        return instance;
     }
 
     public void getSatellitePositions(String apiKey,
