@@ -23,7 +23,17 @@ public class UserService {
     }
 
     public void login(String email, String password, UserAuthCallback callback) {
-        // TODO: Delegate to `mAuth.signInWithEmailAndPassword`
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            callback.onFailure("User is already logged in!");
+        }
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onSuccess(mAuth.getCurrentUser());
+            } else {
+                callback.onFailure(task.getException().getMessage());
+            }
+        });
     }
 
     public void signUp(String name, String email, String password, UserAuthCallback callback) {
@@ -34,6 +44,7 @@ public class UserService {
                         .setDisplayName(name)
                         .build();
                 if (userCreated == null) callback.onFailure("User is null!");
+                assert userCreated != null;
                 userCreated.updateProfile(profileUpdates).addOnCompleteListener(profileUpdateTask -> {
                     if (profileUpdateTask.isSuccessful()) {
                         callback.onSuccess(userCreated);

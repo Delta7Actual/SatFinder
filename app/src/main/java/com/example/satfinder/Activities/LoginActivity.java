@@ -17,10 +17,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.satfinder.Fragments.LoginFragment;
 import com.example.satfinder.Fragments.SignUpFragment;
+import com.example.satfinder.Managers.UserManager;
+import com.example.satfinder.Objects.Interfaces.UserAuthCallback;
 import com.example.satfinder.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -82,34 +83,34 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signUpUser(String name, String email, String password) {
-        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this,
-                task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser userCreated = mAuth.getCurrentUser();
+        UserManager manager = UserManager.getInstance();
+        manager.signUpUser(name, email, password, new UserAuthCallback() {
+            @Override
+            public void onSuccess(FirebaseUser user) {
+                Toast.makeText(LoginActivity.this, "User created successfully!", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
 
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
-                                .build();
-
-                        userCreated.updateProfile(profileUpdates).addOnCompleteListener(profileUpdateTask -> {
-                            if (profileUpdateTask.isSuccessful()) {
-                                Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show();
-
-                                // TODO implement local storage save of information in SQLite?
-                                startActivity(new Intent(this, MainActivity.class));
-                                finish();
-                            } else {
-                                Toast.makeText(this, "Failed to update profile name!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                    else {
-                        Toast.makeText(this, "Something went wrong with account creation!", Toast.LENGTH_LONG).show();
-                    }
-                });
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(LoginActivity.this, error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public void loginUser(String email, String password) {
+        UserManager manager = UserManager.getInstance();
+        manager.loginUser(email, password, new UserAuthCallback() {
+            @Override
+            public void onSuccess(FirebaseUser user) {
+                Toast.makeText(LoginActivity.this, "Logged in successfully! Hello" + user.getDisplayName(), Toast.LENGTH_LONG).show();
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            }
 
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(LoginActivity.this, error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

@@ -22,15 +22,11 @@ public class UserManager {
 
     // Login user via UserService
     public void loginUser(String email, String password, UserAuthCallback callback) {
-        // TODO: Delegate to `userService.login`
-        // - Pass the email and password to `userService.login`
-        // - Handle success or failure using the provided callback
+        userService.login(email, password, callback);
     }
 
     // Sign up user via UserService
     public void signUpUser(String name, String email, String password, UserAuthCallback callback) {
-        // TODO: Delegate to `userService.signUp`
-        // - Pass the name, email, and password to `userService.signUp`
-        // - Handle success or failure using the provided callback
+        userService.signUp(name, email, password, callback);
     }
 }
