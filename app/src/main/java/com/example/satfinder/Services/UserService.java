@@ -22,11 +22,17 @@ public class UserService {
         return instance;
     }
 
+    public boolean isLoggedIn() {
+        return mAuth.getCurrentUser() != null;
+    }
+
     public void login(String email, String password, UserAuthCallback callback) {
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            callback.onFailure("User is already logged in!");
+        // Check if already logged in
+        if (isLoggedIn()) {
+            callback.onSuccess(mAuth.getCurrentUser());
+            return;
         }
+
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 callback.onSuccess(mAuth.getCurrentUser());
@@ -36,24 +42,27 @@ public class UserService {
         });
     }
 
+
     public void signUp(String name, String email, String password, UserAuthCallback callback) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
+                if (!isLoggedIn()) {
+                    callback.onFailure("User creation failed");
+                    return;
+                }
+
                 FirebaseUser userCreated = mAuth.getCurrentUser();
                 UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                         .setDisplayName(name)
                         .build();
-                if (userCreated == null) callback.onFailure("User is null!");
-                assert userCreated != null;
+
                 userCreated.updateProfile(profileUpdates).addOnCompleteListener(profileUpdateTask -> {
                     if (profileUpdateTask.isSuccessful()) {
-                        callback.onSuccess(userCreated);
+                        callback.onSuccess(userCreated); // Final callback
                     } else {
                         callback.onFailure(profileUpdateTask.getException().getMessage());
                     }
                 });
-
-                callback.onSuccess(mAuth.getCurrentUser());
             } else {
                 callback.onFailure(task.getException().getMessage());
             }

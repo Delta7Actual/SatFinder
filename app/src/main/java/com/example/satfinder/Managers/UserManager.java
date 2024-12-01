@@ -20,6 +20,11 @@ public class UserManager {
         return instance;
     }
 
+    // Check if a user is logged in
+    public boolean isLoggedIn() {
+        return userService.isLoggedIn();
+    }
+
     // Login user via UserService
     public void loginUser(String email, String password, UserAuthCallback callback) {
         userService.login(email, password, callback);

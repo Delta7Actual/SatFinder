@@ -2,6 +2,8 @@ package com.example.satfinder.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -9,7 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -28,16 +32,14 @@ public class LoginActivity extends AppCompatActivity {
     private FrameLayout flFragmentContainer;
     private Button btnSwitch;
     private TextView tvLoginSignup;
+    private Toolbar toolbar;
     private boolean isLogin = true;
-    private FirebaseAuth mAuth;
 
     private void setupUI()
     {
         flFragmentContainer = findViewById(R.id.fragment_container);
         btnSwitch = findViewById(R.id.btn_switch);
         tvLoginSignup = findViewById(R.id.tv_login_signup);
-        mAuth = FirebaseAuth.getInstance();
-
         btnSwitch.setOnClickListener(this::onClick);
     }
 
@@ -57,10 +59,39 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        if (!UserManager.getInstance().isLoggedIn()) {
+            FirebaseAuth.getInstance().signOut();
+        }
 
         setupUI();
         toggleFragment();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_more) {
+            Toast.makeText(this, "More clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getItemId() == R.id.action_options) {
+            Toast.makeText(this, "Options clicked", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (item.getItemId() == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+            finish();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     private void toggleFragment() {
         if (isLogin) {

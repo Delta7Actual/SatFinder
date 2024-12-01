@@ -134,6 +134,6 @@ public class IntroActivity extends AppCompatActivity {
             Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
-        }, 3000);
+        }, 500);
     }
 }
