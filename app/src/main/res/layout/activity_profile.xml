@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activities.BrowserActivity">
+    tools:context=".Activities.ProfileActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:title="Browser"
+        android:title="Profile"
         android:titleTextColor="@android:color/white"
         app:layout_scrollFlags="scroll|enterAlways" />
 
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:textSize="45sp"
-        android:text="BROWSE"
+        android:text="PROFILE"
         android:layout_marginTop="50dp"
         android:layout_gravity="center"
         android:layout_weight="1"/>

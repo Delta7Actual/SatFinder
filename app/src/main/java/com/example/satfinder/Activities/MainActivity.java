@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -16,12 +15,28 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.satfinder.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvPlaceholder;
     private Toolbar toolbar;
+    private BottomNavigationView bottomNavigationView;
+
+    private void setupUI() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        tvPlaceholder = findViewById(R.id.tv_placeholder);
+        tvPlaceholder.setText(FirebaseAuth
+                .getInstance()
+                .getCurrentUser()
+                .getDisplayName());
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +49,8 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        tvPlaceholder = findViewById(R.id.tv_placeholder);
-        tvPlaceholder.setText(FirebaseAuth
-                .getInstance()
-                .getCurrentUser()
-                .getDisplayName());
-
+        setupUI();
+        bottomNavigationView.setOnItemSelectedListener(this::onOptionsItemSelected);
     }
 
     @Override
@@ -53,19 +61,37 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_more) {
-            Toast.makeText(this, "More clicked", Toast.LENGTH_SHORT).show();
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_more) {
+//            startActivity(new Intent(this, MoreActivity.class));
+//            finish();
             return true;
-        } else if (item.getItemId() == R.id.action_options) {
-            Toast.makeText(this, "Options clicked", Toast.LENGTH_SHORT).show();
-            return true;
-        } else if (item.getItemId() == R.id.action_logout) {
-            FirebaseAuth.getInstance().signOut();
-            Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else if (itemId == R.id.action_options) {
+            startActivity(new Intent(this, SettingsActivity.class));
             finish();
             return true;
-        } else {
+        } else if (itemId == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return true;
+        }
+
+        else if (itemId == R.id.action_profile) {
+            startActivity(new Intent(this, ProfileActivity.class));
+            finish();
+            return true;
+        } else if (itemId == R.id.action_track) {
+//            startActivity(new Intent(this, TrackActivity.class));
+//            finish();
+            return true;
+        } else if (itemId == R.id.action_browse) {
+            startActivity(new Intent(this, BrowserActivity.class));
+            finish();
+            return true;
+        }
+
+        else {
             return super.onOptionsItemSelected(item);
         }
     }
