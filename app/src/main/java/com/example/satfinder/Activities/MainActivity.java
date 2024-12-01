@@ -29,13 +29,31 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+
+            if (itemId == R.id.action_home) {
+                // Stay on MainActivity
+                return true;
+            } else if (itemId == R.id.action_browse) {
+                startActivity(new Intent(this, BrowserActivity.class));
+                finish();
+                return true;
+            } else if (itemId == R.id.action_profile) {
+                startActivity(new Intent(this, ProfileActivity.class));
+                finish();
+                return true;
+            }
+            return false;
+        });
+
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
 
         tvPlaceholder = findViewById(R.id.tv_placeholder);
         tvPlaceholder.setText(FirebaseAuth
                 .getInstance()
                 .getCurrentUser()
                 .getDisplayName());
-
     }
 
     @Override
@@ -43,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -50,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setupUI();
-        bottomNavigationView.setOnItemSelectedListener(this::onOptionsItemSelected);
     }
 
     @Override
@@ -62,28 +80,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
+
         if (itemId == R.id.action_more) {
-//            startActivity(new Intent(this, MoreActivity.class));
-//            finish();
+            // TODO: Implement MoreActivity
             return true;
         } else if (itemId == R.id.action_options) {
             startActivity(new Intent(this, SettingsActivity.class));
-            finish();
             return true;
         } else if (itemId == R.id.action_logout) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return true;
-        }
-
-        else if (itemId == R.id.action_profile) {
+        } else if (itemId == R.id.action_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
             finish();
-            return true;
-        } else if (itemId == R.id.action_track) {
-//            startActivity(new Intent(this, TrackActivity.class));
-//            finish();
             return true;
         } else if (itemId == R.id.action_browse) {
             startActivity(new Intent(this, BrowserActivity.class));
@@ -91,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        else {
-            return super.onOptionsItemSelected(item);
-        }
+        return super.onOptionsItemSelected(item);
     }
 }
