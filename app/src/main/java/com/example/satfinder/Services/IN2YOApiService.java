@@ -5,35 +5,36 @@ import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface IN2YOApiService {
-    @GET("satellite/visualpasses")
+    @GET("satellite/visualpasses/{id}/{observer_lat}/{observer_lng}/{observer_alt}/{days}/{min_visibility}")
     Call<SatelliteVisualPassesResponse> getSatelliteVisualPasses(
-            @Query("apiKey") String apiKey,
-            @Query("id") int id,
-            @Query("observer_lat") float observer_lat,
-            @Query("observer_lng") float observer_lng,
-            @Query("observer_alt") float observer_alt,
-            @Query("days") int days,
-            @Query("min_visibility") int min_visibility
+            @Path("id") int id,
+            @Path("observer_lat") float observer_lat,
+            @Path("observer_lng") float observer_lng,
+            @Path("observer_alt") float observer_alt,
+            @Path("days") int days,
+            @Path("min_visibility") int min_visibility,
+            @Query("apiKey") String apiKey
     );
 
     // Example of another endpoint for satellite position
-    @GET("satellite/positions")
+    @GET("satellite/positions/{id}/{observer_lat}/{observer_lng}/{observer_alt}/{seconds}")
     Call<SatellitePositionsResponse> getSatellitePositions(
-            @Query("apiKey") String apiKey,
-            @Query("id") int id,
-            @Query("observer_lat") float observer_lat,
-            @Query("observer_lng") float observer_lng,
-            @Query("observer_alt") float observer_alt,
-            @Query("seconds") int seconds
+            @Path("id") int id,
+            @Path("observer_lat") float observer_lat,
+            @Path("observer_lng") float observer_lng,
+            @Path("observer_alt") float observer_alt,
+            @Path("seconds") int seconds,
+            @Query("apiKey") String apiKey
     );
 
-    @GET("satellite/tle")
+    @GET("satellite/tle/{id}")
     Call<SatelliteTLEResponse> getSatelliteTLE(
-            @Query("apiKey") String apiKey,
-            @Query("id") int id
+            @Path("id") int id,
+            @Query("apiKey") String apiKey
     );
 
     // TODO: add more methods like this for other endpoints

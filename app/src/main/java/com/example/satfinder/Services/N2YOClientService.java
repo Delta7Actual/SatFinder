@@ -41,12 +41,12 @@ public class N2YOClientService {
             Callback<SatellitePositionsResponse> callback) {
 
         Call<SatellitePositionsResponse> call = apiService.getSatellitePositions(
-                apiKey,  // Use the field directly
                 id,
                 observer_lat,
                 observer_lng,
                 observer_alt,
-                seconds
+                seconds,
+                apiKey
         );
 
         call.enqueue(callback);
@@ -61,15 +61,14 @@ public class N2YOClientService {
             int min_visibility,
             Callback<SatelliteVisualPassesResponse> callback) {
 
-        // Call the Retrofit method for satellite passes
         Call<SatelliteVisualPassesResponse> call = apiService.getSatelliteVisualPasses(
-                apiKey,  // Use the field directly
                 satelliteId,
                 observer_lat,
                 observer_lng,
                 observer_alt,
                 days,
-                min_visibility
+                min_visibility,
+                apiKey
         );
 
         call.enqueue(callback);
@@ -79,7 +78,7 @@ public class N2YOClientService {
             int id,
             Callback<SatelliteTLEResponse> callback) {
 
-        Call<SatelliteTLEResponse> call = apiService.getSatelliteTLE(apiKey, id);
+        Call<SatelliteTLEResponse> call = apiService.getSatelliteTLE(id, apiKey);
         call.enqueue(callback);
     }
 
