@@ -28,4 +28,14 @@ public class SatellitePositionsResponse implements com.example.satfinder.Objects
     public String getSatname() {
         return satname;
     }
+
+    @Override
+    public String toString() {
+        return "SatellitePositionsResponse{" +
+                "satid=" + satid +
+                ", satname='" + satname + '\'' +
+                ", transactionscount=" + transactionscount +
+                ", positions=" + positions +
+                '}';
+    }
 }

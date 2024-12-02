@@ -33,4 +33,15 @@ public class SatelliteVisualPassesResponse implements com.example.satfinder.Obje
     public String getSatname() {
         return satname;
     }
+
+    @Override
+    public String toString() {
+        return "SatelliteVisualPassesResponse{" +
+                "satid=" + satid +
+                ", satname='" + satname + '\'' +
+                ", transactionscount=" + transactionscount +
+                ", passescount=" + passescount +
+                ", passes=" + passes +
+                '}';
+    }
 }

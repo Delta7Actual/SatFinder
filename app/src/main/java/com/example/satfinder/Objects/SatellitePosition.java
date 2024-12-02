@@ -46,4 +46,18 @@ public class SatellitePosition {
     public float getSatlongitude() {
         return satlongitude;
     }
+
+    @Override
+    public String toString() {
+        return "SatellitePosition{" +
+                "satlatitude=" + satlatitude +
+                ", satlongitude=" + satlongitude +
+                ", sataltitude=" + sataltitude +
+                ", azimuth=" + azimuth +
+                ", elevation=" + elevation +
+                ", ra=" + ra +
+                ", dec=" + dec +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }

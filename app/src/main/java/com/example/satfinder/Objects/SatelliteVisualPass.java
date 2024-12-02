@@ -76,4 +76,24 @@ public class SatelliteVisualPass implements com.example.satfinder.Objects.ISatel
     public long getMaxUTC() {
         return maxUTC;
     }
+
+    @Override
+    public String toString() {
+        return "SatelliteVisualPass{" +
+                "startAz=" + startAz +
+                ", startAzCompass='" + startAzCompass + '\'' +
+                ", startEl=" + startEl +
+                ", startUTC=" + startUTC +
+                ", maxAz=" + maxAz +
+                ", maxAzCompass='" + maxAzCompass + '\'' +
+                ", maxEl=" + maxEl +
+                ", maxUTC=" + maxUTC +
+                ", endAz=" + endAz +
+                ", endAzCompass='" + endAzCompass + '\'' +
+                ", endEl=" + endEl +
+                ", endUTC=" + endUTC +
+                ", mag=" + mag +
+                ", duration=" + duration +
+                '}';
+    }
 }

@@ -25,4 +25,14 @@ public class SatelliteTLEResponse implements com.example.satfinder.Objects.ISate
     public int getSatid() {
         return satid;
     }
+
+    @Override
+    public String toString() {
+        return "SatelliteTLEResponse{" +
+                "satid=" + satid +
+                ", satname='" + satname + '\'' +
+                ", transactionscount=" + transactionscount +
+                ", tle='" + tle + '\'' +
+                '}';
+    }
 }
