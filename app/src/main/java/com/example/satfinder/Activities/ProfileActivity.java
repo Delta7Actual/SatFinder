@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -13,39 +15,21 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.satfinder.Fragments.AccountFragment;
+import com.example.satfinder.Managers.UserManager;
+import com.example.satfinder.Objects.Interfaces.UserAuthCallback;
 import com.example.satfinder.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private BottomNavigationView bottomNavigationView;
+    TextView tvGreeting;
 
     private void setupUI() {
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.action_home) {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                return true;
-            } else if (itemId == R.id.action_browse) {
-                startActivity(new Intent(this, BrowserActivity.class));
-                finish();
-                return true;
-            } else if (itemId == R.id.action_profile) {
-                // Stay on ProfileActivity
-                return true;
-            }
-            return false;
-        });
-
-        bottomNavigationView.setSelectedItemId(R.id.action_profile);
+        tvGreeting = findViewById(R.id.tv_greeting);
     }
 
     @Override
@@ -61,6 +45,15 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         setupUI();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            tvGreeting.setText("Hey, " + user.getDisplayName() + "!");
+        }
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new AccountFragment())
+                .commit();
     }
 
     @Override
@@ -90,5 +83,21 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setUserDisplayName(String newName) {
+        UserManager manager = UserManager.getInstance();
+        manager.setUserDisplayName(newName, new UserAuthCallback() {
+            @Override
+            public void onSuccess(FirebaseUser user) {
+                tvGreeting.setText("Hey, " + user.getDisplayName() + "!");
+                Toast.makeText(ProfileActivity.this, "Display name updated to " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(ProfileActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

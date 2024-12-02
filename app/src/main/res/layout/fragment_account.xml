@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.AccountFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/background_light"
+        android:layout_margin="10dp">
+    <!-- Display Name Update Section -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- User's Display Name -->
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Account Details"
+            android:textSize="32sp"
+            android:paddingBottom="8dp"
+            android:textAlignment="center"/>
+
+        <!-- Edit Display Name -->
+        <EditText
+            android:id="@+id/et_display_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter new display name"
+            android:textSize="22sp"
+            android:inputType="textPersonName"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="20dp"
+            android:textColorHint="@color/secondary"/>
+
+        <!-- Save Display Name Button -->
+        <Button
+            android:id="@+id/btn_save_display_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Display Name"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+
+    <!-- Satellite IDs Section -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:layout_marginTop="16dp">
+
+        <!-- Add Satellite ID -->
+        <EditText
+            android:id="@+id/et_satellite_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter Satellite ID"
+            android:textSize="22sp"
+            android:inputType="text"
+            android:textColorHint="@color/secondary"/>
+
+        <!-- Add Satellite Button -->
+        <Button
+            android:id="@+id/btn_add_satellite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add Satellite"
+            android:layout_gravity="center"/>
+
+        <!-- Satellite List -->
+        <TextView
+            android:id="@+id/tv_satellite_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="---"
+            android:textSize="26sp"
+            android:layout_marginTop="16dp"
+            android:textAlignment="center"/>
+    </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>

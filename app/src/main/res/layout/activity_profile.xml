@@ -6,8 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context=".Activities.ProfileActivity">
 
+    <!-- Toolbar at the top -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -17,24 +19,25 @@
         android:titleTextColor="@android:color/white"
         app:layout_scrollFlags="scroll|enterAlways" />
 
+    <!-- Greeting with user's name -->
     <TextView
-        android:id="@+id/tv_placeholder"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:textSize="45sp"
-        android:text="PROFILE"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"/>
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/tv_greeting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_light"
-        app:itemTextColor="@color/white"
-        app:itemIconTint="@color/secondary_light"
-        android:layout_gravity="bottom"
-        app:menu="@menu/bottom_nav_menu" />
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/primary"
+        android:padding="16dp"
+        android:text="Hey, User!" />
+
+    <!-- Fragment container for swapping views -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="16dp"
+        android:background="@color/background_light" />
 
 </LinearLayout>

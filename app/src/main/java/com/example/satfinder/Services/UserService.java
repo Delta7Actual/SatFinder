@@ -26,6 +26,27 @@ public class UserService {
         return mAuth.getCurrentUser() != null;
     }
 
+    public void setDisplayName(String newName, UserAuthCallback callback) {
+        // Check if user is not logged in
+        if (!isLoggedIn()) {
+            callback.onFailure("User not logged in!");
+            return;
+        }
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(newName)
+                .build();
+
+        currentUser.updateProfile(profileUpdates).addOnCompleteListener(profileUpdateTask -> {
+            if (profileUpdateTask.isSuccessful()) {
+                callback.onSuccess(currentUser);
+            } else {
+                callback.onFailure(profileUpdateTask.getException().getMessage());
+            }
+        });
+    }
+
     public void login(String email, String password, UserAuthCallback callback) {
         // Check if already logged in
         if (isLoggedIn()) {
@@ -50,19 +71,7 @@ public class UserService {
                     callback.onFailure("User creation failed");
                     return;
                 }
-
-                FirebaseUser userCreated = mAuth.getCurrentUser();
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(name)
-                        .build();
-
-                userCreated.updateProfile(profileUpdates).addOnCompleteListener(profileUpdateTask -> {
-                    if (profileUpdateTask.isSuccessful()) {
-                        callback.onSuccess(userCreated); // Final callback
-                    } else {
-                        callback.onFailure(profileUpdateTask.getException().getMessage());
-                    }
-                });
+                setDisplayName(name, callback);
             } else {
                 callback.onFailure(task.getException().getMessage());
             }

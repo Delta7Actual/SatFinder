@@ -14,38 +14,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.satfinder.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class BrowserActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private BottomNavigationView bottomNavigationView;
 
     private void setupUI() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.action_home) {
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
-                return true;
-            } else if (itemId == R.id.action_browse) {
-                // Stay on BrowserActivity
-                return true;
-            } else if (itemId == R.id.action_profile) {
-                startActivity(new Intent(this, ProfileActivity.class));
-                finish();
-                return true;
-            }
-            return false;
-        });
-
-        bottomNavigationView.setSelectedItemId(R.id.action_browse);
     }
 
     @Override
@@ -83,13 +60,6 @@ public class BrowserActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
-            return true;
-        } else if (itemId == R.id.action_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
-            finish();
-            return true;
-        } else if (itemId == R.id.action_browse) {
-            // Already in BrowserActivity
             return true;
         }
 

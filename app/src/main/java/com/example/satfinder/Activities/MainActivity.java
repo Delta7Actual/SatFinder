@@ -20,15 +20,11 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvPlaceholder;
-    private Toolbar toolbar;
-    private BottomNavigationView bottomNavigationView;
-
     private void setupUI() {
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
@@ -37,11 +33,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             } else if (itemId == R.id.action_browse) {
                 startActivity(new Intent(this, BrowserActivity.class));
-                finish();
                 return true;
             } else if (itemId == R.id.action_profile) {
                 startActivity(new Intent(this, ProfileActivity.class));
-                finish();
                 return true;
             }
             return false;
@@ -49,11 +43,12 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigationView.setSelectedItemId(R.id.action_home);
 
-        tvPlaceholder = findViewById(R.id.tv_placeholder);
+        TextView tvPlaceholder = findViewById(R.id.tv_placeholder);
         tvPlaceholder.setText(FirebaseAuth
                 .getInstance()
                 .getCurrentUser()
                 .getDisplayName());
+
     }
 
     @Override
@@ -90,15 +85,12 @@ public class MainActivity extends AppCompatActivity {
         } else if (itemId == R.id.action_logout) {
             FirebaseAuth.getInstance().signOut();
             startActivity(new Intent(this, LoginActivity.class));
-            finish();
             return true;
         } else if (itemId == R.id.action_profile) {
             startActivity(new Intent(this, ProfileActivity.class));
-            finish();
             return true;
         } else if (itemId == R.id.action_browse) {
             startActivity(new Intent(this, BrowserActivity.class));
-            finish();
             return true;
         }
 

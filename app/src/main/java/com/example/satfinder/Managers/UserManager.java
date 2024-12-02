@@ -20,9 +20,14 @@ public class UserManager {
         return instance;
     }
 
-    // Check if a user is logged in
-    public boolean isLoggedIn() {
+    // Check if a user is logged in via UserService
+    public boolean isUserLoggedIn() {
         return userService.isLoggedIn();
+    }
+
+    // Set a new display name via UserService
+    public void setUserDisplayName(String newName, UserAuthCallback callback) {
+        userService.setDisplayName(newName, callback);
     }
 
     // Login user via UserService

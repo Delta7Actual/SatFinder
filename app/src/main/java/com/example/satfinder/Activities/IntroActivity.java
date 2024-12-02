@@ -7,8 +7,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -130,10 +128,14 @@ public class IntroActivity extends AppCompatActivity {
 
     private void proceedToNextActivity() {
 
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        }, 500);
+//        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+//            Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
+//            startActivity(intent);
+//            finish();
+//        }, 500);
+
+        Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

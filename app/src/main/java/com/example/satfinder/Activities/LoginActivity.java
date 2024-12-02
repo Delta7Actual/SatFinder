@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,14 +24,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private FrameLayout flFragmentContainer;
     private Button btnSwitch;
     private TextView tvLoginSignup;
     private boolean isLogin = true;
 
     private void setupUI()
     {
-        flFragmentContainer = findViewById(R.id.fragment_container);
         btnSwitch = findViewById(R.id.btn_switch);
         tvLoginSignup = findViewById(R.id.tv_login_signup);
         btnSwitch.setOnClickListener(this::onClick);
@@ -54,7 +51,7 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        if (!UserManager.getInstance().isLoggedIn()) {
+        if (!UserManager.getInstance().isUserLoggedIn()) {
             FirebaseAuth.getInstance().signOut();
         }
 
