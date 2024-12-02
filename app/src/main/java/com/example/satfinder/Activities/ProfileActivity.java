@@ -1,16 +1,11 @@
 package com.example.satfinder.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -27,8 +22,6 @@ public class ProfileActivity extends AppCompatActivity {
     TextView tvGreeting;
 
     private void setupUI() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         tvGreeting = findViewById(R.id.tv_greeting);
     }
 
@@ -54,35 +47,6 @@ public class ProfileActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.fragment_container, new AccountFragment())
                 .commit();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-
-        if (itemId == R.id.action_more) {
-            // TODO: Implement MoreActivity
-            return true;
-        } else if (itemId == R.id.action_options) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        } else if (itemId == R.id.action_logout) {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return true;
-        } else if (itemId == R.id.action_profile) {
-            // Already in ProfileActivity
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void setUserDisplayName(String newName) {
