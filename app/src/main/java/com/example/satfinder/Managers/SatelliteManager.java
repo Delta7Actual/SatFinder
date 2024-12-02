@@ -1,16 +1,12 @@
 package com.example.satfinder.Managers;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.example.satfinder.Objects.SatellitePosition;
+import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.SatellitePositionsResponse;
-import com.example.satfinder.Objects.SatelliteVisualPass;
+import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
 import com.example.satfinder.Services.N2YOClientService;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,9 +35,9 @@ public class SatelliteManager {
                                   double altitude,
                                   int days,
                                   int minVisibility,
-                                  String apiKey) {
+                                  final IN2YOCallback callback) {
 
-        clientService.getSatellitePasses(apiKey,
+        clientService.getSatellitePasses(
                 satelliteId,
                 (float) latitude,
                 (float) longitude,
@@ -54,30 +50,29 @@ public class SatelliteManager {
             public void onResponse(@NonNull Call<SatelliteVisualPassesResponse> call,
                                    @NonNull Response<SatelliteVisualPassesResponse> response) {
                 if (response.isSuccessful()) {
-                    handleVisualPassesResponse(response.body());
+                    callback.onCallSuccess(response.body());
                 } else {
-                    handleErrorResponse("Failed to fetch visual passes.");
+                    callback.onCallError("Failed to fetch visual passes.");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<SatelliteVisualPassesResponse> call,
                                   @NonNull Throwable t) {
-                handleError(t);
+                callback.onCallError(t.getMessage());
             }
         });
     }
 
-    // Fetch satellite position
-    public void fetchSatellitePosition(String apiKey,
-                                       int id,
+    // Fetch satellite positions
+    public void fetchSatellitePositions(int id,
                                        float observer_lat,
                                        float observer_lng,
                                        float observer_alt,
-                                       int seconds) {
+                                       int seconds,
+                                       final IN2YOCallback callback) {
 
-        clientService.getSatellitePositions(apiKey,
-                id,
+        clientService.getSatellitePositions(id,
                 observer_lat,
                 observer_lng,
                 observer_alt,
@@ -88,43 +83,38 @@ public class SatelliteManager {
             public void onResponse(@NonNull Call<SatellitePositionsResponse> call,
                                    @NonNull Response<SatellitePositionsResponse> response) {
                 if (response.isSuccessful()) {
-                    handlePositionResponse(response.body());
+                    callback.onCallSuccess(response.body());
                 } else {
-                    handleErrorResponse("Failed to fetch satellite position.");
+                    callback.onCallError("Failed to fetch satellite position.");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<SatellitePositionsResponse> call,
                                   @NonNull Throwable t) {
-                handleError(t);
+                callback.onCallError(t.getMessage());
             }
         });
     }
 
-    private void handleVisualPassesResponse(SatelliteVisualPassesResponse response) {
-        if (response != null && response.getPasses() != null) {
-            List<SatelliteVisualPass> passes = response.getPasses();
-            // Process and update UI with passes
-        } else {
-            handleErrorResponse("No visual passes data available.");
-        }
-    }
+    public void fetchSatelliteTLE(int id, final IN2YOCallback callback) {
+        clientService.getSatelliteTLE(id, new Callback<SatelliteTLEResponse>() {
 
-    private void handlePositionResponse(SatellitePositionsResponse response) {
-        if (response != null && response.getPositions() != null) {
-            List<SatellitePosition> position = response.getPositions();
-            // Process and update UI with position data
-        } else {
-            handleErrorResponse("No satellite position data available.");
-        }
-    }
+            @Override
+            public void onResponse(Call<SatelliteTLEResponse> call,
+                                   Response<SatelliteTLEResponse> response) {
+                if (response.isSuccessful()) {
+                    callback.onCallSuccess(response.body());
+                } else {
+                    callback.onCallError("Failed to fetch satellite TLE.");
+                }
+            }
 
-    private void handleErrorResponse(String errorMessage) {
-        Log.e("SatelliteManager", errorMessage);
-    }
-
-    private void handleError(Throwable t) {
-        Log.e("SatelliteManager", "API call failed", t);
+            @Override
+            public void onFailure(Call<SatelliteTLEResponse> call,
+                                  Throwable t) {
+                callback.onCallError(t.getMessage());
+            }
+        });
     }
 }

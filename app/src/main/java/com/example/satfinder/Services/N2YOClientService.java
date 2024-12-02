@@ -1,6 +1,8 @@
 package com.example.satfinder.Services;
 
+import com.example.satfinder.BuildConfig;
 import com.example.satfinder.Objects.SatellitePositionsResponse;
+import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
 
 import retrofit2.Call;
@@ -9,8 +11,10 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class N2YOClientService {
+
     private static N2YOClientService instance;
     private static final IN2YOApiService apiService;
+    private final String apiKey = BuildConfig.API_KEY;
 
     static {
         Retrofit retrofit = new Retrofit.Builder()
@@ -28,44 +32,56 @@ public class N2YOClientService {
         return instance;
     }
 
-    public void getSatellitePositions(String apiKey,
-                                     int id,
-                                     float observer_lat,
-                                     float observer_lng,
-                                     float observer_alt,
-                                     int seconds,
-                                     Callback<SatellitePositionsResponse> callback) {
+    public void getSatellitePositions(
+            int id,
+            float observer_lat,
+            float observer_lng,
+            float observer_alt,
+            int seconds,
+            Callback<SatellitePositionsResponse> callback) {
 
-        Call<SatellitePositionsResponse> call = apiService.getSatellitePositions(apiKey,
+        Call<SatellitePositionsResponse> call = apiService.getSatellitePositions(
+                apiKey,  // Use the field directly
                 id,
                 observer_lat,
                 observer_lng,
                 observer_alt,
-                seconds);
+                seconds
+        );
 
         call.enqueue(callback);
     }
 
-    public void getSatellitePasses(String apiKey,
-                                   int satelliteId,
-                                   float observer_lat,
-                                   float observer_lng,
-                                   float observer_alt,
-                                   int days,
-                                   int min_visibility,
-                                   Callback<SatelliteVisualPassesResponse> callback) {
+    public void getSatellitePasses(
+            int satelliteId,
+            float observer_lat,
+            float observer_lng,
+            float observer_alt,
+            int days,
+            int min_visibility,
+            Callback<SatelliteVisualPassesResponse> callback) {
+
         // Call the Retrofit method for satellite passes
-        Call<SatelliteVisualPassesResponse> call = apiService.getSatelliteVisualPasses(apiKey,
+        Call<SatelliteVisualPassesResponse> call = apiService.getSatelliteVisualPasses(
+                apiKey,  // Use the field directly
                 satelliteId,
                 observer_lat,
                 observer_lng,
                 observer_alt,
                 days,
-                min_visibility);
+                min_visibility
+        );
 
+        call.enqueue(callback);
+    }
+
+    public void getSatelliteTLE(
+            int id,
+            Callback<SatelliteTLEResponse> callback) {
+
+        Call<SatelliteTLEResponse> call = apiService.getSatelliteTLE(apiKey, id);
         call.enqueue(callback);
     }
 
     // TODO: add more methods for other API endpoints
 }
-

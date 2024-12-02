@@ -1,5 +1,6 @@
 package com.example.satfinder.Services;
 import com.example.satfinder.Objects.SatellitePositionsResponse;
+import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
 
 import retrofit2.Call;
@@ -27,6 +28,12 @@ public interface IN2YOApiService {
             @Query("observer_lng") float observer_lng,
             @Query("observer_alt") float observer_alt,
             @Query("seconds") int seconds
+    );
+
+    @GET("satellite/tle")
+    Call<SatelliteTLEResponse> getSatelliteTLE(
+            @Query("apiKey") String apiKey,
+            @Query("id") int id
     );
 
     // TODO: add more methods like this for other endpoints
