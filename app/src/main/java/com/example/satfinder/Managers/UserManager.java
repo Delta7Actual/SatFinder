@@ -1,6 +1,6 @@
 package com.example.satfinder.Managers;
 
-import com.example.satfinder.Objects.Interfaces.UserAuthCallback;
+import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.example.satfinder.Services.UserService;
 
 public class UserManager {
@@ -21,22 +21,21 @@ public class UserManager {
     }
 
     // Check if a user is logged in via UserService
-    public boolean isUserLoggedIn() {
-        return userService.isLoggedIn();
-    }
+    public boolean isUserLoggedIn() { return userService.isLoggedIn(); }
+    public String getCurrentUserUid() { return userService.getCurrentUserUid(); }
 
     // Set a new display name via UserService
-    public void setUserDisplayName(String newName, UserAuthCallback callback) {
+    public void setUserDisplayName(String newName, IUserAuthCallback callback) {
         userService.setDisplayName(newName, callback);
     }
 
     // Login user via UserService
-    public void loginUser(String email, String password, UserAuthCallback callback) {
+    public void loginUser(String email, String password, IUserAuthCallback callback) {
         userService.login(email, password, callback);
     }
 
     // Sign up user via UserService
-    public void signUpUser(String name, String email, String password, UserAuthCallback callback) {
+    public void signUpUser(String name, String email, String password, IUserAuthCallback callback) {
         userService.signUp(name, email, password, callback);
     }
 }

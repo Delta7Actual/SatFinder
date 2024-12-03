@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.satfinder.Fragments.LoginFragment;
 import com.example.satfinder.Fragments.SignUpFragment;
 import com.example.satfinder.Managers.UserManager;
-import com.example.satfinder.Objects.Interfaces.UserAuthCallback;
+import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.example.satfinder.R;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -78,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signUpUser(String name, String email, String password) {
         UserManager manager = UserManager.getInstance();
-        manager.signUpUser(name, email, password, new UserAuthCallback() {
+        manager.signUpUser(name, email, password, new IUserAuthCallback() {
             @Override
             public void onSuccess(FirebaseUser user) {
                 Toast.makeText(LoginActivity.this, "User created successfully!", Toast.LENGTH_LONG).show();
@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginUser(String email, String password) {
         UserManager manager = UserManager.getInstance();
-        manager.loginUser(email, password, new UserAuthCallback() {
+        manager.loginUser(email, password, new IUserAuthCallback() {
             @Override
             public void onSuccess(FirebaseUser user) {
                 Toast.makeText(LoginActivity.this, "Logged in successfully! Hello" + user.getDisplayName(), Toast.LENGTH_LONG).show();

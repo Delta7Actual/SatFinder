@@ -114,7 +114,7 @@ public class IntroActivity extends AppCompatActivity {
         }
     }
 
-    // TODO upgrade to local storage with SQLite?
+    // Saves location to SharedPreferences on local storage
     private void saveLocationToSharedPreferences(Location location) {
         SharedPreferences sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -127,13 +127,6 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     private void proceedToNextActivity() {
-
-//        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-//            Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
-//            startActivity(intent);
-//            finish();
-//        }, 500);
-
         Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
         startActivity(intent);
         finish();

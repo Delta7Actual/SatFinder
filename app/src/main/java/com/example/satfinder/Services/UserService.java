@@ -1,6 +1,6 @@
 package com.example.satfinder.Services;
 
-import com.example.satfinder.Objects.Interfaces.UserAuthCallback;
+import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -22,11 +22,21 @@ public class UserService {
         return instance;
     }
 
+    /*
+     *   Authentication related methods
+     */
+
     public boolean isLoggedIn() {
         return mAuth.getCurrentUser() != null;
     }
+    public String getCurrentUserUid() {
+        if (!isLoggedIn()) {
+            return null;
+        }
+        return mAuth.getCurrentUser().getUid();
+    }
 
-    public void setDisplayName(String newName, UserAuthCallback callback) {
+    public void setDisplayName(String newName, IUserAuthCallback callback) {
         // Check if user is not logged in
         if (!isLoggedIn()) {
             callback.onFailure("User not logged in!");
@@ -47,7 +57,7 @@ public class UserService {
         });
     }
 
-    public void login(String email, String password, UserAuthCallback callback) {
+    public void login(String email, String password, IUserAuthCallback callback) {
         // Check if already logged in
         if (isLoggedIn()) {
             callback.onSuccess(mAuth.getCurrentUser());
@@ -64,7 +74,7 @@ public class UserService {
     }
 
 
-    public void signUp(String name, String email, String password, UserAuthCallback callback) {
+    public void signUp(String name, String email, String password, IUserAuthCallback callback) {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 if (!isLoggedIn()) {

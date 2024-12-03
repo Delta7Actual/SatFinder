@@ -12,7 +12,11 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.example.satfinder.Activities.ProfileActivity;
+import com.example.satfinder.Managers.StorageManager;
+import com.example.satfinder.Objects.Interfaces.IStorageCallback;
 import com.example.satfinder.R;
+
+import java.util.List;
 
 public class AccountFragment extends Fragment {
 
@@ -38,7 +42,9 @@ public class AccountFragment extends Fragment {
         
         btnSaveDisplayName.setOnClickListener(this::handleClick);
         btnAddSatellite.setOnClickListener(this::handleClick);
-        
+
+        updateSatelliteList();
+
         return view;
     }
     
@@ -47,7 +53,46 @@ public class AccountFragment extends Fragment {
             String newName = String.valueOf(etDisplayName.getText());
             ((ProfileActivity) requireActivity()).setUserDisplayName(newName);
         } else if (view == btnAddSatellite) {
-            Toast.makeText(AccountFragment.this.getContext(), "Satellite added!", Toast.LENGTH_LONG).show();
+            StorageManager manager = StorageManager.getInstance();
+            int satelliteId = Integer.parseInt(String.valueOf(etSatelliteID.getText()));
+            manager.addFavouriteSatelliteId(satelliteId, new IStorageCallback<Void>() {
+
+                @Override
+                public void onSuccess(Void result) {
+                    updateSatelliteList();
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
+    }
+
+    private void updateSatelliteList() {
+        StorageManager manager = StorageManager.getInstance();
+        manager.getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
+
+            @Override
+            public void onSuccess(List<String> result) {
+                StringBuilder sb = new StringBuilder();
+
+                if (result.isEmpty()) {
+                    sb.append("No favourite satellites added yet.");
+                } else {
+                    for (String satelliteId : result) {
+                        sb.append(satelliteId).append("\n");
+                    }
+                }
+
+                tvSatelliteList.setText(sb.toString().trim());
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

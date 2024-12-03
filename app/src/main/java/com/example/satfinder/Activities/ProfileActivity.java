@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.satfinder.Fragments.AccountFragment;
 import com.example.satfinder.Managers.UserManager;
-import com.example.satfinder.Objects.Interfaces.UserAuthCallback;
+import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.example.satfinder.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,7 +51,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void setUserDisplayName(String newName) {
         UserManager manager = UserManager.getInstance();
-        manager.setUserDisplayName(newName, new UserAuthCallback() {
+        manager.setUserDisplayName(newName, new IUserAuthCallback() {
             @Override
             public void onSuccess(FirebaseUser user) {
                 tvGreeting.setText("Hey, " + user.getDisplayName() + "!");
