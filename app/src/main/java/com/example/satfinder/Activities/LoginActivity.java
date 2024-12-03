@@ -19,14 +19,13 @@ import com.example.satfinder.Fragments.SignUpFragment;
 import com.example.satfinder.Managers.UserManager;
 import com.example.satfinder.Objects.Interfaces.UserAuthCallback;
 import com.example.satfinder.R;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
     private Button btnSwitch;
     private TextView tvLoginSignup;
-    private boolean isLogin = true;
+    private boolean isLogin = false;
 
     private void setupUI()
     {
@@ -51,12 +50,16 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        if (!UserManager.getInstance().isUserLoggedIn()) {
-            FirebaseAuth.getInstance().signOut();
-        }
+//        if (!UserManager.getInstance().isUserLoggedIn()) {
+//            FirebaseAuth.getInstance().signOut();
+//        }
 
         setupUI();
-        toggleFragment();
+        if (savedInstanceState == null) {
+            replaceFragment(isLogin ? new LoginFragment() : new SignUpFragment());
+            tvLoginSignup.setText(isLogin ? "LOGIN" : "SIGN UP");
+            btnSwitch.setText(isLogin ? "Switch to Sign Up" : "Switch to Login");
+        }
     }
 
     private void toggleFragment() {
@@ -76,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null) // Add the transaction to the backstack
                 .commit();
     }
 

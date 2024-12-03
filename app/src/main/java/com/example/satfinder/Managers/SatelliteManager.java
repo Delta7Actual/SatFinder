@@ -29,13 +29,13 @@ public class SatelliteManager {
     }
 
     // Fetch satellite visual passes
-    public void fetchVisualPasses(int satelliteId,
-                                  double latitude,
-                                  double longitude,
-                                  double altitude,
-                                  int days,
-                                  int minVisibility,
-                                  final IN2YOCallback callback) {
+    public void fetchSatelliteVisualPasses(int satelliteId,
+                                           double latitude,
+                                           double longitude,
+                                           double altitude,
+                                           int days,
+                                           int minVisibility,
+                                           final IN2YOCallback callback) {
 
         clientService.getSatellitePasses(
                 satelliteId,

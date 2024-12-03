@@ -3,13 +3,13 @@ package com.example.satfinder.Objects;
 import androidx.annotation.NonNull;
 
 public class ObserverLocation {
-    float longitude;
     float latitude;
+    float longitude;
     float altitude;
 
     public ObserverLocation(float longitude, float latitude, float altitude) {
-        this.longitude = longitude;
         this.latitude = latitude;
+        this.longitude = longitude;
         this.altitude = altitude;
     }
 
@@ -41,8 +41,8 @@ public class ObserverLocation {
     @Override
     public String toString() {
         return "ObserverLocation{" +
-                "longitude=" + longitude +
-                ", latitude=" + latitude +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
                 ", altitude=" + altitude +
                 '}';
     }
