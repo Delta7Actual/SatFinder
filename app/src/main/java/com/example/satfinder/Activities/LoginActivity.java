@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button btnSwitch;
     private TextView tvLoginSignup;
-    private boolean isLogin = false;
+    private boolean isLogin = true;
 
     private void setupUI()
     {
@@ -50,16 +50,9 @@ public class LoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//        if (!UserManager.getInstance().isUserLoggedIn()) {
-//            FirebaseAuth.getInstance().signOut();
-//        }
 
         setupUI();
-        if (savedInstanceState == null) {
-            replaceFragment(isLogin ? new LoginFragment() : new SignUpFragment());
-            tvLoginSignup.setText(isLogin ? "LOGIN" : "SIGN UP");
-            btnSwitch.setText(isLogin ? "Switch to Sign Up" : "Switch to Login");
-        }
+        toggleFragment();
     }
 
     private void toggleFragment() {
