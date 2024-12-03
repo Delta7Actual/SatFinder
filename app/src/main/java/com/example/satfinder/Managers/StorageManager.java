@@ -7,7 +7,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,19 +37,13 @@ public class StorageManager {
 
         DocumentReference userDocRef = firestore.collection("users").document(userId);
 
-        userDocRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                userDocRef.update("favouriteSatelliteIds", FieldValue.arrayUnion(String.valueOf(satelliteId)))
-                        .addOnSuccessListener(aVoid -> callback.onSuccess(null))
-                        .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
-            } else {
-                userDocRef.set(new HashMap<String, Object>() {{
-                            put("favouriteSatelliteIds", Arrays.asList(String.valueOf(satelliteId)));
-                        }}, SetOptions.merge())
-                        .addOnSuccessListener(aVoid -> callback.onSuccess(null))
-                        .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
-            }
-        }).addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+        userDocRef.set(
+                        new HashMap<String, Object>() {{
+                            put("favouriteSatelliteIds", FieldValue.arrayUnion(String.valueOf(satelliteId)));
+                        }},
+                        SetOptions.merge())  // Merge instead of overwriting
+                .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
     public void removeFavouriteSatelliteId(int satelliteId, IStorageCallback<Void> callback) {
@@ -59,10 +52,10 @@ public class StorageManager {
             callback.onFailure("User not logged in");
             return;
         }
-        firestore.collection("users")
-                .document(userId)
+
+        firestore.collection("users").document(userId)
                 .update("favouriteSatelliteIds", FieldValue.arrayRemove(String.valueOf(satelliteId)))
-                .addOnSuccessListener(unused -> callback.onSuccess(null))
+                .addOnSuccessListener(aVoid -> callback.onSuccess(null))
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
@@ -73,17 +66,17 @@ public class StorageManager {
             return;
         }
 
-        firestore.collection("users")
-                .document(userId)
+        firestore.collection("users").document(userId)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        List<String> satelliteIds = (List<String>) documentSnapshot.get("favouriteSatelliteIds");
-                        if (satelliteIds == null) satelliteIds = new ArrayList<>();
-                        callback.onSuccess(satelliteIds);
-                    } else {
-                        callback.onFailure("User document does not exist");
+                    if (!documentSnapshot.exists()) {
+                        callback.onSuccess(new ArrayList<>());
+                        return;
                     }
+
+                    List<String> satelliteIds = (List<String>) documentSnapshot.get("favouriteSatelliteIds");
+                    if (satelliteIds == null) satelliteIds = new ArrayList<>();
+                    callback.onSuccess(satelliteIds);
                 })
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
