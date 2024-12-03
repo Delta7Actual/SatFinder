@@ -16,7 +16,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="5dp">
 
         <!-- User's Display Name -->
         <TextView
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Change Account Details"
-            android:textSize="32sp"
+            android:textSize="26sp"
             android:paddingBottom="8dp"
             android:textAlignment="center"/>
 
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Enter new display name"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:inputType="textPersonName"
             android:layout_marginBottom="16dp"
             android:layout_marginTop="20dp"
@@ -46,45 +46,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Save Display Name"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
     </LinearLayout>
 
     <!-- Satellite IDs Section -->
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:layout_marginTop="16dp">
-
-        <!-- Add Satellite ID -->
-        <EditText
-            android:id="@+id/et_satellite_id"
+        <!-- Satellite IDs Section -->
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Satellite ID"
-            android:textSize="22sp"
-            android:inputType="text"
-            android:textColorHint="@color/secondary"/>
+            android:padding="5dp">
 
-        <!-- Add Satellite Button -->
-        <Button
-            android:id="@+id/btn_add_satellite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Satellite"
-            android:layout_gravity="center"/>
+            <!-- Add Satellite ID -->
+            <EditText
+                android:id="@+id/et_satellite_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Satellite ID"
+                android:textSize="18sp"
+                android:inputType="text"
+                android:textColorHint="@color/secondary"/>
 
-        <!-- Satellite List -->
-        <TextView
-            android:id="@+id/tv_satellite_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="---"
-            android:textSize="26sp"
-            android:layout_marginTop="16dp"
-            android:textAlignment="center"/>
-    </LinearLayout>
+            <!-- Add Satellite Button -->
+            <Button
+                android:id="@+id/btn_add_satellite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Satellite"
+                android:layout_gravity="center"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_satellite_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/background_light" />
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>
