@@ -1,5 +1,7 @@
 package com.example.satfinder.Objects;
 
+import android.location.Location;
+
 import androidx.annotation.NonNull;
 
 public class ObserverLocation {
@@ -11,6 +13,18 @@ public class ObserverLocation {
         this.latitude = latitude;
         this.longitude = longitude;
         this.altitude = altitude;
+    }
+
+    public ObserverLocation() {
+        this.latitude = 0;
+        this.longitude = 0;
+        this.altitude = 0;
+    }
+
+    public ObserverLocation(Location location) {
+        this.latitude = (float) location.getLatitude();
+        this.longitude = (float) location.getLongitude();
+        this.altitude = (float) location.getAltitude();
     }
 
     public float getAltitude() {

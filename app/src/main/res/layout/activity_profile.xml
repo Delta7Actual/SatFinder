@@ -27,7 +27,7 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/white"
-        android:background="@color/primary"
+        android:background="@color/primary_dark"
         android:padding="16dp"
         android:text="Hey, User!" />
 

@@ -1,6 +1,10 @@
 package com.example.satfinder.Managers;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.example.satfinder.Objects.Interfaces.IStorageCallback;
+import com.example.satfinder.Objects.ObserverLocation;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +30,35 @@ public class StorageManager {
             instance = new StorageManager();
         }
         return instance;
+    }
+
+    public void spSaveUserLocation(Context context, ObserverLocation location) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user_loc_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("longitude", String.valueOf(location.getLongitude()));
+        editor.putString("latitude", String.valueOf(location.getLatitude()));
+        editor.putString("altitude", String.valueOf(location.getAltitude()));
+
+        editor.apply();
+    }
+
+    public ObserverLocation spGetUserLocation(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user_loc_prefs", Context.MODE_PRIVATE);
+
+        String latitude = sharedPreferences.getString("latitude", null);
+        String longitude = sharedPreferences.getString("longitude", null);
+        String altitude = sharedPreferences.getString("altitude", null);
+
+        if (longitude == null || latitude == null || altitude == null) {
+            return new ObserverLocation();
+        } else {
+            float savedLatitude = Float.parseFloat(latitude);
+            float savedLongitude = (Float.parseFloat(latitude));
+            float savedAltitude = (Float.parseFloat(altitude));
+
+            return new ObserverLocation(savedLatitude, savedLongitude, savedAltitude);
+        }
     }
 
     public void addFavouriteSatelliteId(int satelliteId, IStorageCallback<Void> callback) {

@@ -2,7 +2,6 @@ package com.example.satfinder.Activities;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -18,6 +17,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.satfinder.Managers.StorageManager;
+import com.example.satfinder.Objects.ObserverLocation;
 import com.example.satfinder.R;
 
 public class IntroActivity extends AppCompatActivity {
@@ -85,8 +86,8 @@ public class IntroActivity extends AppCompatActivity {
                         5000,
                         10,
                         currentLocation -> {
-                            location = currentLocation;
-                            saveLocationToSharedPreferences(location);
+                            ObserverLocation observerLocation = new ObserverLocation(currentLocation);
+                            StorageManager.getInstance().spSaveUserLocation(this, observerLocation);
                             proceedToNextActivity();
                         });
             } catch (SecurityException e) {
@@ -96,35 +97,21 @@ public class IntroActivity extends AppCompatActivity {
     }
 
     private void getLocationOffline() {
-        SharedPreferences sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
+        ObserverLocation retrievedLocation = StorageManager.getInstance().spGetUserLocation(this);
 
-        String latitude = sharedPreferences.getString("latitude", null);
-        String longitude = sharedPreferences.getString("longitude", null);
-        String altitude = sharedPreferences.getString("altitude", null);
-
-        if (longitude == null || latitude == null || altitude == null) {
+        if (retrievedLocation.getLatitude() == 0 || retrievedLocation.getLongitude() == 0 || retrievedLocation.getAltitude() == 0) {
             Toast.makeText(this, "No previous location found", Toast.LENGTH_SHORT).show();
         } else {
             location = new Location("saved_location");
-            location.setLongitude(Double.parseDouble(longitude));
-            location.setLatitude(Double.parseDouble(latitude));
-            location.setAltitude(Double.parseDouble(altitude));
+            location.setLatitude(retrievedLocation.getLatitude());
+            location.setLongitude(retrievedLocation.getLongitude());
+            location.setAltitude(retrievedLocation.getAltitude());
+
             Log.d("IntroActivity", "Retrieved saved location: " + location);
             proceedToNextActivity();
         }
     }
 
-    // Saves location to SharedPreferences on local storage
-    private void saveLocationToSharedPreferences(Location location) {
-        SharedPreferences sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString("longitude", String.valueOf(location.getLongitude()));
-        editor.putString("latitude", String.valueOf(location.getLatitude()));
-        editor.putString("altitude", String.valueOf(location.getAltitude()));
-
-        editor.apply();
-    }
 
     private void proceedToNextActivity() {
         Intent intent = new Intent(IntroActivity.this, LoginActivity.class);
