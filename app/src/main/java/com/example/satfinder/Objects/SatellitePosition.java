@@ -1,5 +1,8 @@
 package com.example.satfinder.Objects;
 
+/**
+ * Represents a position for a given satellite.
+ */
 public class SatellitePosition {
 
     private float satlatitude;

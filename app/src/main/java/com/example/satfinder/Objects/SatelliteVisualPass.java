@@ -1,5 +1,8 @@
 package com.example.satfinder.Objects;
 
+/**
+ * Represents a visual pass for a given satellite.
+ */
 public class SatelliteVisualPass {
 
     private float startAz;

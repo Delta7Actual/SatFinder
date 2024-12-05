@@ -2,6 +2,9 @@ package com.example.satfinder.Objects;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Represents the information about a given satellite.
+ */
 public class SatelliteInfo {
     @SerializedName("satid")
     private int satid;

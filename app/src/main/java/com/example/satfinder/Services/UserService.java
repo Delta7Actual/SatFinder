@@ -6,7 +6,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 /**
- * A service class responsible for user authentication and management using Firebase.
+ * A service class for interacting with Firebase Authentication.
+ * This service is responsible for user authentication and management using Firebase.
  */
 public class UserService {
     private static UserService instance;

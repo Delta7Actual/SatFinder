@@ -13,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * A service class for interacting with the N2YO API using Retrofit.
  * This service is responsible for retrieving satellite data such as positions, passes, and TLE data.
- * Implements the Singleton pattern to ensure only one instance of the service is used.
  */
 public class N2YOClientService {
 

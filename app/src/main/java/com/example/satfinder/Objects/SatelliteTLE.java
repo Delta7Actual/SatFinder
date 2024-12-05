@@ -1,5 +1,9 @@
 package com.example.satfinder.Objects;
 
+/**
+ * Represents the TLE data for a specific satellite.
+ * Handles mathematical calculations for orbital parameters.
+ */
 public class SatelliteTLE {
     private String line1;
     private String line2;

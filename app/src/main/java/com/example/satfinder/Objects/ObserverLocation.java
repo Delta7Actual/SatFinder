@@ -4,6 +4,9 @@ import android.location.Location;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Represents the location of an observer.
+ */
 public class ObserverLocation {
     float latitude;
     float longitude;
