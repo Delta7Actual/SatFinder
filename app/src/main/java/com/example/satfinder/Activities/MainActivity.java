@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onSuccess(ISatelliteResponse response) {
                         SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
                         tvISSPassDetails.setText(String.format("Next pass is in: %s",
-                                convertUTCToLocalTime(svpResponse.getPasses().get(0).getStartUTC())));
+                                convertUTCToLocalTime(svpResponse.getPasses().get(1).getStartUTC())));
                     }
 
                     @Override
