@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Manages interactions with local storage and remote Firebase Firestore.
+ */
 public class StorageManager {
 
     private static StorageManager instance;
@@ -32,6 +35,12 @@ public class StorageManager {
         return instance;
     }
 
+    /**
+     * Saves the user's location in SharedPreferences.
+     *
+     * @param context The context used to access SharedPreferences.
+     * @param location The location to save.
+     */
     public void spSaveUserLocation(Context context, ObserverLocation location) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("user_loc_prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -43,6 +52,12 @@ public class StorageManager {
         editor.apply();
     }
 
+    /**
+     * Retrieves the user's saved location from SharedPreferences.
+     *
+     * @param context The context used to access SharedPreferences.
+     * @return The saved location, or a default {@link ObserverLocation} if none is found.
+     */
     public ObserverLocation spGetUserLocation(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("user_loc_prefs", Context.MODE_PRIVATE);
 
@@ -54,13 +69,19 @@ public class StorageManager {
             return new ObserverLocation();
         } else {
             float savedLatitude = Float.parseFloat(latitude);
-            float savedLongitude = (Float.parseFloat(latitude));
-            float savedAltitude = (Float.parseFloat(altitude));
+            float savedLongitude = Float.parseFloat(longitude);
+            float savedAltitude = Float.parseFloat(altitude);
 
             return new ObserverLocation(savedLatitude, savedLongitude, savedAltitude);
         }
     }
 
+    /**
+     * Adds a satellite ID to the user's list of favorite satellites in Firestore.
+     *
+     * @param satelliteId The ID of the satellite to add.
+     * @param callback The callback to notify upon success or failure.
+     */
     public void addFavouriteSatelliteId(int satelliteId, IStorageCallback<Void> callback) {
         String userId = userManager.getCurrentUserUid();
         if (userId == null) {
@@ -79,6 +100,12 @@ public class StorageManager {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
+    /**
+     * Removes a satellite ID from the user's list of favorite satellites in Firestore.
+     *
+     * @param satelliteId The ID of the satellite to remove.
+     * @param callback The callback to notify upon success or failure.
+     */
     public void removeFavouriteSatelliteId(int satelliteId, IStorageCallback<Void> callback) {
         String userId = userManager.getCurrentUserUid();
         if (userId == null) {
@@ -92,6 +119,11 @@ public class StorageManager {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
+    /**
+     * Retrieves the list of favorite satellite IDs for the current user from Firestore.
+     *
+     * @param callback The callback to notify with the list of satellite IDs or an error message.
+     */
     public void getFavouriteSatelliteIds(IStorageCallback<List<String>> callback) {
         String userId = userManager.getCurrentUserUid();
         if (userId == null) {
