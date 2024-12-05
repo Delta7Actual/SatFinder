@@ -53,8 +53,8 @@ public class SatelliteIdAdapter extends RecyclerView.Adapter<SatelliteIdAdapter.
                         }
 
                         @Override
-                        public void onFailure(String error) {
-                            Toast.makeText(holder.itemView.getContext(), error, Toast.LENGTH_SHORT).show();
+                        public void onFailure(String errorMessage) {
+                            Toast.makeText(holder.itemView.getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                         }
                     });
                 } catch (NumberFormatException e) {

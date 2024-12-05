@@ -11,14 +11,13 @@
         android:orientation="vertical"
         android:background="@color/background_light"
         android:layout_margin="10dp">
-    <!-- Display Name Update Section -->
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp">
 
-        <!-- User's Display Name -->
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
@@ -28,7 +27,6 @@
             android:paddingBottom="8dp"
             android:textAlignment="center"/>
 
-        <!-- Edit Display Name -->
         <EditText
             android:id="@+id/et_display_name"
             android:layout_width="match_parent"
@@ -40,7 +38,6 @@
             android:layout_marginTop="20dp"
             android:textColorHint="@color/secondary"/>
 
-        <!-- Save Display Name Button -->
         <Button
             android:id="@+id/btn_save_display_name"
             android:layout_width="match_parent"
@@ -49,15 +46,12 @@
             android:layout_gravity="center" />
     </LinearLayout>
 
-    <!-- Satellite IDs Section -->
-        <!-- Satellite IDs Section -->
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp">
 
-            <!-- Add Satellite ID -->
             <EditText
                 android:id="@+id/et_satellite_id"
                 android:layout_width="match_parent"
@@ -67,7 +61,6 @@
                 android:inputType="text"
                 android:textColorHint="@color/secondary"/>
 
-            <!-- Add Satellite Button -->
             <Button
                 android:id="@+id/btn_add_satellite"
                 android:layout_width="match_parent"
@@ -79,8 +72,7 @@
                 android:id="@+id/recycler_satellite_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/background_light" />
+                android:layout_marginTop="10dp" />
         </LinearLayout>
     </LinearLayout>
 

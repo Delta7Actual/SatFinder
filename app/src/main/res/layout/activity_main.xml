@@ -9,7 +9,6 @@
     android:fitsSystemWindows="true"
     tools:context=".Activities.MainActivity">
 
-    <!-- Toolbar Container -->
     <FrameLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
@@ -21,7 +20,6 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <!-- Welcome Section -->
     <TextView
         android:id="@+id/tv_greeting"
         android:layout_width="match_parent"
@@ -33,7 +31,6 @@
         android:padding="16dp"
         android:text="Hey, User!" />
 
-    <!-- Next ISS Pass Section -->
     <LinearLayout
         android:id="@+id/iss_pass_container"
         android:layout_width="match_parent"
@@ -43,7 +40,6 @@
         android:padding="15dp"
         android:layout_margin="16dp">
 
-        <!-- ISS Pass Title -->
         <TextView
             android:id="@+id/tv_iss_pass_title"
             android:layout_width="wrap_content"
@@ -55,7 +51,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp" />
 
-        <!-- ISS Pass Details -->
         <TextView
             android:id="@+id/tv_iss_pass_details"
             android:layout_width="match_parent"
@@ -64,13 +59,12 @@
             android:textColor="@color/white"
             android:textSize="16sp"
             android:padding="8dp"
-            android:background="@color/primary_dark"
+            android:background="@color/primary"
             android:gravity="center"
             android:layout_marginBottom="8dp" />
 
     </LinearLayout>
 
-    <!-- Satellite Details Section -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -90,17 +84,14 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp" />
 
-        <!-- Satellite List
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_satellite_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background_light"
-            android:padding="10dp" /> -->
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"/>
 
     </LinearLayout>
 
-    <!-- Bottom Navigation Container -->
     <FrameLayout
         android:id="@+id/bottom_navigation_container"
         android:layout_width="match_parent"

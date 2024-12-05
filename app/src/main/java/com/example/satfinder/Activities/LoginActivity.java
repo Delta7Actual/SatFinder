@@ -19,6 +19,7 @@ import com.example.satfinder.Fragments.SignUpFragment;
 import com.example.satfinder.Managers.UserManager;
 import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.example.satfinder.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -53,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
 
         setupUI();
         toggleFragment();
+
+        if (UserManager.getInstance().isUserLoggedIn()) FirebaseAuth.getInstance().signOut();
     }
 
     private void toggleFragment() {
@@ -98,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
         manager.loginUser(email, password, new IUserAuthCallback() {
             @Override
             public void onSuccess(FirebaseUser user) {
-                Toast.makeText(LoginActivity.this, "Logged in successfully! Hello" + user.getDisplayName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Logged in successfully! Hello " + user.getDisplayName(), Toast.LENGTH_LONG).show();
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             }

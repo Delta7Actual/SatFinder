@@ -7,7 +7,6 @@
     android:background="@color/background"
     android:gravity="center_vertical">
 
-    <!-- Display Satellite ID -->
     <TextView
         android:id="@+id/tv_satellite_id"
         android:layout_width="0dp"
@@ -17,7 +16,6 @@
         android:textSize="18sp"
         android:textColor="@color/white"/>
 
-    <!-- Remove Satellite Button -->
     <Button
         android:id="@+id/btn_remove_satellite_item"
         android:layout_width="wrap_content"

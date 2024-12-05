@@ -1,12 +1,9 @@
 package com.example.satfinder.Objects;
 
-import com.google.gson.annotations.SerializedName;
-
 public class SatelliteTLEResponse implements com.example.satfinder.Objects.ISatelliteResponse {
-    @SerializedName("info")
+
     private SatelliteInfo info;
 
-    @SerializedName("tle")
     private String tle;
 
     public SatelliteInfo getInfo() {

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/background"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_satellite_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Satellite Name"
+        android:textColor="@color/primary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingBottom="4dp" />
+
+    <TextView
+        android:id="@+id/tv_satellite_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ID: 12345"
+        android:textColor="@color/secondary"
+        android:textSize="18sp"
+        android:paddingBottom="4dp"
+        android:layout_marginLeft="14dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:background="@color/primary">
+
+        <TextView
+            android:id="@+id/tv_orbital_period"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Orbital Period: 90 min"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_inclination"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Inclination: 51.6°"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:paddingStart="8dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:background="@color/primary_dark">
+
+        <TextView
+            android:id="@+id/tv_apogee"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Apogee: 420 km"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_perigee"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Perigee: 410 km"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:paddingStart="8dp" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -80,8 +80,8 @@ public class AccountFragment extends Fragment {
                 }
 
                 @Override
-                public void onFailure(String error) {
-                    Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+                public void onFailure(String errorMessage) {
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -99,8 +99,8 @@ public class AccountFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(String error) {
-                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+            public void onFailure(String errorMessage) {
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
     }

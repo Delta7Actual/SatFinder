@@ -8,7 +8,6 @@
     android:fitsSystemWindows="true"
     tools:context=".Activities.ProfileActivity">
 
-    <!-- Toolbar at the top -->
     <FrameLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
@@ -19,7 +18,6 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <!-- Greeting with user's name -->
     <TextView
         android:id="@+id/tv_greeting"
         android:layout_width="match_parent"
@@ -31,7 +29,6 @@
         android:padding="16dp"
         android:text="Hey, User!" />
 
-    <!-- Fragment container for swapping views -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

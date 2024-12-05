@@ -8,7 +8,6 @@
     android:orientation="vertical"
     tools:context=".Activities.LoginActivity">
 
-    <!-- Header Text -->
     <TextView
         android:id="@+id/tv_login_signup"
         android:layout_width="match_parent"

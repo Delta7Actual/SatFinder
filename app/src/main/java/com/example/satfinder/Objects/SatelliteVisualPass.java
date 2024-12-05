@@ -1,19 +1,19 @@
 package com.example.satfinder.Objects;
 
-public class SatelliteVisualPass implements com.example.satfinder.Objects.ISatelliteResponse {
+public class SatelliteVisualPass {
 
     private float startAz;
     private String startAzCompass;
     private float startEl;
-    private long startUTC;
+    private int startUTC;
     private float maxAz;
     private String maxAzCompass;
     private float maxEl;
-    private long maxUTC;
+    private int maxUTC;
     private float endAz;
     private String endAzCompass;
     private float endEl;
-    private long endUTC;
+    private int endUTC;
     private float mag;
     private int duration;
 
@@ -33,7 +33,7 @@ public class SatelliteVisualPass implements com.example.satfinder.Objects.ISatel
         return mag;
     }
 
-    public long getEndUTC() {
+    public int getEndUTC() {
         return endUTC;
     }
 
@@ -65,7 +65,7 @@ public class SatelliteVisualPass implements com.example.satfinder.Objects.ISatel
         return maxAz;
     }
 
-    public long getStartUTC() {
+    public int getStartUTC() {
         return startUTC;
     }
 
@@ -73,7 +73,7 @@ public class SatelliteVisualPass implements com.example.satfinder.Objects.ISatel
         return maxAzCompass;
     }
 
-    public long getMaxUTC() {
+    public int getMaxUTC() {
         return maxUTC;
     }
 
