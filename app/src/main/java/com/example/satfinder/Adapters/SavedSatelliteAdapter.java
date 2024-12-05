@@ -45,10 +45,10 @@ public class SavedSatelliteAdapter extends RecyclerView.Adapter<SavedSatelliteAd
         else {
             holder.tvSatelliteName.setText(satelliteResponse.getInfo().getSatname());
             holder.tvSatelliteId.setText(String.format("ID: %d", satelliteResponse.getInfo().getSatid()));
-            holder.tvOrbitalPeriod.setText(String.format("Orbital Period: %.3f min", satelliteTLE.getOrbitalPeriod()));
-            holder.tvInclination.setText(String.format("Inclination: %.3f°", satelliteTLE.getInclination()));
-            holder.tvApogee.setText(String.format("Apogee: %.3f km", satelliteTLE.getApogee()));
-            holder.tvPerigee.setText(String.format("Perigee: %.3f km", satelliteTLE.getPerigee()));
+            holder.tvOrbitalPeriod.setText(String.format("Orbital Period: %.1f min", satelliteTLE.getOrbitalPeriod()));
+            holder.tvInclination.setText(String.format("Inclination: %.1f°", satelliteTLE.getInclination()));
+            holder.tvApogee.setText(String.format("Apogee: %.1f km", satelliteTLE.getApogee()));
+            holder.tvPerigee.setText(String.format("Perigee: %.1f km", satelliteTLE.getPerigee()));
         }
     }
 

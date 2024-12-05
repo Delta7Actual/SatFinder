@@ -30,11 +30,11 @@ public class SatelliteTLE {
     }
 
     private double getEccentricity() {
-        return Double.parseDouble(line2.substring(27, 33));
+        return Double.parseDouble("0." + line2.substring(27, 33));
     }
 
     private double getMeanMotion() {
-        return Double.parseDouble(line2.substring(53, 63));
+        return Double.parseDouble(line2.substring(53, 63)) * (2 * Math.PI) / 86400;
     }
 
     private double getSemiMajorAxis() {
@@ -62,7 +62,7 @@ public class SatelliteTLE {
     }
 
     public double getOrbitalPeriod() {
-        return (double) 86400 / getMeanMotion();
+        return (2 * Math.PI / getMeanMotion()) / 360;
     }
 
     @Override
