@@ -1,8 +1,9 @@
 package com.example.satfinder.Objects.Interfaces;
 
-import com.example.satfinder.Objects.ISatelliteResponse;
-
+/**
+ * Callback interface for handling {@link com.example.satfinder.Managers.SatelliteManager} responses.
+ */
 public interface IN2YOCallback {
-    void onCallSuccess(ISatelliteResponse response);
-    void onCallError(String errorMessage);
+    void onSuccess(ISatelliteResponse response);
+    void onError(String errorMessage);
 }

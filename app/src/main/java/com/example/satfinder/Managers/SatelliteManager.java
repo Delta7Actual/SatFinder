@@ -50,16 +50,16 @@ public class SatelliteManager {
             public void onResponse(@NonNull Call<SatelliteVisualPassesResponse> call,
                                    @NonNull Response<SatelliteVisualPassesResponse> response) {
                 if (response.isSuccessful()) {
-                    callback.onCallSuccess(response.body());
+                    callback.onSuccess(response.body());
                 } else {
-                    callback.onCallError("Failed to fetch visual passes.");
+                    callback.onError("Failed to fetch visual passes.");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<SatelliteVisualPassesResponse> call,
                                   @NonNull Throwable t) {
-                callback.onCallError(t.getMessage());
+                callback.onError(t.getMessage());
             }
         });
     }
@@ -83,16 +83,16 @@ public class SatelliteManager {
             public void onResponse(@NonNull Call<SatellitePositionsResponse> call,
                                    @NonNull Response<SatellitePositionsResponse> response) {
                 if (response.isSuccessful()) {
-                    callback.onCallSuccess(response.body());
+                    callback.onSuccess(response.body());
                 } else {
-                    callback.onCallError("Failed to fetch satellite position.");
+                    callback.onError("Failed to fetch satellite position.");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<SatellitePositionsResponse> call,
                                   @NonNull Throwable t) {
-                callback.onCallError(t.getMessage());
+                callback.onError(t.getMessage());
             }
         });
     }
@@ -104,16 +104,16 @@ public class SatelliteManager {
             public void onResponse(Call<SatelliteTLEResponse> call,
                                    Response<SatelliteTLEResponse> response) {
                 if (response.isSuccessful()) {
-                    callback.onCallSuccess(response.body());
+                    callback.onSuccess(response.body());
                 } else {
-                    callback.onCallError("Failed to fetch satellite TLE.");
+                    callback.onError("Failed to fetch satellite TLE.");
                 }
             }
 
             @Override
             public void onFailure(Call<SatelliteTLEResponse> call,
                                   Throwable t) {
-                callback.onCallError(t.getMessage());
+                callback.onError(t.getMessage());
             }
         });
     }

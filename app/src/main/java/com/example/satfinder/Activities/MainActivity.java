@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.satfinder.Adapters.SavedSatelliteAdapter;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
-import com.example.satfinder.Objects.ISatelliteResponse;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
+import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.Interfaces.IStorageCallback;
 import com.example.satfinder.Objects.ObserverLocation;
 import com.example.satfinder.Objects.SatelliteTLEResponse;
@@ -83,14 +83,14 @@ public class MainActivity extends AppCompatActivity {
                 30,
                 new IN2YOCallback() {
                     @Override
-                    public void onCallSuccess(ISatelliteResponse response) {
+                    public void onSuccess(ISatelliteResponse response) {
                         SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
                         tvISSPassDetails.setText(String.format("Next pass is in: %s",
                                 convertUTCToLocalTime(svpResponse.getPasses().get(0).getStartUTC())));
                     }
 
                     @Override
-                    public void onCallError(String errorMessage) {
+                    public void onError(String errorMessage) {
                         Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -107,14 +107,14 @@ public class MainActivity extends AppCompatActivity {
                     SatelliteManager.getInstance().fetchSatelliteTLE(Integer.parseInt(result.get(i)), new IN2YOCallback() {
 
                         @Override
-                        public void onCallSuccess(ISatelliteResponse response) {
+                        public void onSuccess(ISatelliteResponse response) {
                             SatelliteTLEResponse satelliteTLEResponse = (SatelliteTLEResponse) response;
                             satelliteTLEResponses.add(satelliteTLEResponse);
                             adapter.notifyItemInserted(satelliteTLEResponses.size() - 1);
                         }
 
                         @Override
-                        public void onCallError(String errorMessage) {
+                        public void onError(String errorMessage) {
                             Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
                         }
                     });

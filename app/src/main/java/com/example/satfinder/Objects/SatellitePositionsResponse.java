@@ -6,7 +6,7 @@ import java.util.List;
  * Represents the response from the N2YO API for satellite positions.
  * Contains satellite information and a list of future positions for the satellite.
  */
-public class SatellitePositionsResponse implements com.example.satfinder.Objects.ISatelliteResponse {
+public class SatellitePositionsResponse implements com.example.satfinder.Objects.Interfaces.ISatelliteResponse {
 
     private SatelliteInfo info;
     private List<SatellitePosition> positions;
