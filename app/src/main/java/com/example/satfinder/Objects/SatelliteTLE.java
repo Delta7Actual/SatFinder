@@ -19,6 +19,9 @@ public class SatelliteTLE {
     }
 
     public SatelliteTLE(String tle) {
+        if (tle == null) {
+            tle = "";
+        }
         String[] lines = tle.split("\r\n");
         if (lines.length != 2) {
             this.line1 = "";
