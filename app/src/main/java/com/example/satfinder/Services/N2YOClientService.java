@@ -20,8 +20,8 @@ public class N2YOClientService {
     private static final IN2YOApiService apiService;
     private final String apiKey = BuildConfig.API_KEY;
 
-    /**
-     * Static initializer to set up Retrofit instance and create the API service.
+    /*
+      Static initializer to set up Retrofit instance and create the API service.
      */
     static {
         Retrofit retrofit = new Retrofit.Builder()

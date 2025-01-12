@@ -7,10 +7,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
 
+import com.example.satfinder.Fragments.SearchFragment;
 import com.example.satfinder.R;
 
 public class BrowserActivity extends AppCompatActivity {
+
+
+    private void setupUI() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,5 +30,16 @@ public class BrowserActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        setupUI();
+        replaceFragment(new SearchFragment());
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.browser_fragment_container, fragment)
+                .addToBackStack(null) // Add the transaction to the backstack
+                .commit();
     }
 }

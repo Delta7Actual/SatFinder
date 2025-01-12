@@ -12,6 +12,7 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class StorageManager {
      * @param location The location to save.
      */
     public void spSaveUserLocation(Context context, ObserverLocation location) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("user_loc_prefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user_loc", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         editor.putString("longitude", String.valueOf(location.getLongitude()));
@@ -52,6 +53,19 @@ public class StorageManager {
         editor.apply();
     }
 
+    public void spSaveUserFavouriteSatellites(Context context, List<String> satelliteIds) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user_fav_sat", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putStringSet("satelliteIds", new HashSet<>(satelliteIds));
+    }
+
+    public List<String> spGetUserFavouriteSatellites(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user_fav_sat", Context.MODE_PRIVATE);
+        List<String> satelliteIds = (List<String>) sharedPreferences.getStringSet("satelliteIds", null);
+        return satelliteIds;
+    }
+
     /**
      * Retrieves the user's saved location from SharedPreferences.
      *
@@ -59,7 +73,7 @@ public class StorageManager {
      * @return The saved location, or a default {@link ObserverLocation} if none is found.
      */
     public ObserverLocation spGetUserLocation(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("user_loc_prefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user_loc", Context.MODE_PRIVATE);
 
         String latitude = sharedPreferences.getString("latitude", null);
         String longitude = sharedPreferences.getString("longitude", null);
