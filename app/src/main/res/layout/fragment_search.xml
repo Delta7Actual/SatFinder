@@ -60,6 +60,7 @@
             android:layout_marginTop="16dp">
 
             <fragment
+                android:id="@+id/details_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:name="com.example.satfinder.Fragments.DetailsFragment"/>

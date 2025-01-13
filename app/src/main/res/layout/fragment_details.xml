@@ -1,15 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.DetailsFragment">
+    android:background="@color/background"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tv_satellite_name"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-</FrameLayout>
+        <!-- Satellite Name -->
+        <TextView
+            android:id="@+id/tv_satellite_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Satellite Name"
+            android:textColor="@color/secondary"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Satellite Details Container -->
+        <LinearLayout
+            android:id="@+id/satellite_details_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/background_light"
+            android:padding="15dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- Inclination -->
+            <TextView
+                android:id="@+id/tv_inclination"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inclination: --"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Latitude -->
+            <TextView
+                android:id="@+id/tv_latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Latitude: --"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Longitude -->
+            <TextView
+                android:id="@+id/tv_longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Longitude: --"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Next Visual Pass Container -->
+        <LinearLayout
+            android:id="@+id/visual_pass_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/background_light"
+            android:padding="15dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tv_next_pass_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Next Visual Pass"
+                android:textColor="@color/secondary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tv_next_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No visual pass information available yet."
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:padding="8dp"
+                android:background="@color/primary"
+                android:gravity="center" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

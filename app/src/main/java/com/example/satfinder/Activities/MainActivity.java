@@ -79,14 +79,21 @@ public class MainActivity extends AppCompatActivity {
                 observerLocation.getLatitude(),
                 observerLocation.getLongitude(),
                 observerLocation.getAltitude(),
-                3,
+                7,
                 30,
                 new IN2YOCallback() {
                     @Override
                     public void onSuccess(ISatelliteResponse response) {
                         SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
-                        tvISSPassDetails.setText(String.format("Next pass is in: %s",
-                                convertUTCToLocalTime(svpResponse.getPasses().get(1).getStartUTC())));
+                        if (svpResponse != null) {
+                            tvISSPassDetails.setText(String.format("Next pass is in: %s",
+                                    convertUTCToLocalTime(svpResponse
+                                            .getPasses()
+                                            .get(0)
+                                            .getStartUTC())));
+                        } else {
+                            tvISSPassDetails.setText("No ISS sightings in the next week :)");
+                        }
                     }
 
                     @Override
@@ -128,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    // Put in a utils class?
     private String convertUTCToLocalTime(int utc) {
         Instant instant = Instant.ofEpochSecond(utc);
 

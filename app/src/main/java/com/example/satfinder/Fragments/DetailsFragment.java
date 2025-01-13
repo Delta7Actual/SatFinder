@@ -16,14 +16,22 @@ public class DetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private TextView tvSatelliteName;
+    private TextView tvSatelliteName, tvInclination, tvLatitude, tvLongitude, tvNextPass;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_details, container, false);
-        tvSatelliteName = view.findViewById(R.id.tv_satellite_name);
+        setupUI(view);
         return view;
+    }
+
+    private void setupUI(View view) {
+        tvSatelliteName = view.findViewById(R.id.tv_satellite_name);
+        tvInclination = view.findViewById(R.id.tv_inclination);
+        tvLatitude = view.findViewById(R.id.tv_latitude);
+        tvLongitude = view.findViewById(R.id.tv_longitude);
+        tvNextPass = view.findViewById(R.id.tv_next_pass);
     }
 }
