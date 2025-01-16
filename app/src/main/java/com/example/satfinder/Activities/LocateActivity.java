@@ -1,11 +1,15 @@
 package com.example.satfinder.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,11 +22,19 @@ import com.example.satfinder.R;
 
 public class LocateActivity extends AppCompatActivity implements SensorEventListener {
 
-    private Sensor rvSensor;
     private SensorManager sensorManager;
+    private ImageView ivAzimuth;
+    private Button btnReturn;
 
     private final float[] rMat = new float[9]; // Rotation matrix
+    // 0 is azimuth, 1 is pitch, 2 is roll
     private final float[] orientationVector = new float[3]; // Orientation vector
+    private float neededAzimuth;
+
+    private void setupUI() {
+        ivAzimuth = findViewById(R.id.iv_azimuth);
+        btnReturn = findViewById(R.id.button_return);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +47,15 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
             return insets;
         });
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        rvSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        setupUI();
+        btnReturn.setOnClickListener(v -> {
+            startActivity(new Intent(LocateActivity.this, BrowserActivity.class));
+            finish();
+        });
 
-        // Use the recommended method
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor rvSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+
         if (rvSensor != null) {
             sensorManager.registerListener(this, rvSensor, SensorManager.SENSOR_DELAY_NORMAL);
         } else {
@@ -53,8 +70,13 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
             SensorManager.getRotationMatrixFromVector(rMat, sensorEvent.values);
             SensorManager.getOrientation(rMat, orientationVector);
 
-            // 0 is azimuth, 1 is pitch, 2 is roll
-            // TODO: implement graphical representation of orientation
+            float azimuthInDegrees = (float) Math.toDegrees(orientationVector[0]);
+            // Normalize azimuth to 0-360 degrees
+            if (azimuthInDegrees < 0) {
+                azimuthInDegrees += 360;
+            }
+            updateCompassDirection(azimuthInDegrees);
+            Log.d("TAG", "onSensorChanged: " + getDirectionFromAzimuth(azimuthInDegrees));
         }
     }
 
@@ -68,5 +90,58 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         super.onDestroy();
         // Sensor cleanup
         sensorManager.unregisterListener(this);
+    }
+
+    private void updateCompassDirection(float azimuth) {
+        float offset = neededAzimuth - azimuth;
+        ivAzimuth.setRotation(offset);
+        if (offset < 10 && offset > -10) {
+            ivAzimuth.setColorFilter(R.color.primary);
+        }
+        else {
+            if (ivAzimuth.getColorFilter() != null) {
+                ivAzimuth.clearColorFilter();
+            }
+        }
+    }
+
+    // Put in utils class?
+    // Helper function to get the direction based on azimuth
+    private String getDirectionFromAzimuth(float azimuth) {
+        if (azimuth >= 348.75 || azimuth < 11.25) {
+            return "N";
+        } else if (azimuth >= 11.25 && azimuth < 33.75) {
+            return "NNE";
+        } else if (azimuth >= 33.75 && azimuth < 56.25) {
+            return "NE";
+        } else if (azimuth >= 56.25 && azimuth < 78.75) {
+            return "ENE";
+        } else if (azimuth >= 78.75 && azimuth < 101.25) {
+            return "E";
+        } else if (azimuth >= 101.25 && azimuth < 123.75) {
+            return "ESE";
+        } else if (azimuth >= 123.75 && azimuth < 146.25) {
+            return "SE";
+        } else if (azimuth >= 146.25 && azimuth < 168.75) {
+            return "SSE";
+        } else if (azimuth >= 168.75 && azimuth < 191.25) {
+            return "S";
+        } else if (azimuth >= 191.25 && azimuth < 213.75) {
+            return "SSW";
+        } else if (azimuth >= 213.75 && azimuth < 236.25) {
+            return "SW";
+        } else if (azimuth >= 236.25 && azimuth < 258.75) {
+            return "WSW";
+        } else if (azimuth >= 258.75 && azimuth < 281.25) {
+            return "W";
+        } else if (azimuth >= 281.25 && azimuth < 303.75) {
+            return "WNW";
+        } else if (azimuth >= 303.75 && azimuth < 326.25) {
+            return "NW";
+        } else if (azimuth >= 326.25 && azimuth < 348.75) {
+            return "NNW";
+        } else {
+            return "Unknown";
+        }
     }
 }

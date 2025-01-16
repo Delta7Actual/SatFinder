@@ -1,22 +1,29 @@
 package com.example.satfinder.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 
 import com.example.satfinder.Fragments.SearchFragment;
 import com.example.satfinder.R;
 
 public class BrowserActivity extends AppCompatActivity {
 
+    private Button btnLocate;
 
     private void setupUI() {
-
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.browser_fragment_container, new SearchFragment())
+                .addToBackStack(null) // Add the transaction to the backstack
+                .commit();
+        btnLocate = findViewById(R.id.btn_locate);
     }
 
     @Override
@@ -32,14 +39,9 @@ public class BrowserActivity extends AppCompatActivity {
         });
 
         setupUI();
-        replaceFragment(new SearchFragment());
-    }
-
-    private void replaceFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.browser_fragment_container, fragment)
-                .addToBackStack(null) // Add the transaction to the backstack
-                .commit();
+        btnLocate.setOnClickListener(v -> {
+            startActivity(new Intent(BrowserActivity.this, LocateActivity.class));
+            finish();
+        });
     }
 }

@@ -27,7 +27,7 @@
         android:textColor="@color/white"
         android:background="@color/primary_dark"
         android:padding="16dp"
-        android:text="Hey, User!" />
+        android:text="Edit profile for: user!" />
 
     <FrameLayout
         android:id="@+id/fragment_container"

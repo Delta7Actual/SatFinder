@@ -15,6 +15,7 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/primary_dark">
         <fragment
+            android:id="@+id/toolbar_fragment"
             android:name="com.example.satfinder.Fragments.ToolBarFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

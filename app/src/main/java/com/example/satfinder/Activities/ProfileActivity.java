@@ -38,9 +38,10 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         setupUI();
+        // TODO: Change this to support encapsulation
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            tvGreeting.setText("Hey, " + user.getDisplayName() + "!");
+            tvGreeting.setText("Edit profile for: " + user.getDisplayName() + "!");
         }
 
         getSupportFragmentManager()
