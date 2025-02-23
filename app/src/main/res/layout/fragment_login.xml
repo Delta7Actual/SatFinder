@@ -47,6 +47,14 @@
             android:text="Login"
             android:layout_marginTop="50dp" />
 
+        <!-- TODO: implement this -->
+        <Button
+            android:id="@+id/btn_forgot_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Forgot Password?"
+            android:layout_marginTop="15dp" />
+
     </LinearLayout>
 
 </LinearLayout>

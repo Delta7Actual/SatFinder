@@ -121,4 +121,18 @@ public class UserService {
             }
         });
     }
+
+    /**
+     * Sends a password reset email to the provided email address.
+     *
+     * @param email the email address to send the reset email to.
+     * @param callback the callback to notify of success or failure.
+     */
+    public void recoverPassword(String email, IUserAuthCallback callback) {
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+            if (!task.isSuccessful()){
+                callback.onFailure(task.getException().getMessage());
+            }
+        });
+    }
 }

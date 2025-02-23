@@ -19,7 +19,7 @@ public class SignUpFragment extends Fragment {
         // Required empty public constructor
     }
 
-    private EditText etName, etEmail, etPassword;
+    private EditText etName, etEmail, etPassword, etConfirmPassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +29,7 @@ public class SignUpFragment extends Fragment {
         etName = view.findViewById(R.id.et_name);
         etEmail = view.findViewById(R.id.et_email);
         etPassword = view.findViewById(R.id.et_password);
+        etConfirmPassword = view.findViewById(R.id.et_confirm_password);
 
         Button buttonSignUp = view.findViewById(R.id.button_signup);
         buttonSignUp.setOnClickListener(v -> handleSignUp());
@@ -40,12 +41,13 @@ public class SignUpFragment extends Fragment {
         String name = etName.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
+        String confirmPassword = etConfirmPassword.getText().toString().trim();
 
-        if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(SignUpFragment.this.getContext(), "All input fields must be filled!", Toast.LENGTH_LONG).show();
             return;
         }
         // Call LoginActivity method -> Preserve separation of concerns
-        ((LoginActivity) requireActivity()).signUpUser(name, email, password);
+        ((LoginActivity) requireActivity()).signUpUser(name, email, password, confirmPassword);
     }
 }

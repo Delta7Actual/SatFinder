@@ -72,4 +72,14 @@ public class UserManager {
     public void signUpUser(String name, String email, String password, IUserAuthCallback callback) {
         userService.signUp(name, email, password, callback);
     }
+
+    /**
+     * Sends a password reset email to the provided email address.
+     *
+     * @param email The email address to send the reset email to.
+     * @param callback The callback to notify on success or failure.
+     */
+    public void recoverPassword(String email, IUserAuthCallback callback) {
+        userService.recoverPassword(email, callback);
+    }
 }

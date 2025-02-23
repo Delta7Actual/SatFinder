@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.example.satfinder.Managers.StorageManager;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.ObserverLocation;
+import com.example.satfinder.Objects.SatellitePositionsResponse;
 import com.example.satfinder.Objects.SatelliteTLE;
 import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
@@ -35,6 +37,7 @@ public class SearchFragment extends Fragment {
     private EditText etSatelliteId;
     private Button btnSearch;
     private DetailsFragment detailsFragment;
+    private FrameLayout detailsFragmentContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,25 +47,29 @@ public class SearchFragment extends Fragment {
         btnSearch = view.findViewById(R.id.btn_search);
         btnSearch.setOnClickListener(v -> handleSearch());
         detailsFragment = (DetailsFragment) getChildFragmentManager().findFragmentById(R.id.details_fragment);
+        detailsFragmentContainer = view.findViewById(R.id.fragment_container);
 
         return view;
     }
 
+    private void searchFailure() {
+        Toast.makeText(SearchFragment.this.getContext(), "Please enter a valid satellite ID!", Toast.LENGTH_LONG).show();
+    }
+
     private void handleSearch() {
         if (etSatelliteId.getText().toString().isEmpty()) {
-            Toast.makeText(SearchFragment.this.getContext(), "Please enter a valid satellite ID!", Toast.LENGTH_LONG).show();
+            searchFailure();
             return;
         }
         SatelliteManager manager = SatelliteManager.getInstance();
         int satelliteId = Integer.parseInt(etSatelliteId.getText().toString());
 
         manager.fetchSatelliteTLE(satelliteId, new IN2YOCallback() {
-
             @Override
             public void onSuccess(ISatelliteResponse response) {
                 SatelliteTLEResponse tleResponse = (SatelliteTLEResponse) response;
                 if (tleResponse == null) {
-                    Toast.makeText(SearchFragment.this.getContext(), "Couldn't fetch data. Make sure you provided a valid ID", Toast.LENGTH_LONG).show();
+                    searchFailure();
                     return;
                 }
 
@@ -71,11 +78,12 @@ public class SearchFragment extends Fragment {
 
                 tvSatName.setText(tleResponse.getInfo().getSatname());
                 tvInclination.setText(String.format("%.2f", new SatelliteTLE(tleResponse.getTle()).getInclination()));
+                detailsFragmentContainer.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onError(String errorMessage) {
-                Toast.makeText(SearchFragment.this.getContext(), "Couldn't fetch data. Make sure you provided a valid ID", Toast.LENGTH_LONG).show();
+                searchFailure();
             }
         });
         ObserverLocation observerLocation = StorageManager.getInstance().spGetUserLocation(this.getContext());
@@ -91,7 +99,7 @@ public class SearchFragment extends Fragment {
                     public void onSuccess(ISatelliteResponse response) {
                         SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
                         if (svpResponse == null) {
-                            Toast.makeText(SearchFragment.this.getContext(), "Couldn't fetch data. Make sure you provided a valid ID", Toast.LENGTH_LONG).show();
+                            searchFailure();
                             return;
                         }
 
@@ -101,7 +109,32 @@ public class SearchFragment extends Fragment {
 
                     @Override
                     public void onError(String errorMessage) {
-                        Toast.makeText(SearchFragment.this.getContext(), "Couldn't fetch data. Make sure you provided a valid ID", Toast.LENGTH_LONG).show();
+                        searchFailure();
+                    }
+                });
+        manager.fetchSatellitePositions(satelliteId
+                , observerLocation.getLatitude()
+                , observerLocation.getLongitude()
+                , observerLocation.getAltitude()
+                , 1
+                , new IN2YOCallback() {
+                    @Override
+                    public void onSuccess(ISatelliteResponse response) {
+                        SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
+                        if (spResponse == null) {
+                            searchFailure();
+                            return;
+                        }
+
+                        TextView tvLatitude = detailsFragment.getView().findViewById(R.id.tv_latitude);
+                        TextView tvLongitude = detailsFragment.getView().findViewById(R.id.tv_longitude);
+                        tvLatitude.setText(String.format("%.2f", spResponse.getPositions().get(0).getSatlatitude()));
+                        tvLongitude.setText(String.format("%.2f", spResponse.getPositions().get(0).getSatlongitude()));
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        searchFailure();
                     }
                 });
     }

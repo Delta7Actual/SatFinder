@@ -20,6 +20,7 @@ public class LoginFragment extends Fragment {
     }
 
     private EditText etEmail, etPassword;
+    private Button btnLogin, btnForgotPassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,10 +30,31 @@ public class LoginFragment extends Fragment {
         etEmail = view.findViewById(R.id.et_email);
         etPassword = view.findViewById(R.id.et_password);
 
-        Button buttonLogin = view.findViewById(R.id.button_login);
-        buttonLogin.setOnClickListener(v -> handleLogin());
+        btnLogin = view.findViewById(R.id.button_login);
+        btnForgotPassword = view.findViewById(R.id.btn_forgot_password);
+
+        btnLogin.setOnClickListener(v -> handleLogin());
+        btnForgotPassword.setOnClickListener(v -> handlePasswordReset());
 
         return view;
+    }
+
+    private void handlePasswordReset() {
+        String email = String.valueOf(etEmail.getText());
+
+        if (email.isEmpty())
+        {
+            Toast.makeText(LoginFragment.this.getContext(), "Fill in recovery email address!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Call LoginActivity method -> Preserve separation of concerns
+        boolean isSuccessful = ((LoginActivity) requireActivity()).recoverPassword(email);
+        if (isSuccessful) {
+            Toast.makeText(LoginFragment.this.getContext(), "Password reset email sent!", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(LoginFragment.this.getContext(), "Password reset failed!", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void handleLogin()

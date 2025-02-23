@@ -79,7 +79,11 @@ public class LoginActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void signUpUser(String name, String email, String password) {
+    public void signUpUser(String name, String email, String password, String confirmPassword) {
+        if (!password.equals(confirmPassword)) {
+            Toast.makeText(LoginActivity.this, "Passwords do not match!", Toast.LENGTH_LONG).show();
+            return;
+        }
         UserManager manager = UserManager.getInstance();
         manager.signUpUser(name, email, password, new IUserAuthCallback() {
             @Override
@@ -97,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginUser(String email, String password) {
+
         UserManager manager = UserManager.getInstance();
         manager.loginUser(email, password, new IUserAuthCallback() {
             @Override
@@ -111,5 +116,23 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, error, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public boolean recoverPassword(String email) {
+        UserManager manager = UserManager.getInstance();
+        final boolean[] status = {false};
+        manager.recoverPassword(email, new IUserAuthCallback() {
+
+            @Override
+            public void onSuccess(FirebaseUser user) {
+                status[0] = true;
+            }
+
+            @Override
+            public void onFailure(String error) {
+                status[0] = false;
+            }
+        });
+        return status[0];
     }
 }
