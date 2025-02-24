@@ -49,12 +49,7 @@ public class LoginFragment extends Fragment {
         }
 
         // Call LoginActivity method -> Preserve separation of concerns
-        boolean isSuccessful = ((LoginActivity) requireActivity()).recoverPassword(email);
-        if (isSuccessful) {
-            Toast.makeText(LoginFragment.this.getContext(), "Password reset email sent!", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(LoginFragment.this.getContext(), "Password reset failed!", Toast.LENGTH_LONG).show();
-        }
+        ((LoginActivity) requireActivity()).recoverPassword(email);
     }
 
     private void handleLogin()

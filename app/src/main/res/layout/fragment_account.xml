@@ -1,79 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.AccountFragment">
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/background"
+    android:fitsSystemWindows="true">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_display_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Display Name"
+        android:textColor="@color/primary_dark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/et_display_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:hint="Enter your display name"
+        android:textColor="@color/primary_dark"
+        android:background="?android:attr/editTextBackground"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btn_save_display_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/primary"
+        android:textSize="14sp"
+        android:layout_marginBottom="32dp"
+        android:padding="12dp" />
+
+    <TextView
+        android:id="@+id/tv_satellite_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Satellite ID"
+        android:textColor="@color/primary_dark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/et_satellite_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Satellite ID"
+        android:textColor="@color/primary_dark"
+        android:background="?android:attr/editTextBackground"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btn_add_satellite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Satellite"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@color/primary"
+        android:textSize="14sp"
+        android:layout_marginBottom="32dp"
+        android:padding="12dp" />
+
+    <TextView
+        android:id="@+id/tv_satellite_list_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Saved Satellites"
+        android:textColor="@color/primary_dark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_satellite_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:background="@color/background_light"
-        android:layout_margin="10dp">
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp">
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Change Account Details"
-            android:textSize="26sp"
-            android:paddingBottom="8dp"
-            android:textAlignment="center"/>
-
-        <EditText
-            android:id="@+id/et_display_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter new display name"
-            android:textSize="18sp"
-            android:inputType="textPersonName"
-            android:layout_marginBottom="16dp"
-            android:layout_marginTop="20dp"
-            android:textColorHint="@color/secondary"/>
-
-        <Button
-            android:id="@+id/btn_save_display_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save Display Name"
-            android:layout_gravity="center" />
-    </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp">
-
-            <EditText
-                android:id="@+id/et_satellite_id"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter Satellite ID"
-                android:textSize="18sp"
-                android:inputType="text"
-                android:textColorHint="@color/secondary"/>
-
-            <Button
-                android:id="@+id/btn_add_satellite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add Satellite"
-                android:layout_gravity="center"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_satellite_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
-        </LinearLayout>
-    </LinearLayout>
-
-</FrameLayout>
+        android:clipToPadding="false"
+        android:paddingTop="8dp" />
+</LinearLayout>

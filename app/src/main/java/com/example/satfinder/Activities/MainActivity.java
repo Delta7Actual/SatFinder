@@ -22,7 +22,6 @@ import com.example.satfinder.Objects.ObserverLocation;
 import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
 import com.example.satfinder.R;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -36,17 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerSatelliteTLEList;
     private SavedSatelliteAdapter adapter;
     private List<SatelliteTLEResponse> satelliteTLEResponses;
-    private TextView tvGreeting;
     private TextView tvISSPassDetails;
 
     private void setupUI() {
-        tvGreeting = findViewById(R.id.tv_greeting);
         tvISSPassDetails = findViewById(R.id.tv_iss_pass_details);
         recyclerSatelliteTLEList = findViewById(R.id.recycler_satellite_list);
-
-        tvGreeting.setText("Hello, " +
-                FirebaseAuth.getInstance().getCurrentUser().getDisplayName()
-                + "!");
         satelliteTLEResponses = new ArrayList<>();
         adapter = new SavedSatelliteAdapter(satelliteTLEResponses);
         recyclerSatelliteTLEList.setLayoutManager(new LinearLayoutManager(this));

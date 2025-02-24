@@ -118,21 +118,19 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    public boolean recoverPassword(String email) {
+    public void recoverPassword(String email) {
         UserManager manager = UserManager.getInstance();
-        final boolean[] status = {false};
         manager.recoverPassword(email, new IUserAuthCallback() {
 
             @Override
             public void onSuccess(FirebaseUser user) {
-                status[0] = true;
+                Toast.makeText(LoginActivity.this, "Password reset email sent!", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onFailure(String error) {
-                status[0] = false;
+                Toast.makeText(LoginActivity.this, error, Toast.LENGTH_LONG).show();
             }
         });
-        return status[0];
     }
 }

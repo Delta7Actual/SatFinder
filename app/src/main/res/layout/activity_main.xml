@@ -9,11 +9,13 @@
     android:fitsSystemWindows="true"
     tools:context=".Activities.MainActivity">
 
+    <!-- Toolbar -->
     <FrameLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/primary_dark">
+        android:layout_height="wrap_content"
+        android:background="@color/primary_dark"
+        android:elevation="4dp">
         <fragment
             android:id="@+id/toolbar_fragment"
             android:name="com.example.satfinder.Fragments.ToolBarFragment"
@@ -21,50 +23,46 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/tv_greeting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:background="@color/primary_dark"
-        android:padding="16dp"
-        android:text="Hey, User!" />
-
+    <!-- ISS Pass Info -->
     <LinearLayout
         android:id="@+id/iss_pass_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/background_light"
-        android:padding="15dp"
+        android:background="@color/primary"
+        android:padding="16dp"
         android:layout_margin="16dp">
+
+
 
         <TextView
             android:id="@+id/tv_iss_pass_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next ISS Pass"
-            android:textColor="@color/secondary"
+            android:textColor="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp" />
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_iss_pass_details"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No pass information available yet."
-            android:textColor="@color/white"
+            android:textColor="@color/secondary_light"
             android:textSize="16sp"
-            android:padding="8dp"
-            android:background="@color/primary"
-            android:gravity="center"
-            android:layout_marginBottom="8dp" />
-
+            android:layout_marginTop="8dp" />
     </LinearLayout>
+
+    <!-- Saved Satellites -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/secondary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Your Tracked Satellites"
+        android:layout_margin="16dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -72,32 +70,20 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:background="@color/background_light"
-        android:layout_margin="16dp"
-        android:padding="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/secondary"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:text="Your saved satellites"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp" />
+        android:padding="8dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_satellite_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"/>
-
+            android:layout_height="match_parent" />
     </LinearLayout>
 
+    <!-- Bottom Navigation -->
     <FrameLayout
         android:id="@+id/bottom_navigation_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_light">
+        android:background="@color/primary_dark">
         <fragment
             android:name="com.example.satfinder.Fragments.BottomNavigationFragment"
             android:layout_width="match_parent"

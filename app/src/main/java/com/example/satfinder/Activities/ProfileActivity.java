@@ -1,7 +1,6 @@
 package com.example.satfinder.Activities;
 
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -14,15 +13,15 @@ import com.example.satfinder.Fragments.AccountFragment;
 import com.example.satfinder.Managers.UserManager;
 import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.example.satfinder.R;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView tvGreeting;
-
     private void setupUI() {
-        tvGreeting = findViewById(R.id.tv_greeting);
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new AccountFragment())
+                .commit();
     }
 
     @Override
@@ -38,16 +37,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         setupUI();
-        // TODO: Change this to support encapsulation
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            tvGreeting.setText("Edit profile for: " + user.getDisplayName() + "!");
-        }
-
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new AccountFragment())
-                .commit();
     }
 
     public void setUserDisplayName(String newName) {
@@ -55,7 +44,6 @@ public class ProfileActivity extends AppCompatActivity {
         manager.setUserDisplayName(newName, new IUserAuthCallback() {
             @Override
             public void onSuccess(FirebaseUser user) {
-                tvGreeting.setText("Hey, " + user.getDisplayName() + "!");
                 Toast.makeText(ProfileActivity.this, "Display name updated to " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
             }
 

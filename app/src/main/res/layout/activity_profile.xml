@@ -18,17 +18,6 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/tv_greeting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:background="@color/primary_dark"
-        android:padding="16dp"
-        android:text="Edit profile for: user!" />
-
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"

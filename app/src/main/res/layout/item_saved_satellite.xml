@@ -1,90 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/background"
-    android:padding="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="6dp"
+    android:layout_margin="12dp"
+    android:layout_gravity="center"
+    android:backgroundTint="@color/background"
+    app:cardCornerRadius="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_satellite_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Satellite Name"
-        android:textColor="@color/primary"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:paddingBottom="4dp" />
+        <!-- Satellite Name and ID -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
 
-    <TextView
-        android:id="@+id/tv_satellite_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ID: 12345"
-        android:textColor="@color/secondary"
-        android:textSize="18sp"
-        android:paddingBottom="4dp"
-        android:layout_marginLeft="14dp"/>
+            <TextView
+                android:id="@+id/tv_satellite_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Satellite Name"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/tv_satellite_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ID: 12345"
+                android:textColor="@color/secondary"
+                android:textSize="18sp"
+                android:layout_gravity="end"
+                android:layout_weight="0"
+                android:paddingStart="8dp"/>
+        </LinearLayout>
+
+        <!-- Satellite Details (Orbital Period, Inclination) -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/tv_orbital_period"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Orbital Period: 90 min"
+                android:textColor="@color/primary_dark"
+                android:textSize="14sp"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:id="@+id/tv_inclination"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Inclination: 51.6°"
+                android:textColor="@color/primary_dark"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:paddingStart="8dp"/>
+        </LinearLayout>
+
+        <!-- Apogee and Perigee -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:id="@+id/tv_apogee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Apogee: 420 km"
+                android:textColor="@color/primary_dark"
+                android:textSize="14sp"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:id="@+id/tv_perigee"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Perigee: 410 km"
+                android:textColor="@color/primary_dark"
+                android:textSize="14sp"
+                android:layout_weight="1"
+                android:paddingStart="8dp"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="4dp"
-        android:background="@color/primary">
-
-        <TextView
-            android:id="@+id/tv_orbital_period"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Orbital Period: 90 min"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tv_inclination"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Inclination: 51.6°"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:paddingStart="8dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="4dp"
-        android:background="@color/primary_dark">
-
-        <TextView
-            android:id="@+id/tv_apogee"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Apogee: 420 km"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tv_perigee"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Perigee: 410 km"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:paddingStart="8dp" />
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>
