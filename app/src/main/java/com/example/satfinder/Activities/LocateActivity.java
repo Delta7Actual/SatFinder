@@ -23,17 +23,35 @@ import com.example.satfinder.R;
 public class LocateActivity extends AppCompatActivity implements SensorEventListener {
 
     private SensorManager sensorManager;
-    private ImageView ivAzimuth;
+    private ImageView ivCompass;
+    private ImageView ivNeedle;
     private Button btnReturn;
 
     private final float[] rMat = new float[9]; // Rotation matrix
     // 0 is azimuth, 1 is pitch, 2 is roll
     private final float[] orientationVector = new float[3]; // Orientation vector
-    private float neededAzimuth;
+
+    private float satAzimuth;
+    private float satElevation;
 
     private void setupUI() {
-        ivAzimuth = findViewById(R.id.iv_azimuth);
+        ivCompass = findViewById(R.id.iv_compass);
+        ivNeedle = findViewById(R.id.iv_compass_needle);
         btnReturn = findViewById(R.id.button_return);
+        btnReturn.setOnClickListener(v -> {
+            startActivity(new Intent(LocateActivity.this, BrowserActivity.class));
+            finish();
+        });
+    }
+
+    private void setupSensors() {
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor rvSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        if (rvSensor != null) {
+            sensorManager.registerListener(this, rvSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        } else {
+            Toast.makeText(this, "Sensors unavailable! Cannot triangulate orientation!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -48,19 +66,11 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         });
 
         setupUI();
-        btnReturn.setOnClickListener(v -> {
-            startActivity(new Intent(LocateActivity.this, BrowserActivity.class));
-            finish();
-        });
+        setupSensors();
+        satAzimuth = getIntent().getFloatExtra("sat_azimuth", 0);
+        satElevation = getIntent().getFloatExtra("sat_elevation", 0);
 
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Sensor rvSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-
-        if (rvSensor != null) {
-            sensorManager.registerListener(this, rvSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        } else {
-            Toast.makeText(this, "Sensors unavailable! Cannot triangulate orientation!", Toast.LENGTH_SHORT).show();
-        }
+        Log.d("TAG", "SAT AZ': " + satAzimuth);
     }
 
     @Override
@@ -75,14 +85,15 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
             if (azimuthInDegrees < 0) {
                 azimuthInDegrees += 360;
             }
-            updateCompassDirection(azimuthInDegrees);
+            updateCompassDirection(azimuthInDegrees + 90);
             Log.d("TAG", "onSensorChanged: " + getDirectionFromAzimuth(azimuthInDegrees));
         }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
-        // Handle later...
+        // TODO: Handle this
+        // Do i have to?
     }
 
     @Override
@@ -93,14 +104,14 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
     }
 
     private void updateCompassDirection(float azimuth) {
-        float offset = neededAzimuth - azimuth;
-        ivAzimuth.setRotation(offset);
+        float offset = satAzimuth - azimuth;
+        ivCompass.setRotation(offset);
         if (offset < 10 && offset > -10) {
-            ivAzimuth.setColorFilter(R.color.primary);
+            ivCompass.setColorFilter(R.color.primary);
         }
         else {
-            if (ivAzimuth.getColorFilter() != null) {
-                ivAzimuth.clearColorFilter();
+            if (ivCompass.getColorFilter() != null) {
+                ivCompass.clearColorFilter();
             }
         }
     }
