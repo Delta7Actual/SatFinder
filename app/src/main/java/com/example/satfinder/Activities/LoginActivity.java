@@ -19,7 +19,6 @@ import com.example.satfinder.Fragments.SignUpFragment;
 import com.example.satfinder.Managers.UserManager;
 import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.example.satfinder.R;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -52,10 +51,15 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Check if user is logged in before toggling fragments
+        if (UserManager.getInstance().isUserLoggedIn()) {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+            return; // Don't show the login fragment if user is already logged in
+        }
+
         setupUI();
         toggleFragment();
-
-        if (UserManager.getInstance().isUserLoggedIn()) FirebaseAuth.getInstance().signOut();
     }
 
     private void toggleFragment() {

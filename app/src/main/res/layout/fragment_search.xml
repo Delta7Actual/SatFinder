@@ -1,73 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/background"
-    tools:context=".Fragments.SearchFragment">
+    android:padding="12dp">
 
-    <!-- Search Container -->
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_search_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search Satellite by ID"
+        android:textColor="@color/secondary"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="12dp" />
+
+    <EditText
+        android:id="@+id/et_satellite_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:hint="Enter Satellite ID"
+        android:textColor="@color/secondary_light"
+        android:textColorHint="@color/secondary"
+        android:background="@color/background_light"
+        android:textSize="18sp"
         android:padding="16dp"
-        android:gravity="center">
+        android:layout_marginBottom="6dp" />
 
-        <!-- Title -->
-        <TextView
-            android:id="@+id/tv_search_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Search Satellite by ID"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"
-            android:gravity="center"/>
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search"
+        android:textColor="@color/white"
+        android:background="@color/primary"
+        android:textSize="18sp"
+        android:layout_marginBottom="24dp" />
 
-        <!-- Input Field for Satellite ID -->
-        <EditText
-            android:id="@+id/et_satellite_id"
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="invisible">
+
+        <fragment
+            android:id="@+id/details_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Satellite ID"
-            android:textColor="@color/secondary"
-            android:background="@color/background_light"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:textColorHint="@color/secondary"
-            android:layout_marginBottom="16dp"/>
+            android:name="com.example.satfinder.Fragments.DetailsFragment"/>
+    </FrameLayout>
 
-        <!-- Search Button -->
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Search"
-            android:textColor="@color/white"
-            android:background="@color/primary"
-            android:padding="12dp"
-            android:textSize="16sp"
-            android:layout_marginBottom="16dp"
-            android:onClick="onSearchClicked"/>
-
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginTop="16dp"
-            android:visibility="invisible">
-
-            <fragment
-                android:id="@+id/details_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:name="com.example.satfinder.Fragments.DetailsFragment"/>
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

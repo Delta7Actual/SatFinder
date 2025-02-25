@@ -2,8 +2,9 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:layout_marginTop="8dp"
+    android:padding="8dp"
+    android:layout_marginTop="4dp"
+    android:layout_margin="4dp"
     android:background="@color/background"
     android:gravity="center_vertical">
 
@@ -13,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Satellite ID"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textColor="@color/white"/>
 
     <Button

@@ -33,8 +33,6 @@
         android:padding="16dp"
         android:layout_margin="16dp">
 
-
-
         <TextView
             android:id="@+id/tv_iss_pass_title"
             android:layout_width="wrap_content"
@@ -62,7 +60,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         android:text="Your Tracked Satellites"
-        android:layout_margin="16dp" />
+        android:layout_margin="8dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
