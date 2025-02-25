@@ -7,6 +7,6 @@
     android:layout_height="wrap_content"
     android:background="@color/background_light"
     app:itemTextColor="@color/white"
-    app:itemIconTint="@color/secondary_light"
+    app:itemIconTint="@color/white"
     app:menu="@menu/bottom_nav_menu"
     android:padding="0dp"/>

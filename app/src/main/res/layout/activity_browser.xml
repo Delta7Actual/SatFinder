@@ -33,7 +33,9 @@
         android:id="@+id/btn_locate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Locate this satellite"/>
+        android:text="Locate this satellite!"
+        android:background="@color/primary"
+        android:layout_margin="8dp"/>
 
     <FrameLayout
         android:id="@+id/bottom_navigation_container"
