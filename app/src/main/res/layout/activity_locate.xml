@@ -6,8 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".Activities.LocateActivity"
     android:orientation="vertical"
-    android:gravity="center|top">
+    android:gravity="center">
 
+    <!-- Toolbar -->
     <FrameLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
@@ -20,50 +21,84 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <!-- Instructions -->
+    <TextView
+        android:id="@+id/tv_greeting"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/secondary"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Point your camera so the arrow points up, then adjust your angle!" />
+
+    <!-- Compass and Angle container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp">
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
 
-        <TextView
-            android:id="@+id/tv_greeting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/secondary"
-            android:padding="16dp"
-            android:text="Point your camera so the arrow points to the top!" />
-
+        <!-- Compass with needle -->
         <FrameLayout
-            android:id="@+id/frameLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="350dp"
+            android:layout_height="350dp"
+            android:layout_gravity="center"
+            android:padding="8dp">
 
-            <!-- Existing ImageView displaying the image with cardinal directions -->
             <ImageView
                 android:id="@+id/iv_compass"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/compass" />
 
-            <!-- ImageView for the compass needle -->
             <ImageView
                 android:id="@+id/iv_compass_needle"
-                android:layout_width="225dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/baseline_north_24" />
+                android:src="@drawable/baseline_north_24"
+                android:tintMode="src_atop" />
         </FrameLayout>
+
+        <!-- Angle representation -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="32dp">
+
+            <ImageView
+                android:id="@+id/iv_angle"
+                android:layout_width="wrap_content"
+                android:layout_height="170dp"
+                android:src="@drawable/angle"
+                android:layout_weight="1"
+                android:layout_marginLeft="-124dp"/>
+
+            <TextView
+                android:id="@+id/tv_angle_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Angle: 0°"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_weight="0"/>
+        </LinearLayout>
     </LinearLayout>
 
+    <!-- Return button -->
     <Button
         android:id="@+id/button_return"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary"
-        android:layout_margin="8dp"
-        android:text="RETURN"/>
+        android:textColor="@color/white"
+        android:text="RETURN"
+        android:layout_margin="16dp" />
 </LinearLayout>

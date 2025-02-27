@@ -1,0 +1,87 @@
+package com.example.satfinder.Activities;
+
+import com.example.satfinder.Objects.ObserverLocation;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
+public final class SatUtils {
+    private SatUtils() {
+        // Utility class
+    }
+
+    /**
+     * Calculate the angle above the horizon needed to see target from source
+     * @param source The observer's location
+     * @param target The target's location
+     * @return The angle above the horizon in degrees
+     */
+    public static float getAngleFromHorizon(ObserverLocation source, ObserverLocation target) {
+        double dLat = Math.toRadians(target.getLatitude() - source.getLatitude());
+        double dLon = Math.toRadians(target.getLongitude() - source.getLongitude());
+
+        double distance = Math.sqrt(dLat * dLat + dLon * dLon);
+        double altitudeDiff = target.getAltitude() - source.getAltitude();
+
+        double angleRad = Math.atan2(altitudeDiff, distance);
+        return (float) Math.toDegrees(angleRad);
+    }
+
+    /**
+     * Convert UTC time to local time
+     * @param utc The UTC time
+     * @return The local time
+     */
+    public static String convertUTCToLocalTime(int utc) {
+        Instant instant = Instant.ofEpochSecond(utc);
+
+        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM HH:mm");
+
+        return localDateTime.format(formatter);
+    }
+
+    /**
+     * Turn float azimuth into string direction
+     * @return cardinal direction as a String
+     */
+    public static String getDirectionFromAzimuth(float azimuth) {
+        if (azimuth >= 348.75 || azimuth < 11.25) {
+            return "N";
+        } else if (azimuth >= 11.25 && azimuth < 33.75) {
+            return "NNE";
+        } else if (azimuth >= 33.75 && azimuth < 56.25) {
+            return "NE";
+        } else if (azimuth >= 56.25 && azimuth < 78.75) {
+            return "ENE";
+        } else if (azimuth >= 78.75 && azimuth < 101.25) {
+            return "E";
+        } else if (azimuth >= 101.25 && azimuth < 123.75) {
+            return "ESE";
+        } else if (azimuth >= 123.75 && azimuth < 146.25) {
+            return "SE";
+        } else if (azimuth >= 146.25 && azimuth < 168.75) {
+            return "SSE";
+        } else if (azimuth >= 168.75 && azimuth < 191.25) {
+            return "S";
+        } else if (azimuth >= 191.25 && azimuth < 213.75) {
+            return "SSW";
+        } else if (azimuth >= 213.75 && azimuth < 236.25) {
+            return "SW";
+        } else if (azimuth >= 236.25 && azimuth < 258.75) {
+            return "WSW";
+        } else if (azimuth >= 258.75 && azimuth < 281.25) {
+            return "W";
+        } else if (azimuth >= 281.25 && azimuth < 303.75) {
+            return "WNW";
+        } else if (azimuth >= 303.75 && azimuth < 326.25) {
+            return "NW";
+        } else if (azimuth >= 326.25 && azimuth < 348.75) {
+            return "NNW";
+        } else {
+            return "Unknown";
+        }
+    }
+}

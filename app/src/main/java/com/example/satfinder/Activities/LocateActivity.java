@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,6 +26,8 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
     private SensorManager sensorManager;
     private ImageView ivCompass;
     private ImageView ivNeedle;
+    private ImageView ivAngle;
+    private TextView tvAngleValue;
     private Button btnReturn;
 
     private final float[] rMat = new float[9]; // Rotation matrix
@@ -32,11 +35,13 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
     private final float[] orientationVector = new float[3]; // Orientation vector
 
     private float satAzimuth;
-    private float satElevation;
+    private float satPitch;
 
     private void setupUI() {
         ivCompass = findViewById(R.id.iv_compass);
         ivNeedle = findViewById(R.id.iv_compass_needle);
+        ivAngle = findViewById(R.id.iv_angle);
+        tvAngleValue = findViewById(R.id.tv_angle_value);
         btnReturn = findViewById(R.id.button_return);
         btnReturn.setOnClickListener(v -> {
             startActivity(new Intent(LocateActivity.this, BrowserActivity.class));
@@ -68,9 +73,10 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         setupUI();
         setupSensors();
         satAzimuth = getIntent().getFloatExtra("sat_azimuth", 0);
-        satElevation = getIntent().getFloatExtra("sat_elevation", 0);
+        satPitch = getIntent().getFloatExtra("sat_elevation", 0);
 
-        Log.d("TAG", "SAT AZ': " + satAzimuth);
+        Log.d("SAT", "SAT AZ': " + satAzimuth);
+        Log.d("SAT", "SAT PI': " + satPitch);
     }
 
     @Override
@@ -85,8 +91,9 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
             if (azimuthInDegrees < 0) {
                 azimuthInDegrees += 360;
             }
-            updateCompassDirection(azimuthInDegrees + 90);
-            Log.d("TAG", "onSensorChanged: " + getDirectionFromAzimuth(azimuthInDegrees));
+            float pitch = orientationVector[1];
+            updateValues(azimuthInDegrees, pitch);
+            Log.d("TAG", "onSensorChanged: " + SatUtils.getDirectionFromAzimuth(azimuthInDegrees));
         }
     }
 
@@ -103,56 +110,26 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         sensorManager.unregisterListener(this);
     }
 
-    private void updateCompassDirection(float azimuth) {
-        float offset = satAzimuth - azimuth;
-        ivCompass.setRotation(offset);
-        if (offset < 10 && offset > -10) {
-            ivCompass.setColorFilter(R.color.primary);
-        }
-        else {
+    public void updateValues(float azimuth, float pitch) {
+        float azOffset = satAzimuth - azimuth;
+        float piOffset = satPitch - pitch;
+
+        ivCompass.setRotation(azOffset);
+        tvAngleValue.setText("Angle: " + String.format("%.2f", pitch+ "°"));
+
+        if (azOffset < 10 && azOffset > -10) {
+            ivCompass.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
+        } else {
             if (ivCompass.getColorFilter() != null) {
                 ivCompass.clearColorFilter();
             }
         }
-    }
-
-    // Put in utils class?
-    // Helper function to get the direction based on azimuth
-    private String getDirectionFromAzimuth(float azimuth) {
-        if (azimuth >= 348.75 || azimuth < 11.25) {
-            return "N";
-        } else if (azimuth >= 11.25 && azimuth < 33.75) {
-            return "NNE";
-        } else if (azimuth >= 33.75 && azimuth < 56.25) {
-            return "NE";
-        } else if (azimuth >= 56.25 && azimuth < 78.75) {
-            return "ENE";
-        } else if (azimuth >= 78.75 && azimuth < 101.25) {
-            return "E";
-        } else if (azimuth >= 101.25 && azimuth < 123.75) {
-            return "ESE";
-        } else if (azimuth >= 123.75 && azimuth < 146.25) {
-            return "SE";
-        } else if (azimuth >= 146.25 && azimuth < 168.75) {
-            return "SSE";
-        } else if (azimuth >= 168.75 && azimuth < 191.25) {
-            return "S";
-        } else if (azimuth >= 191.25 && azimuth < 213.75) {
-            return "SSW";
-        } else if (azimuth >= 213.75 && azimuth < 236.25) {
-            return "SW";
-        } else if (azimuth >= 236.25 && azimuth < 258.75) {
-            return "WSW";
-        } else if (azimuth >= 258.75 && azimuth < 281.25) {
-            return "W";
-        } else if (azimuth >= 281.25 && azimuth < 303.75) {
-            return "WNW";
-        } else if (azimuth >= 303.75 && azimuth < 326.25) {
-            return "NW";
-        } else if (azimuth >= 326.25 && azimuth < 348.75) {
-            return "NNW";
+        if (piOffset < 10 && azOffset > -10) {
+            ivAngle.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
         } else {
-            return "Unknown";
+            if (ivAngle.getColorFilter() != null) {
+                ivAngle.clearColorFilter();
+            }
         }
     }
 }

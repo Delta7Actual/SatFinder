@@ -5,18 +5,10 @@ package com.example.satfinder.Objects;
  * Handles mathematical calculations for orbital parameters.
  */
 public class SatelliteTLE {
-    private String line1;
-    private String line2;
-    private double inclination;
-    private double apogee;
-    private double perigee;
-    private double orbitalPeriod;
-
-    private final double stdEarthGrav = 398600.4418;
-    private final double stdEarthRad = 6378.137;
-
-    public SatelliteTLE() {
-    }
+    private final String line1;
+    private final String line2;
+    private final double stdEarthGrav = 398600.4418; // km^3/s^2
+    private final double stdEarthRad = 6378.137; // km
 
     public SatelliteTLE(String tle) {
         if (tle == null) {
@@ -37,11 +29,28 @@ public class SatelliteTLE {
     }
 
     private double getMeanMotion() {
-        return Double.parseDouble(line2.substring(53, 63)) * (2 * Math.PI) / 86400;
+        return Double.parseDouble(line2.substring(53, 63));
     }
 
     private double getSemiMajorAxis() {
-        return Math.pow(stdEarthGrav / Math.pow(getMeanMotion(), 2), (double)1/3);
+        double meanMotion = getMeanMotion() * 2 * Math.PI / 86400; // convert orbits/day to radians/sec
+        return Math.pow(stdEarthGrav / (meanMotion * meanMotion), 1.0 / 3.0); // km
+    }
+
+    public double getPerigee() {
+        return getSemiMajorAxis() * (1 - getEccentricity()) - stdEarthRad;
+    }
+
+    public double getApogee() {
+        return getSemiMajorAxis() * (1 + getEccentricity()) - stdEarthRad;
+    }
+
+    public double getInclination() {
+        return Double.parseDouble(line2.substring(8, 16));
+    }
+
+    public double getOrbitalPeriod() {
+        return 86400 / getMeanMotion(); // seconds per orbit
     }
 
     public String getLine1() {
@@ -52,31 +61,15 @@ public class SatelliteTLE {
         return line2;
     }
 
-    public double getPerigee() {
-        return this.getSemiMajorAxis() * (1 - getEccentricity()) - stdEarthRad;
-    }
-
-    public double getApogee() {
-        return this.getSemiMajorAxis() * (1 + getEccentricity()) - stdEarthRad;
-    }
-
-    public double getInclination() {
-        return Double.parseDouble(line2.substring(8, 16));
-    }
-
-    public double getOrbitalPeriod() {
-        return (2 * Math.PI / getMeanMotion()) / 360;
-    }
-
     @Override
     public String toString() {
         return "SatelliteTLE{" +
                 "line1='" + line1 + '\'' +
                 ", line2='" + line2 + '\'' +
-                ", inclination=" + inclination +
-                ", apogee=" + apogee +
-                ", perigee=" + perigee +
-                ", orbitalPeriod=" + orbitalPeriod +
+                ", inclination=" + getInclination() +
+                ", apogee=" + getApogee() +
+                ", perigee=" + getPerigee() +
+                ", orbitalPeriod=" + getOrbitalPeriod() +
                 ", stdEarthGrav=" + stdEarthGrav +
                 ", stdEarthRad=" + stdEarthRad +
                 '}';

@@ -53,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check if user is logged in before toggling fragments
         if (UserManager.getInstance().isUserLoggedIn()) {
+            Toast.makeText(this, "Continuing previous session", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
             return; // Don't show the login fragment if user is already logged in

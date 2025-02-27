@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.satfinder.Activities.SatUtils;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
@@ -22,11 +23,6 @@ import com.example.satfinder.Objects.SatelliteTLE;
 import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
 import com.example.satfinder.R;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 public class SearchFragment extends Fragment {
 
@@ -104,7 +100,7 @@ public class SearchFragment extends Fragment {
                         }
 
                         TextView tvNextPass = detailsFragment.getView().findViewById(R.id.tv_next_pass);
-                        tvNextPass.setText(String.format("Next pass is in: %s", convertUTCToLocalTime(svpResponse.getPasses().get(0).getStartUTC())));
+                        tvNextPass.setText(String.format("Next pass is in: %s", SatUtils.convertUTCToLocalTime(svpResponse.getPasses().get(0).getStartUTC())));
                     }
 
                     @Override
@@ -137,15 +133,5 @@ public class SearchFragment extends Fragment {
                         searchFailure();
                     }
                 });
-    }
-
-    // Put in a utils class?
-    private String convertUTCToLocalTime(int utc) {
-        Instant instant = Instant.ofEpochSecond(utc);
-
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM HH:mm");
-
-        return localDateTime.format(formatter);
     }
 }

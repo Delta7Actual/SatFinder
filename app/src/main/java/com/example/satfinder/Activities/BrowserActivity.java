@@ -28,6 +28,7 @@ public class BrowserActivity extends AppCompatActivity {
     private Button btnLocate;
     private SearchFragment searchFragment;
     private SatellitePosition satPosition;
+    private ObserverLocation currentLocation;
 
     private void setupUI() {
         searchFragment = new SearchFragment();
@@ -63,7 +64,7 @@ public class BrowserActivity extends AppCompatActivity {
             }
             int satId = Integer.parseInt(satIdString);
             StorageManager storageManager = StorageManager.getInstance();
-            ObserverLocation currentLocation = storageManager.spGetUserLocation(this);
+            currentLocation = storageManager.spGetUserLocation(this);
 
             SatelliteManager satelliteManager = SatelliteManager.getInstance();
             satelliteManager.fetchSatellitePositions(satId,
@@ -80,7 +81,10 @@ public class BrowserActivity extends AppCompatActivity {
                                 // Only start the activity if the satellite position is successfully fetched
                                 Intent intent = new Intent(BrowserActivity.this, LocateActivity.class);
                                 intent.putExtra("sat_azimuth", satPosition.getAzimuth());
-                                intent.putExtra("sat_elevation", satPosition.getElevation());
+                                intent.putExtra("sat_angle", SatUtils.getAngleFromHorizon(currentLocation
+                                        , new ObserverLocation(satPosition.getSatlatitude()
+                                                , satPosition.getSatlongitude()
+                                                , satPosition.getSataltitude())));
                                 startActivity(intent);
                                 finish();
                             } else {

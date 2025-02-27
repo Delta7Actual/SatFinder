@@ -23,10 +23,6 @@ import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
 import com.example.satfinder.R;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                         SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
                         if (svpResponse != null) {
                             tvISSPassDetails.setText(String.format("Next pass is in: %s",
-                                    convertUTCToLocalTime(svpResponse
+                                    SatUtils.convertUTCToLocalTime(svpResponse
                                             .getPasses()
                                             .get(0)
                                             .getStartUTC())));
@@ -126,15 +122,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    // Put in a utils class?
-    private String convertUTCToLocalTime(int utc) {
-        Instant instant = Instant.ofEpochSecond(utc);
-
-        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM HH:mm");
-
-        return localDateTime.format(formatter);
     }
 }
