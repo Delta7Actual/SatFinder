@@ -115,7 +115,7 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         float piOffset = satPitch - pitch;
 
         ivCompass.setRotation(azOffset);
-        tvAngleValue.setText("Angle: " + String.format("%.2f", pitch+ "°"));
+        tvAngleValue.setText("Angle: " + String.format("%.2f", pitch) + "°");
 
         if (azOffset < 10 && azOffset > -10) {
             ivCompass.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));

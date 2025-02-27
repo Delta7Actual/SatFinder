@@ -3,32 +3,37 @@ package com.example.satfinder.Managers;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.satfinder.Activities.SatUtils;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
+import com.example.satfinder.Objects.Interfaces.IStorageCallback;
 import com.example.satfinder.Objects.ObserverLocation;
 import com.example.satfinder.Objects.SatellitePositionsResponse;
 import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class StorageManager {
 
     private static StorageManager instance;
     private final SharedPreferences sharedPreferences;
-    private final Gson gson;
+    private final FirebaseFirestore firestore;
+    private final UserManager userManager;
 
     private static final String PREFS_NAME = "user_data";
 
     private StorageManager(Context context) {
         sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        gson = new Gson();
+        firestore = FirebaseFirestore.getInstance();
+        userManager = UserManager.getInstance();
     }
 
     public static synchronized StorageManager getInstance(Context context) {
@@ -42,76 +47,91 @@ public class StorageManager {
     /* SHAREDPREFERENCES BASED METHODS */
     /////////////////////////////////////
 
-    /** Saves user location */
-    public void saveUserLocation(ObserverLocation location) {
+    public void spSaveUserLocation(ObserverLocation location) {
         sharedPreferences.edit()
-                .putString("userLocation", gson.toJson(location))
+                .putString("userLocation", location.getLatitude() + "," + location.getLongitude() + "," + location.getAltitude())
                 .apply();
     }
 
-    /** Retrieves user location */
-    public ObserverLocation getUserLocation() {
-        String json = sharedPreferences.getString("userLocation", null);
-        return (json != null) ? gson.fromJson(json, ObserverLocation.class) : new ObserverLocation();
+    public ObserverLocation spGetUserLocation() {
+        String location = sharedPreferences.getString("userLocation", null);
+        if (location != null) {
+            String[] parts = location.split(",");
+            if (parts.length == 3) {
+                return new ObserverLocation(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2]));
+            }
+        }
+        return new ObserverLocation();
     }
 
-    /** Saves favorite satellites */
-    public void saveUserFavoriteSatellites(List<String> satelliteIds) {
+    public void spSaveUserFavoriteSatellites(List<String> satelliteIds) {
+        String favoriteSatellites = String.join(",", satelliteIds);
         sharedPreferences.edit()
-                .putString("fav_satelliteIds", gson.toJson(satelliteIds))
+                .putString("fav_sat", favoriteSatellites)
                 .apply();
     }
 
-    /** Retrieves favorite satellites */
-    public List<String> getUserFavoriteSatellites() {
-        String json = sharedPreferences.getString("fav_satelliteIds", null);
-        Type type = new TypeToken<List<String>>() {}.getType();
-        return (json != null) ? gson.fromJson(json, type) : new ArrayList<>();
+    public List<String> spGetUserFavoriteSatellites() {
+        String favoriteSatellites = sharedPreferences.getString("fav_sat", "");
+        return favoriteSatellites.isEmpty() ? new ArrayList<>() : new ArrayList<>(Arrays.asList(favoriteSatellites.split(",")));
     }
 
-    /** Saves satellite data (passes, positions, and TLE) */
-    public void saveSatelliteData(SatelliteManager satelliteManager) {
-        List<String> satelliteIds = getUserFavoriteSatellites();
+    public String spGetSatellitePass(int satelliteId) {
+        return sharedPreferences.getString("sat_pass_" + satelliteId, "");
+    }
+
+    public String spGetSatellitePos(int satelliteId) {
+        return sharedPreferences.getString("sat_pos_" + satelliteId, "");
+    }
+
+    public String spGetSatelliteTLE(int satelliteId) {
+        return sharedPreferences.getString("sat_tle_" + satelliteId, "");
+    }
+
+    private boolean[] spIsSatelliteDataStale(int satelliteId) {
+        String passData = spGetSatellitePass(satelliteId);
+        String posData = spGetSatellitePos(satelliteId);
+        String tleData = spGetSatelliteTLE(satelliteId);
+
+        return new boolean[]{
+                passData.isEmpty() || SatUtils.isStale(Long.parseLong(passData.split(",")[0])),
+                posData.isEmpty() || SatUtils.isStale(Long.parseLong(posData.split(",")[0])),
+                tleData.isEmpty() // TLE is never outdated
+        };
+    }
+
+    public void spSaveSatelliteData(SatelliteManager satelliteManager) {
+        List<String> satelliteIds = spGetUserFavoriteSatellites();
         if (satelliteIds.isEmpty()) return;
 
-        ObserverLocation curr = getUserLocation();
+        ObserverLocation curr = spGetUserLocation();
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         for (String satelliteId : satelliteIds) {
             int id = Integer.parseInt(satelliteId);
-            saveSatellitePasses(editor, satelliteManager, id, curr);
-            saveSatellitePositions(editor, satelliteManager, id, curr);
-            saveSatelliteTLE(editor, satelliteManager, id);
+            boolean[] stale = spIsSatelliteDataStale(id);
+            if (stale[0]) saveSatellitePasses(editor, satelliteManager, id, curr);
+            if (stale[1]) saveSatellitePositions(editor, satelliteManager, id, curr);
+            if (stale[2]) saveSatelliteTLE(editor, satelliteManager, id);
         }
 
         editor.apply();
     }
 
     private void saveSatellitePasses(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
-        manager.fetchSatelliteVisualPasses(id
-                , curr.getLatitude()
-                , curr.getLongitude()
-                , curr.getAltitude()
-                , 7
-                , 60
-                , new IN2YOCallback() {
+        manager.fetchSatelliteVisualPasses(id, curr.getLatitude(), curr.getLongitude(), curr.getAltitude(), 7, 60, new IN2YOCallback() {
             @Override
             public void onSuccess(ISatelliteResponse response) {
                 SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
                 if (svpResponse == null || svpResponse.getPasses().isEmpty()) return;
 
-                Map<String, Object> passData = new HashMap<>();
-                passData.put("timestamp", System.currentTimeMillis());
-                passData.put("passInfo", svpResponse.getPasses().get(0));
-
-                editor.putString("sat_pass_" + id, gson.toJson(passData));
-                editor.apply();
+                String passData = System.currentTimeMillis() + "," + svpResponse.getPasses().get(0).getStartUTC();
+                editor.putString("sat_pass_" + id, passData);
             }
 
             @Override
             public void onError(String errorMessage) {
-                editor.putString("sat_pass_" + id, null);
-                editor.apply();
+                editor.putString("sat_pass_" + id, "");
             }
         });
     }
@@ -123,20 +143,13 @@ public class StorageManager {
                 SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
                 if (spResponse == null || spResponse.getPositions().isEmpty()) return;
 
-                Map<String, Object> posData = new HashMap<>();
-                posData.put("timestamp", System.currentTimeMillis());
-                posData.put("latitude", spResponse.getPositions().get(0).getSatlatitude());
-                posData.put("longitude", spResponse.getPositions().get(0).getSatlongitude());
-                posData.put("altitude", spResponse.getPositions().get(0).getSataltitude());
-
-                editor.putString("sat_pos_" + id, gson.toJson(posData));
-                editor.apply();
+                String posData = System.currentTimeMillis() + "," + spResponse.getPositions().get(0).getSatlatitude() + "," + spResponse.getPositions().get(0).getSatlongitude() + "," + spResponse.getPositions().get(0).getSataltitude();
+                editor.putString("sat_pos_" + id, posData);
             }
 
             @Override
             public void onError(String errorMessage) {
-                editor.putString("sat_pos_" + id, null);
-                editor.apply();
+                editor.putString("sat_pos_" + id, "");
             }
         });
     }
@@ -148,26 +161,78 @@ public class StorageManager {
                 SatelliteTLEResponse stleResponse = (SatelliteTLEResponse) response;
                 if (stleResponse == null || stleResponse.getTle() == null) return;
 
-                Map<String, Object> tleData = new HashMap<>();
-                tleData.put("timestamp", System.currentTimeMillis());
-                tleData.put("tle", stleResponse.getTle());
-
-                editor.putString("sat_tle_" + id, gson.toJson(tleData));
-                editor.apply();
+                String tleData = stleResponse.getTle();
+                editor.putString("sat_tle_" + id, tleData);
             }
 
             @Override
             public void onError(String errorMessage) {
-                editor.putString("sat_tle_" + id, null);
-                editor.apply();
+                editor.putString("sat_tle_" + id, "");
             }
         });
     }
 
-    /** Retrieves satellite data */
-    public Map<String, Object> getSatelliteData(String key) {
-        String json = sharedPreferences.getString(key, null);
-        Type type = new TypeToken<Map<String, Object>>() {}.getType();
-        return json != null ? gson.fromJson(json, type) : null;
+    /////////////////////////////////////
+    /*    FIRESTORE BASED METHODS      */
+    /////////////////////////////////////
+
+    public void addFavouriteSatelliteId(int satelliteId, IStorageCallback<Void> callback) {
+        String userId = userManager.getCurrentUserUid();
+        if (userId == null) {
+            callback.onFailure("User not logged in");
+            return;
+        }
+
+        DocumentReference userDocRef = firestore.collection("users").document(userId);
+        userDocRef.set(
+                        new HashMap<String, Object>() {{
+                            put("favouriteSatelliteIds", FieldValue.arrayUnion(String.valueOf(satelliteId)));
+                        }},
+                        SetOptions.merge()
+                ).addOnSuccessListener(aVoid -> {
+                    // Update the SharedPreferences after a successful Firebase update
+                    List<String> favSatellites = spGetUserFavoriteSatellites();
+                    if (!favSatellites.contains(String.valueOf(satelliteId))) {
+                        favSatellites.add(String.valueOf(satelliteId));
+                        spSaveUserFavoriteSatellites(favSatellites);  // Save to SharedPreferences
+                    }
+                    callback.onSuccess(null);
+                })
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    public void removeFavouriteSatelliteId(int satelliteId, IStorageCallback<Void> callback) {
+        String userId = userManager.getCurrentUserUid();
+        if (userId == null) {
+            callback.onFailure("User not logged in");
+            return;
+        }
+
+        firestore.collection("users").document(userId)
+                .update("favouriteSatelliteIds", FieldValue.arrayRemove(String.valueOf(satelliteId)))
+                .addOnSuccessListener(aVoid -> {
+                    // Update the SharedPreferences after a successful Firebase update
+                    List<String> favSatellites = spGetUserFavoriteSatellites();
+                    favSatellites.remove(String.valueOf(satelliteId));
+                    spSaveUserFavoriteSatellites(favSatellites);  // Save to SharedPreferences
+                    callback.onSuccess(null);
+                })
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
+
+    public void getFavouriteSatelliteIds(IStorageCallback<List<String>> callback) {
+        String userId = userManager.getCurrentUserUid();
+        if (userId == null) {
+            callback.onFailure("User not logged in");
+            return;
+        }
+
+        firestore.collection("users").document(userId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    List<String> satelliteIds = (List<String>) documentSnapshot.get("favouriteSatelliteIds");
+                    callback.onSuccess(satelliteIds == null ? new ArrayList<>() : satelliteIds);
+                })
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 }

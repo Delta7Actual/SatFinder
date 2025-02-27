@@ -63,8 +63,8 @@ public class BrowserActivity extends AppCompatActivity {
                 return;
             }
             int satId = Integer.parseInt(satIdString);
-            StorageManager storageManager = StorageManager.getInstance();
-            currentLocation = storageManager.spGetUserLocation(this);
+            StorageManager storageManager = StorageManager.getInstance(this);
+            currentLocation = storageManager.spGetUserLocation();
 
             SatelliteManager satelliteManager = SatelliteManager.getInstance();
             satelliteManager.fetchSatellitePositions(satId,

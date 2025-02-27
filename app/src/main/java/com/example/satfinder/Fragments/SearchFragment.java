@@ -82,7 +82,7 @@ public class SearchFragment extends Fragment {
                 searchFailure();
             }
         });
-        ObserverLocation observerLocation = StorageManager.getInstance().spGetUserLocation(this.getContext());
+        ObserverLocation observerLocation = StorageManager.getInstance(this.getContext()).spGetUserLocation();
         manager.fetchSatelliteVisualPasses(satelliteId
                 ,observerLocation.getLatitude()
                 ,observerLocation.getLongitude()

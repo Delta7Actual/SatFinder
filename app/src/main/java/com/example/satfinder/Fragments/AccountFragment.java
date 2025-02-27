@@ -72,7 +72,7 @@ public class AccountFragment extends Fragment {
     private void addSatellite() {
         String satelliteId = etSatelliteID.getText().toString().trim();
         if (!satelliteId.isEmpty()) {
-            StorageManager.getInstance().addFavouriteSatelliteId(Integer.parseInt(satelliteId), new IStorageCallback<Void>() {
+            StorageManager.getInstance(this.getContext()).addFavouriteSatelliteId(Integer.parseInt(satelliteId), new IStorageCallback<Void>() {
                 @Override
                 public void onSuccess(Void result) {
                     satelliteIds.add(satelliteId);
@@ -90,7 +90,7 @@ public class AccountFragment extends Fragment {
     }
 
     private void updateSatelliteList() {
-        StorageManager.getInstance().getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
+        StorageManager.getInstance(this.getContext()).getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
             @Override
             public void onSuccess(List<String> result) {
                 satelliteIds.clear();

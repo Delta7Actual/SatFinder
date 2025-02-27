@@ -13,6 +13,17 @@ public final class SatUtils {
     }
 
     /**
+     * Check if data is stale based on timestamp
+     * @param timestamp A datapoint's UTC timestamp
+     * @return True if data is stale, false otherwise
+     */
+    public static boolean isStale(long timestamp) {
+        long threshold = 3600; // One hour
+        long currentTime = System.currentTimeMillis() / 1000;
+        return (currentTime - timestamp) > threshold;
+    }
+
+    /**
      * Calculate the angle above the horizon needed to see target from source
      * @param source The observer's location
      * @param target The target's location

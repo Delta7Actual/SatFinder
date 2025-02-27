@@ -31,6 +31,12 @@ public class SatelliteManager {
         return instance;
     }
 
+    public enum E_REQUEST_TYPE {
+        VISUAL_PASSES,
+        POSITIONS,
+        TLE
+    }
+
     /**
      * Fetches visual passes for a specified satellite and observer location.
      *

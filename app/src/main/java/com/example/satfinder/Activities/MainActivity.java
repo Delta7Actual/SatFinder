@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateWithClosestISSPass() {
         SatelliteManager satelliteManager = SatelliteManager.getInstance();
-        StorageManager storageManager = StorageManager.getInstance();
+        StorageManager storageManager = StorageManager.getInstance(this);
 
-        ObserverLocation observerLocation = storageManager.spGetUserLocation(this);
+        ObserverLocation observerLocation = storageManager.spGetUserLocation();
         satelliteManager.fetchSatelliteVisualPasses(25544,
                 observerLocation.getLatitude(),
                 observerLocation.getLongitude(),
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateSavedSatelliteList() {
-        StorageManager storageManager = StorageManager.getInstance();
+        StorageManager storageManager = StorageManager.getInstance(this);
         storageManager.getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
 
             @Override

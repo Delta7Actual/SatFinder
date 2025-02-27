@@ -45,7 +45,7 @@ public class SatelliteIdAdapter extends RecyclerView.Adapter<SatelliteIdAdapter.
                     int id = Integer.parseInt(idToRemove);
 
                     // Remove from storage via StorageManager
-                    StorageManager.getInstance().removeFavouriteSatelliteId(id, new IStorageCallback<Void>() {
+                    StorageManager.getInstance(null).removeFavouriteSatelliteId(id, new IStorageCallback<Void>() {
                         @Override
                         public void onSuccess(Void result) {
                             satelliteIds.remove(adapterPosition);

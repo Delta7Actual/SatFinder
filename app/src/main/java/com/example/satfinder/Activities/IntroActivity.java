@@ -46,6 +46,8 @@ public class IntroActivity extends AppCompatActivity {
 
         // Check for location permissions and start location retrieval
         checkLocationPermissions();
+        // Check cache for stale data and update if necessary
+        checkForStaleData();
     }
 
     private void checkLocationPermissions() {
@@ -63,6 +65,13 @@ public class IntroActivity extends AppCompatActivity {
             // Permissions granted, retrieve location
             getLocation();
         }
+    }
+
+    private void checkForStaleData() {
+        tvIntroDetails.setText("Checking for stale cache data...");
+        StorageManager manager = StorageManager.getInstance(this);
+
+
     }
 
     @Override
@@ -101,7 +110,7 @@ public class IntroActivity extends AppCompatActivity {
                         10,
                         currentLocation -> {
                             ObserverLocation observerLocation = new ObserverLocation(currentLocation);
-                            StorageManager.getInstance().spSaveUserLocation(this, observerLocation);
+                            StorageManager.getInstance(this).spSaveUserLocation(observerLocation);
                             proceedToNextActivity();
                         });
             } catch (SecurityException e) {
@@ -112,7 +121,7 @@ public class IntroActivity extends AppCompatActivity {
 
     private void getLocationOffline() {
         tvIntroDetails.setText("Checking for cached location...");
-        ObserverLocation retrievedLocation = StorageManager.getInstance().spGetUserLocation(this);
+        ObserverLocation retrievedLocation = StorageManager.getInstance(this).spGetUserLocation();
 
         if (retrievedLocation.getLatitude() == 0 || retrievedLocation.getLongitude() == 0 || retrievedLocation.getAltitude() == 0) {
             Toast.makeText(this, "No previous location found", Toast.LENGTH_SHORT).show();
