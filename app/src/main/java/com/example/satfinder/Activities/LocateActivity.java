@@ -91,8 +91,8 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
             if (azimuthInDegrees < 0) {
                 azimuthInDegrees += 360;
             }
-            float pitch = orientationVector[1];
-            updateValues(azimuthInDegrees, pitch);
+            float pitchInDegrees = (float) Math.toDegrees(orientationVector[1]);
+            updateValues(azimuthInDegrees-120, pitchInDegrees);
             Log.d("TAG", "onSensorChanged: " + SatUtils.getDirectionFromAzimuth(azimuthInDegrees));
         }
     }
@@ -114,21 +114,22 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         float azOffset = satAzimuth - azimuth;
         float piOffset = satPitch - pitch;
 
-        ivCompass.setRotation(azOffset);
+        ivCompass.setRotation(-azOffset);
         tvAngleValue.setText("Angle: " + String.format("%.2f", pitch) + "°");
 
-        if (azOffset < 10 && azOffset > -10) {
-            ivCompass.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
-        } else {
-            if (ivCompass.getColorFilter() != null) {
-                ivCompass.clearColorFilter();
-            }
-        }
-        if (piOffset < 10 && azOffset > -10) {
+        if (Math.abs(piOffset) < 10) {
             ivAngle.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
         } else {
             if (ivAngle.getColorFilter() != null) {
                 ivAngle.clearColorFilter();
+            }
+
+            if (Math.abs(azOffset) < 10) {
+                ivCompass.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
+            } else {
+                if (ivCompass.getColorFilter() != null) {
+                    ivCompass.clearColorFilter();
+                }
             }
         }
     }

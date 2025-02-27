@@ -117,7 +117,7 @@ public class SearchFragment extends Fragment {
                     @Override
                     public void onSuccess(ISatelliteResponse response) {
                         SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
-                        if (spResponse == null) {
+                        if (spResponse == null || spResponse.getPositions().isEmpty()) {
                             searchFailure();
                             return;
                         }

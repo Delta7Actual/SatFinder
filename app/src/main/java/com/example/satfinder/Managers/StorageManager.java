@@ -100,7 +100,7 @@ public class StorageManager {
         };
     }
 
-    public void spSaveSatelliteData(SatelliteManager satelliteManager) {
+    public void spSaveAndUpdateSatelliteData(SatelliteManager satelliteManager) {
         List<String> satelliteIds = spGetUserFavoriteSatellites();
         if (satelliteIds.isEmpty()) return;
 
@@ -123,7 +123,9 @@ public class StorageManager {
             @Override
             public void onSuccess(ISatelliteResponse response) {
                 SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
-                if (svpResponse == null || svpResponse.getPasses().isEmpty()) return;
+                if (svpResponse == null) return;
+                if (svpResponse.getPasses() == null) return;
+                if (svpResponse.getPasses().isEmpty()) return;
 
                 String passData = System.currentTimeMillis() + "," + svpResponse.getPasses().get(0).getStartUTC();
                 editor.putString("sat_pass_" + id, passData);
