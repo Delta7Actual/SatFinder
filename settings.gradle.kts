@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "SatFinder"
 include(":app")
- 

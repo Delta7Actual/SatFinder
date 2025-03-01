@@ -20,8 +20,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
+import com.example.satfinder.Managers.UserManager;
 import com.example.satfinder.Objects.ObserverLocation;
 import com.example.satfinder.R;
+import com.example.satfinder.Services.SatUpdateService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,8 +115,9 @@ public class IntroActivity extends AppCompatActivity {
      * Proceeds with location retrieval and stale data check.
      */
     private void proceedWithInitialization() {
-        checkForStaleData();
         checkLocation();
+        if (UserManager.getInstance().isUserLoggedIn()) checkForStaleData();
+        startForegroundService(new Intent(this, SatUpdateService.class));
     }
 
     /**
@@ -123,7 +126,8 @@ public class IntroActivity extends AppCompatActivity {
     private void checkForStaleData() {
         Log.d(TAG, "Checking and updating stale satellite data...");
         tvIntroDetails.setText("Updating satellite data...");
-        StorageManager.getInstance(this).spSaveAndUpdateSatelliteData(SatelliteManager.getInstance());
+        StorageManager.getInstance(this).spSaveAndUpdateSatelliteData(SatelliteManager.getInstance()
+                , () -> Log.d(TAG, "Cache save and update complete"));
     }
 
     /**

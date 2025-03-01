@@ -34,4 +34,18 @@ public class DetailsFragment extends Fragment {
         tvLongitude = view.findViewById(R.id.tv_longitude);
         tvNextPass = view.findViewById(R.id.tv_next_pass);
     }
+
+    public void updateSatellitePosition(String latitude, String longitude) {
+        tvLatitude.setText(latitude);
+        tvLongitude.setText(longitude);
+    }
+
+    public void updateSatelliteDetails(String satName, String satInclination) {
+        tvSatelliteName.setText(satName);
+        tvInclination.setText(satInclination);
+    }
+
+    public void updateNextPass(String nextPassTime) {
+        tvNextPass.setText(nextPassTime);
+    }
 }

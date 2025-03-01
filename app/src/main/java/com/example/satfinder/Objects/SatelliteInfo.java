@@ -15,6 +15,12 @@ public class SatelliteInfo {
     @SerializedName("transactionscount")
     private int transactionscount;
 
+    public SatelliteInfo(int satid, String satname) {
+        this.satid = satid;
+        this.satname = satname;
+        this.transactionscount = 0;
+    }
+
     public int getSatid() {
         return satid;
     }

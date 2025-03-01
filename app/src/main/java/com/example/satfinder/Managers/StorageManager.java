@@ -2,8 +2,10 @@ package com.example.satfinder.Managers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.example.satfinder.Activities.SatUtils;
+import com.example.satfinder.Objects.Interfaces.ICacheUpdateCallback;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.Interfaces.IStorageCallback;
@@ -76,7 +78,7 @@ public class StorageManager {
         return favoriteSatellites.isEmpty() ? new ArrayList<>() : new ArrayList<>(Arrays.asList(favoriteSatellites.split(",")));
     }
 
-    public String spGetSatellitePass(int satelliteId) {
+    public String spGetSatelliteClosestPass(int satelliteId) {
         return sharedPreferences.getString("sat_pass_" + satelliteId, "");
     }
 
@@ -89,7 +91,7 @@ public class StorageManager {
     }
 
     private boolean[] spIsSatelliteDataStale(int satelliteId) {
-        String passData = spGetSatellitePass(satelliteId);
+        String passData = spGetSatelliteClosestPass(satelliteId);
         String posData = spGetSatellitePos(satelliteId);
         String tleData = spGetSatelliteTLE(satelliteId);
 
@@ -100,15 +102,23 @@ public class StorageManager {
         };
     }
 
-    public void spSaveAndUpdateSatelliteData(SatelliteManager satelliteManager) {
+    public void spSaveAndUpdateSatelliteData(SatelliteManager satelliteManager, ICacheUpdateCallback callback) {
         List<String> satelliteIds = spGetUserFavoriteSatellites();
-        if (satelliteIds.isEmpty()) return;
+        if (satelliteIds.isEmpty()) {
+            callback.onComplete();
+            return;
+        }
 
         ObserverLocation curr = spGetUserLocation();
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         for (String satelliteId : satelliteIds) {
             int id = Integer.parseInt(satelliteId);
+
+            Log.d("STORAGE", "pass/" + satelliteId + ": " + spGetSatelliteClosestPass(id));
+            Log.d("STORAGE", "pos/" + satelliteId + ": " + spGetSatellitePos(id));
+            Log.d("STORAGE", "tle/" + satelliteId + ": " + spGetSatelliteTLE(id));
+
             boolean[] stale = spIsSatelliteDataStale(id);
             if (stale[0]) saveSatellitePasses(editor, satelliteManager, id, curr);
             if (stale[1]) saveSatellitePositions(editor, satelliteManager, id, curr);
@@ -116,6 +126,7 @@ public class StorageManager {
         }
 
         editor.apply();
+        callback.onComplete();
     }
 
     private void saveSatellitePasses(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
@@ -128,12 +139,16 @@ public class StorageManager {
                 if (svpResponse.getPasses().isEmpty()) return;
 
                 String passData = System.currentTimeMillis() + "," + svpResponse.getPasses().get(0).getStartUTC();
+                Log.d("HELP", "onSuccess: " + passData);
                 editor.putString("sat_pass_" + id, passData);
+                editor.apply();
             }
 
             @Override
             public void onError(String errorMessage) {
-                editor.putString("sat_pass_" + id, "");
+                Log.d("HELP", "onError: " + errorMessage);
+                editor.putString("sat_pass_" + id, "err:" + errorMessage);
+                editor.apply();
             }
         });
     }
@@ -143,15 +158,21 @@ public class StorageManager {
             @Override
             public void onSuccess(ISatelliteResponse response) {
                 SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
-                if (spResponse == null || spResponse.getPositions().isEmpty()) return;
+                if (spResponse == null) return;
+                if (spResponse.getPositions() == null) return;
+                if (spResponse.getPositions().isEmpty()) return;
 
                 String posData = System.currentTimeMillis() + "," + spResponse.getPositions().get(0).getSatlatitude() + "," + spResponse.getPositions().get(0).getSatlongitude() + "," + spResponse.getPositions().get(0).getSataltitude();
+                Log.d("HELP", "onSuccess: " + posData);
                 editor.putString("sat_pos_" + id, posData);
+                editor.apply();
             }
 
             @Override
             public void onError(String errorMessage) {
-                editor.putString("sat_pos_" + id, "");
+                Log.d("HELP", "onError: " + errorMessage);
+                editor.putString("sat_pos_" + id, "err:" + errorMessage);
+                editor.apply();
             }
         });
     }
@@ -161,15 +182,20 @@ public class StorageManager {
             @Override
             public void onSuccess(ISatelliteResponse response) {
                 SatelliteTLEResponse stleResponse = (SatelliteTLEResponse) response;
-                if (stleResponse == null || stleResponse.getTle() == null) return;
+                if (stleResponse == null || stleResponse.getTle() == null || stleResponse.getTle().isEmpty()) return;
 
                 String tleData = stleResponse.getTle();
-                editor.putString("sat_tle_" + id, tleData);
+                String dataToSave = tleData + "," + stleResponse.getInfo().getSatid() + "," + stleResponse.getInfo().getSatname();
+                Log.d("HELP", "onSuccess: " + tleData);
+                editor.putString("sat_tle_" + id, dataToSave);
+                editor.apply();
             }
 
             @Override
             public void onError(String errorMessage) {
-                editor.putString("sat_tle_" + id, "");
+                Log.d("HELP", "onError: " + errorMessage);
+                editor.putString("sat_tle_" + id, "err:" + errorMessage);
+                editor.apply();
             }
         });
     }

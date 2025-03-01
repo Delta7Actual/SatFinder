@@ -16,8 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.satfinder.Activities.ProfileActivity;
 import com.example.satfinder.Adapters.SatelliteIdAdapter;
+import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
+import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
+import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.Interfaces.IStorageCallback;
+import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.R;
 
 import java.util.ArrayList;
@@ -72,22 +76,53 @@ public class AccountFragment extends Fragment {
     private void addSatellite() {
         String satelliteId = etSatelliteID.getText().toString().trim();
         if (!satelliteId.isEmpty()) {
-            StorageManager.getInstance(this.getContext()).addFavouriteSatelliteId(Integer.parseInt(satelliteId), new IStorageCallback<Void>() {
+            isSatelliteIdValid(satelliteId, new IStorageCallback<Boolean>() {
                 @Override
-                public void onSuccess(Void result) {
-                    satelliteIds.add(satelliteId);
-                    adapter.notifyItemInserted(satelliteIds.size() - 1);
+                public void onSuccess(Boolean result) {
+                    if (result) {
+                        StorageManager.getInstance(getContext()).addFavouriteSatelliteId(Integer.parseInt(satelliteId), new IStorageCallback<Void>() {
+                            @Override
+                            public void onSuccess(Void result) {
+                                satelliteIds.add(satelliteId);
+                                adapter.notifyItemInserted(satelliteIds.size() - 1);
+                                Toast.makeText(requireContext(), "Satellite added!", Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onFailure(String errorMessage) {
+                                Toast.makeText(requireContext(), "Failed to add satellite: " + errorMessage, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(requireContext(), "Invalid satellite ID or no TLE data found.", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
                 public void onFailure(String errorMessage) {
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), "Error validating satellite: " + errorMessage, Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
             Toast.makeText(requireContext(), "Please enter a valid satellite ID.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void isSatelliteIdValid(String satelliteId, IStorageCallback<Boolean> callback) {
+        SatelliteManager.getInstance().fetchSatelliteTLE(Integer.parseInt(satelliteId), new IN2YOCallback() {
+            @Override
+            public void onSuccess(ISatelliteResponse response) {
+                SatelliteTLEResponse tleResponse = (SatelliteTLEResponse) response;
+                callback.onSuccess(tleResponse.getTle() != null && !tleResponse.getTle().isEmpty());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure("Invalid satellite ID or no TLE found.");
+            }
+        });
+    }
+
 
     private void updateSatelliteList() {
         StorageManager.getInstance(this.getContext()).getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {

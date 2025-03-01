@@ -73,7 +73,7 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         setupUI();
         setupSensors();
         satAzimuth = getIntent().getFloatExtra("sat_azimuth", 0);
-        satPitch = getIntent().getFloatExtra("sat_elevation", 0);
+        satPitch = getIntent().getFloatExtra("sat_pitch", 0);
 
         Log.d("SAT", "SAT AZ': " + satAzimuth);
         Log.d("SAT", "SAT PI': " + satPitch);
@@ -92,7 +92,7 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
                 azimuthInDegrees += 360;
             }
             float pitchInDegrees = (float) Math.toDegrees(orientationVector[1]);
-            updateValues(azimuthInDegrees-120, pitchInDegrees);
+            updateValues(azimuthInDegrees, pitchInDegrees + 90);
             Log.d("TAG", "onSensorChanged: " + SatUtils.getDirectionFromAzimuth(azimuthInDegrees));
         }
     }
@@ -114,7 +114,8 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         float azOffset = satAzimuth - azimuth;
         float piOffset = satPitch - pitch;
 
-        ivCompass.setRotation(-azOffset);
+        // Keep compass the same, rotate needle to show where user is looking
+        ivNeedle.setRotation(azimuth);
         tvAngleValue.setText("Angle: " + String.format("%.2f", pitch) + "°");
 
         if (Math.abs(piOffset) < 10) {

@@ -81,7 +81,7 @@ public class BrowserActivity extends AppCompatActivity {
                                 // Only start the activity if the satellite position is successfully fetched
                                 Intent intent = new Intent(BrowserActivity.this, LocateActivity.class);
                                 intent.putExtra("sat_azimuth", satPosition.getAzimuth());
-                                intent.putExtra("sat_angle", SatUtils.getAngleFromHorizon(currentLocation
+                                intent.putExtra("sat_pitch", SatUtils.getAngleFromHorizon(currentLocation
                                         , new ObserverLocation(satPosition.getSatlatitude()
                                                 , satPosition.getSatlongitude()
                                                 , satPosition.getSataltitude())));

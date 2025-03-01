@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -15,25 +14,23 @@ import androidx.fragment.app.Fragment;
 import com.example.satfinder.Activities.SatUtils;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
+import com.example.satfinder.Objects.Interfaces.ICacheUpdateCallback;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
-import com.example.satfinder.Objects.ObserverLocation;
 import com.example.satfinder.Objects.SatellitePositionsResponse;
-import com.example.satfinder.Objects.SatelliteTLE;
-import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
 import com.example.satfinder.R;
 
 public class SearchFragment extends Fragment {
 
-    public SearchFragment() {
-        // Required empty public constructor
-    }
-
     private EditText etSatelliteId;
     private Button btnSearch;
     private DetailsFragment detailsFragment;
     private FrameLayout detailsFragmentContainer;
+
+    public SearchFragment() {
+        // Required empty constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,96 +38,133 @@ public class SearchFragment extends Fragment {
 
         etSatelliteId = view.findViewById(R.id.et_satellite_id);
         btnSearch = view.findViewById(R.id.btn_search);
-        btnSearch.setOnClickListener(v -> handleSearch());
-        detailsFragment = (DetailsFragment) getChildFragmentManager().findFragmentById(R.id.details_fragment);
         detailsFragmentContainer = view.findViewById(R.id.fragment_container);
+
+        // Initialize DetailsFragment
+        detailsFragment = new DetailsFragment();
+        getChildFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, detailsFragment)
+                .commit();
+
+        btnSearch.setOnClickListener(v -> handleSearch());
 
         return view;
     }
 
-    private void searchFailure() {
-        Toast.makeText(SearchFragment.this.getContext(), "Please enter a valid satellite ID!", Toast.LENGTH_LONG).show();
+    private void searchFailure(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
     }
 
     private void handleSearch() {
-        if (etSatelliteId.getText().toString().isEmpty()) {
-            searchFailure();
+        String idText = etSatelliteId.getText().toString().trim();
+        if (idText.isEmpty()) {
+            searchFailure("Please enter a valid satellite ID!");
             return;
         }
-        SatelliteManager manager = SatelliteManager.getInstance();
-        int satelliteId = Integer.parseInt(etSatelliteId.getText().toString());
 
-        manager.fetchSatelliteTLE(satelliteId, new IN2YOCallback() {
+        int satelliteId;
+        try {
+            satelliteId = Integer.parseInt(idText);
+        } catch (NumberFormatException e) {
+            searchFailure("Invalid ID format.");
+            return;
+        }
+
+        StorageManager storageManager = StorageManager.getInstance(getContext());
+        storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), new ICacheUpdateCallback() {
             @Override
-            public void onSuccess(ISatelliteResponse response) {
-                SatelliteTLEResponse tleResponse = (SatelliteTLEResponse) response;
-                if (tleResponse == null) {
-                    searchFailure();
-                    return;
-                }
+            public void onComplete() {
 
-                TextView tvSatName = detailsFragment.getView().findViewById(R.id.tv_satellite_name);
-                TextView tvInclination = detailsFragment.getView().findViewById(R.id.tv_inclination);
-
-                tvSatName.setText(tleResponse.getInfo().getSatname());
-                tvInclination.setText(String.format("%.2f", new SatelliteTLE(tleResponse.getTle()).getInclination()));
-                detailsFragmentContainer.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                searchFailure();
             }
         });
-        ObserverLocation observerLocation = StorageManager.getInstance(this.getContext()).spGetUserLocation();
-        manager.fetchSatelliteVisualPasses(satelliteId
-                ,observerLocation.getLatitude()
-                ,observerLocation.getLongitude()
-                ,observerLocation.getAltitude()
-                ,7
-                ,30
-                , new IN2YOCallback() {
 
+        SatelliteManager manager = SatelliteManager.getInstance();
+//        ObserverLocation observerLocation = StorageManager.getInstance(getContext()).spGetUserLocation();
+
+//        // Fetch TLE data
+//        manager.fetchSatelliteTLE(satelliteId, new IN2YOCallback() {
+//            @Override
+//            public void onSuccess(ISatelliteResponse response) {
+//                if (!(response instanceof SatelliteTLEResponse)) {
+//                    searchFailure("Invalid response.");
+//                    return;
+//                }
+//
+//                SatelliteTLEResponse tleResponse = (SatelliteTLEResponse) response;
+//                if (tleResponse.getTle() == null) {
+//                    searchFailure("No TLE data found.");
+//                    return;
+//                }
+//
+//                SatelliteTLE tle = new SatelliteTLE(tleResponse.getTle());
+//
+//                // Update DetailsFragment
+//                detailsFragment.updateSatelliteDetails(
+//                        tleResponse.getInfo().getSatname(),
+//                        String.format("%.2f°", tle.getInclination())
+//                );
+//
+//                detailsFragmentContainer.setVisibility(View.VISIBLE);
+//            }
+//
+//            @Override
+//            public void onError(String errorMessage) {
+//                searchFailure("Failed to fetch TLE data.");
+//            }
+//        });
+
+        // Fetch Visual Passes
+        manager.fetchSatelliteVisualPasses(satelliteId, observerLocation.getLatitude(), observerLocation.getLongitude(),
+                observerLocation.getAltitude(), 7, 30, new IN2YOCallback() {
                     @Override
                     public void onSuccess(ISatelliteResponse response) {
-                        SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
-                        if (svpResponse == null) {
-                            searchFailure();
+                        if (!(response instanceof SatelliteVisualPassesResponse)) {
+                            searchFailure("Invalid response.");
                             return;
                         }
 
-                        TextView tvNextPass = detailsFragment.getView().findViewById(R.id.tv_next_pass);
-                        tvNextPass.setText(String.format("Next pass is in: %s", SatUtils.convertUTCToLocalTime(svpResponse.getPasses().get(0).getStartUTC())));
+                        SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
+                        if (svpResponse.getPasses().isEmpty()) {
+                            searchFailure("No upcoming passes.");
+                            return;
+                        }
+
+                        detailsFragment.updateNextPass(
+                                SatUtils.convertUTCToLocalTime(svpResponse.getPasses().get(0).getStartUTC())
+                        );
                     }
 
                     @Override
                     public void onError(String errorMessage) {
-                        searchFailure();
+                        searchFailure("Failed to fetch visual passes.");
                     }
                 });
-        manager.fetchSatellitePositions(satelliteId
-                , observerLocation.getLatitude()
-                , observerLocation.getLongitude()
-                , observerLocation.getAltitude()
-                , 1
-                , new IN2YOCallback() {
+
+        // Fetch Satellite Position
+        manager.fetchSatellitePositions(satelliteId, observerLocation.getLatitude(), observerLocation.getLongitude(),
+                observerLocation.getAltitude(), 1, new IN2YOCallback() {
                     @Override
                     public void onSuccess(ISatelliteResponse response) {
-                        SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
-                        if (spResponse == null || spResponse.getPositions().isEmpty()) {
-                            searchFailure();
+                        if (!(response instanceof SatellitePositionsResponse)) {
+                            searchFailure("Invalid response.");
                             return;
                         }
 
-                        TextView tvLatitude = detailsFragment.getView().findViewById(R.id.tv_latitude);
-                        TextView tvLongitude = detailsFragment.getView().findViewById(R.id.tv_longitude);
-                        tvLatitude.setText(String.format("%.2f", spResponse.getPositions().get(0).getSatlatitude()));
-                        tvLongitude.setText(String.format("%.2f", spResponse.getPositions().get(0).getSatlongitude()));
+                        SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
+                        if (spResponse.getPositions().isEmpty()) {
+                            searchFailure("No position data.");
+                            return;
+                        }
+
+                        detailsFragment.updateSatellitePosition(
+                                String.format("%.2f", spResponse.getPositions().get(0).getSatlatitude()),
+                                String.format("%.2f", spResponse.getPositions().get(0).getSatlongitude())
+                        );
                     }
 
                     @Override
                     public void onError(String errorMessage) {
-                        searchFailure();
+                        searchFailure("Failed to fetch position data.");
                     }
                 });
     }

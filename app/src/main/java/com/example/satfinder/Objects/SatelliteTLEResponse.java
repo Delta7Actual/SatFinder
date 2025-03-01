@@ -10,12 +10,24 @@ public class SatelliteTLEResponse implements com.example.satfinder.Objects.Inter
 
     private String tle;
 
+    // REQUIRED BY GSON
+    public SatelliteTLEResponse() {
+    }
+
     public SatelliteInfo getInfo() {
         return info;
     }
 
     public String getTle() {
         return tle;
+    }
+
+    public void setInfo(SatelliteInfo info) {
+        this.info = info;
+    }
+
+    public void setTle(String tle) {
+        this.tle = tle;
     }
 
     @Override
