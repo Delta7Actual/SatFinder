@@ -76,78 +76,90 @@ public class SearchFragment extends Fragment {
 
         StorageManager storageManager = StorageManager.getInstance(getContext());
         storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> {
-            try {
-                // Fetch TLE data
-                String tleData = storageManager.spGetSatelliteTLE(satelliteId);
-                Log.d(TAG, "TLE data: " + tleData);
-
-                if (tleData != null && !tleData.startsWith("err:")) {
-                    String[] tleParts = tleData.split(",");
-                    Log.d(TAG, "TLE parts count: " + tleParts.length);
-
-                    if (tleParts.length >= 3) {
-                        try {
-                            SatelliteTLE tle = new SatelliteTLE(tleParts[0]);
-                            detailsFragment.updateSatelliteDetails(
-                                    tleParts[2],  // Satellite name
-                                    String.format("%.2f°", tle.getInclination())
-                            );
-                            detailsFragmentContainer.setVisibility(View.VISIBLE);
-                        } catch (Exception e) {
-                            searchFailure("Error processing TLE data.");
-                            Log.e(TAG, "Error parsing TLE data: " + tleData, e);
-                        }
-                    } else {
-                        searchFailure("Malformed TLE data.");
-                        Log.e(TAG, "Malformed TLE data: " + tleData);
-                    }
-                } else {
-                    searchFailure("Failed to fetch TLE data.");
-                }
-
-                // Fetch Visual Pass
-                String passData = storageManager.spGetSatelliteClosestPass(satelliteId);
-                Log.d(TAG, "Pass data: " + passData);
-
-                if (passData != null && !passData.startsWith("err:")) {
-                    String[] passParts = passData.split(",");
-                    if (passParts.length >= 2) {
-                        long passTime = Long.parseLong(passParts[1]);
-                        detailsFragment.updateNextPass(SatUtils.convertUTCToLocalTime(passTime));
-                    } else {
-                        Log.e(TAG, "Unexpected pass data format: " + passData);
-                    }
-                } else {
-                    searchFailure("Failed to fetch next pass data.");
-                }
-
-                // Fetch Satellite Position
-                String posData = storageManager.spGetSatellitePos(satelliteId);
-                Log.d(TAG, "Position data: " + posData);
-
-                if (posData != null && !posData.startsWith("err:")) {
-                    String[] posParts = posData.split(",");
-                    if (posParts.length >= 3) {
-                        detailsFragment.updateSatellitePosition(
-                                String.format("%.2f", Float.parseFloat(posParts[1])),
-                                String.format("%.2f", Float.parseFloat(posParts[2]))
-                        );
-                    } else {
-                        Log.e(TAG, "Unexpected position data format: " + posData);
-                    }
-                } else {
-                    searchFailure("Failed to fetch satellite position.");
-                }
-            } catch (NumberFormatException e) {
-                searchFailure("Invalid data format received.");
-                Log.e(TAG, "Number format error while processing data", e);
-            } catch (ArrayIndexOutOfBoundsException e) {
-                searchFailure("Data format error.");
-                Log.e(TAG, "Array index out of bounds while parsing data", e);
-            } catch (Exception e) {
-                searchFailure("Unexpected error occurred.");
-                Log.e(TAG, "Unhandled exception during search", e);
-            }
+            fetchSatelliteData(satelliteId);
         });
+    }
+
+    private void fetchSatelliteData(int satelliteId) {
+        StorageManager storageManager = StorageManager.getInstance(getContext());
+
+        // Fetch TLE data
+        String tleData = storageManager.spGetSatelliteTLE(satelliteId);
+        Log.d(TAG, "TLE data: " + tleData);
+        if (tleData != null && !tleData.startsWith("err:")) {
+            displayTLEData(tleData);
+        } else {
+            searchFailure("Failed to fetch TLE data.");
+        }
+
+        // Fetch Visual Pass
+        String passData = storageManager.spGetSatelliteClosestPass(satelliteId);
+        Log.d(TAG, "Pass data: " + passData);
+        if (passData != null && !passData.startsWith("err:")) {
+            displayNextPass(passData);
+        } else {
+            searchFailure("Failed to fetch next pass data.");
+        }
+
+        // Fetch Satellite Position
+        String posData = storageManager.spGetSatellitePos(satelliteId);
+        Log.d(TAG, "Position data: " + posData);
+        if (posData != null && !posData.startsWith("err:")) {
+            displaySatellitePosition(posData);
+        } else {
+            searchFailure("Failed to fetch satellite position.");
+        }
+    }
+
+    private void displayTLEData(String tleData) {
+        try {
+            String[] tleParts = tleData.split(",");
+            if (tleParts.length >= 3) {
+                SatelliteTLE tle = new SatelliteTLE(tleParts[0]);
+                detailsFragment.updateSatelliteDetails(
+                        tleParts[2],  // Satellite name
+                        String.format("%.2f°", tle.getInclination())
+                );
+                detailsFragmentContainer.setVisibility(View.VISIBLE);
+            } else {
+                searchFailure("Malformed TLE data.");
+                Log.e(TAG, "Malformed TLE data: " + tleData);
+            }
+        } catch (Exception e) {
+            searchFailure("Error processing TLE data.");
+            Log.e(TAG, "Error parsing TLE data: " + tleData, e);
+        }
+    }
+
+    private void displayNextPass(String passData) {
+        try {
+            String[] passParts = passData.split(",");
+            if (passParts.length >= 2) {
+                long passTime = Long.parseLong(passParts[1]);
+                detailsFragment.updateNextPass(SatUtils.convertUTCToLocalTime(passTime));
+            } else {
+                Log.e(TAG, "Unexpected pass data format: " + passData);
+            }
+        } catch (Exception e) {
+            searchFailure("Error processing pass data.");
+            Log.e(TAG, "Error parsing pass data: " + passData, e);
+        }
+    }
+
+    private void displaySatellitePosition(String posData) {
+        try {
+            String[] posParts = posData.split(",");
+            if (posParts.length >= 3) {
+                detailsFragment.updateSatellitePosition(
+                        String.format("%.2f", Float.parseFloat(posParts[1])),
+                        String.format("%.2f", Float.parseFloat(posParts[2]))
+                );
+            } else {
+                Log.e(TAG, "Unexpected position data format: " + posData);
+            }
+        } catch (Exception e) {
+            searchFailure("Error processing position data.");
+            Log.e(TAG, "Error parsing position data: " + posData, e);
+        }
     }
 }

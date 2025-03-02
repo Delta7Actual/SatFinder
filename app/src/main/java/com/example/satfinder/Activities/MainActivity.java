@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.satfinder.Adapters.SavedSatelliteAdapter;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
+import com.example.satfinder.Objects.Interfaces.ICacheUpdateCallback;
 import com.example.satfinder.Objects.Interfaces.IStorageCallback;
 import com.example.satfinder.Objects.SatelliteInfo;
 import com.example.satfinder.Objects.SatelliteTLEResponse;
@@ -89,52 +90,57 @@ public class MainActivity extends AppCompatActivity {
     private void updateSavedSatelliteList() {
         Log.d(TAG, "Fetching saved satellites...");
         StorageManager storageManager = StorageManager.getInstance(this);
-        storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> storageManager.getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
-
+        storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), new ICacheUpdateCallback() {
             @Override
-            public void onSuccess(List<String> result) {
-                try {
-                    satelliteTLEResponses.clear();
-                    Log.d(TAG, "Number of saved satellites: " + result.size());
+            public void onComplete() {
+                storageManager.getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
 
-                    for (String satelliteId : result) {
+                    @Override
+                    public void onSuccess(List<String> result) {
                         try {
-                            Log.d(TAG, "Fetching TLE for satellite ID: " + satelliteId);
-                            String tleData = storageManager.spGetSatelliteTLE(Integer.parseInt(satelliteId));
-                            Log.d(TAG, "Raw TLE data: " + tleData);
+                            satelliteTLEResponses.clear();
+                            Log.d(TAG, "Number of saved satellites: " + result.size());
 
-                            SatelliteTLEResponse tleResponse = new SatelliteTLEResponse();
-                            if (tleData != null && !tleData.startsWith("err:")) {
-                                String[] tleParts = tleData.split(",");
-                                Log.d(TAG, "TLE parts count: " + tleParts.length);
+                            for (String satelliteId : result) {
+                                try {
+                                    Log.d(TAG, "Fetching TLE for satellite ID: " + satelliteId);
+                                    String tleData = storageManager.spGetSatelliteTLE(Integer.parseInt(satelliteId));
+                                    Log.d(TAG, "Raw TLE data: " + tleData);
 
-                                if (tleParts.length >= 3) {
-                                    tleResponse.setTle(tleParts[0]);
-                                    tleResponse.setInfo(new SatelliteInfo(Integer.parseInt(tleParts[1]), tleParts[2]));
-                                    satelliteTLEResponses.add(tleResponse);
-                                    adapter.notifyItemInserted(satelliteTLEResponses.size() - 1);
-                                } else {
-                                    Log.e(TAG, "Malformed TLE data: " + tleData);
+                                    SatelliteTLEResponse tleResponse = new SatelliteTLEResponse();
+                                    if (tleData != null && !tleData.startsWith("err:")) {
+                                        String[] tleParts = tleData.split(",");
+                                        Log.d(TAG, "TLE parts count: " + tleParts.length);
+
+                                        if (tleParts.length >= 3) {
+                                            tleResponse.setTle(tleParts[0]);
+                                            tleResponse.setInfo(new SatelliteInfo(Integer.parseInt(tleParts[1]), tleParts[2]));
+                                            satelliteTLEResponses.add(tleResponse);
+                                            adapter.notifyItemInserted(satelliteTLEResponses.size() - 1);
+                                        } else {
+                                            Log.e(TAG, "Malformed TLE data: " + tleData);
+                                        }
+                                    } else {
+                                        Log.e(TAG, "Null or error TLE data for satellite ID: " + satelliteId);
+                                    }
+                                } catch (NumberFormatException e) {
+                                    Log.e(TAG, "Invalid satellite ID: " + satelliteId, e);
+                                } catch (ArrayIndexOutOfBoundsException e) {
+                                    Log.e(TAG, "Array index out of bounds while parsing TLE data", e);
                                 }
-                            } else {
-                                Log.e(TAG, "Null or error TLE data for satellite ID: " + satelliteId);
                             }
-                        } catch (NumberFormatException e) {
-                            Log.e(TAG, "Invalid satellite ID: " + satelliteId, e);
-                        } catch (ArrayIndexOutOfBoundsException e) {
-                            Log.e(TAG, "Array index out of bounds while parsing TLE data", e);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Exception while processing saved satellite list", e);
                         }
                     }
-                } catch (Exception e) {
-                    Log.e(TAG, "Exception while processing saved satellite list", e);
-                }
-            }
 
-            @Override
-            public void onFailure(String errorMessage) {
-                Log.e(TAG, "Failed to fetch saved satellites: " + errorMessage);
-                Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        Log.e(TAG, "Failed to fetch saved satellites: " + errorMessage);
+                        Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
-        }));
+        });
     }
 }

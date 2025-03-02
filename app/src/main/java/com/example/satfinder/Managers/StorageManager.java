@@ -125,7 +125,7 @@ public class StorageManager {
             if (stale[2]) saveSatelliteTLE(editor, satelliteManager, id);
         }
 
-        editor.commit();
+        editor.apply();
         callback.onComplete();
     }
 
@@ -141,14 +141,14 @@ public class StorageManager {
                 String passData = System.currentTimeMillis() + "," + svpResponse.getPasses().get(0).getStartUTC();
                 Log.d("HELP", "onSuccess: " + passData);
                 editor.putString("sat_pass_" + id, passData);
-                editor.commit();
+                editor.apply();
             }
 
             @Override
             public void onError(String errorMessage) {
                 Log.d("HELP", "onError: " + errorMessage);
                 editor.putString("sat_pass_" + id, "err:" + errorMessage);
-                editor.commit();
+                editor.apply();
             }
         });
     }
@@ -165,14 +165,14 @@ public class StorageManager {
                 String posData = System.currentTimeMillis() + "," + spResponse.getPositions().get(0).getSatlatitude() + "," + spResponse.getPositions().get(0).getSatlongitude() + "," + spResponse.getPositions().get(0).getSataltitude();
                 Log.d("HELP", "onSuccess: " + posData);
                 editor.putString("sat_pos_" + id, posData);
-                editor.commit();
+                editor.apply();
             }
 
             @Override
             public void onError(String errorMessage) {
                 Log.d("HELP", "onError: " + errorMessage);
                 editor.putString("sat_pos_" + id, "err:" + errorMessage);
-                editor.commit();
+                editor.apply();
             }
         });
     }
@@ -188,14 +188,14 @@ public class StorageManager {
                 String dataToSave = tleData + "," + stleResponse.getInfo().getSatid() + "," + stleResponse.getInfo().getSatname();
                 Log.d("HELP", "onSuccess: " + tleData);
                 editor.putString("sat_tle_" + id, dataToSave);
-                editor.commit();
+                editor.apply();
             }
 
             @Override
             public void onError(String errorMessage) {
                 Log.d("HELP", "onError: " + errorMessage);
                 editor.putString("sat_tle_" + id, "err:" + errorMessage);
-                editor.commit();
+                editor.apply();
             }
         });
     }

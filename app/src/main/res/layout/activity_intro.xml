@@ -27,8 +27,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:text="Sat-Seeker"
+            android:text="Sat-Finder"
             android:textAlignment="center"
             android:textSize="52sp"
             android:typeface="monospace" />

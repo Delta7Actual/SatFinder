@@ -39,6 +39,16 @@ public class ProfileActivity extends AppCompatActivity {
         setupUI();
     }
 
+    public String getUserDisplayName() {
+        UserManager manager = UserManager.getInstance();
+        return manager.getCurrentUserDisplayName();
+    }
+
+    public String getUserEmail() {
+        UserManager manager = UserManager.getInstance();
+        return manager.getCurrentUserEmail();
+    }
+
     public void setUserDisplayName(String newName) {
         UserManager manager = UserManager.getInstance();
         manager.setUserDisplayName(newName, new IUserAuthCallback() {

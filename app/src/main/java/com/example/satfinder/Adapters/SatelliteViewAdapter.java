@@ -1,5 +1,5 @@
 package com.example.satfinder.Adapters;
 
 // TODO: Implement this
-public class SatellitePassAdapter {
+public class SatelliteViewAdapter {
 }

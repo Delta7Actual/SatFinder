@@ -22,6 +22,7 @@ public class UserManager {
         return instance;
     }
 
+
     /**
      * Checks if a user is currently logged in.
      *
@@ -38,6 +39,24 @@ public class UserManager {
      */
     public String getCurrentUserUid() {
         return userService.getCurrentUserUid();
+    }
+
+    /**
+     * Gets the display name of the currently logged-in user.
+     *
+     * @return The display name of the current user, or {@code null} if no user is logged in.
+     */
+    public String getCurrentUserDisplayName() {
+        return userService.getCurrentUserDisplayName();
+    }
+
+    /**
+     * Gets the email address of the currently logged-in user.
+     *
+     * @return The email address of the current user, or {@code null} if no user is logged in.
+     */
+    public String getCurrentUserEmail() {
+        return userService.getCurrentUserEmail();
     }
 
     /**

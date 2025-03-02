@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ public class AccountFragment extends Fragment {
     private RecyclerView recyclerSatelliteList;
     private SatelliteIdAdapter adapter;
     private List<String> satelliteIds;
+    private TextView tvDisplayName, tvEmail;
 
     @Nullable
     @Override
@@ -41,6 +43,8 @@ public class AccountFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_account, container, false);
 
         // Initialize views
+        tvDisplayName = view.findViewById(R.id.tv_display_name);
+        tvEmail = view.findViewById(R.id.tv_email);
         etDisplayName = view.findViewById(R.id.et_display_name);
         etSatelliteID = view.findViewById(R.id.et_satellite_id);
         btnSaveDisplayName = view.findViewById(R.id.btn_save_display_name);
@@ -59,18 +63,39 @@ public class AccountFragment extends Fragment {
 
         // Load the initial list of satellite IDs
         updateSatelliteList();
+        // Load / Reload the user's details
+        reloadUserDetails();
 
         return view;
+    }
+
+    private void reloadUserDetails() {
+        String displayName = ((ProfileActivity) requireActivity()).getUserDisplayName();
+        String email = ((ProfileActivity) requireActivity()).getUserEmail();
+
+        if (displayName != null) {
+            tvDisplayName.setText(displayName);
+        } else {
+            tvDisplayName.setText("Error getting display name");
+        }
+
+        if (email != null) {
+            tvEmail.setText(email);
+        } else {
+            tvEmail.setText("Error getting email");
+        }
     }
 
     private void saveDisplayName() {
         String newName = etDisplayName.getText().toString().trim();
         if (!newName.isEmpty()) {
             ((ProfileActivity) requireActivity()).setUserDisplayName(newName);
-            Toast.makeText(requireContext(), "Display name updated: " + newName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Updating Display name: " + newName, Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(requireContext(), "Please enter a valid display name.", Toast.LENGTH_SHORT).show();
         }
+
+        reloadUserDetails();
     }
 
     private void addSatellite() {

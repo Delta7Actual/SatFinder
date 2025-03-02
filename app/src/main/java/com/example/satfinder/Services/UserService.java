@@ -51,6 +51,30 @@ public class UserService {
     }
 
     /**
+     * Retrieves the display name of the currently logged-in user.
+     *
+     * @return the display name of the current user, or null if not logged in.
+     */
+    public String getCurrentUserDisplayName() {
+        if (!isLoggedIn()) {
+            return null;
+        }
+        return mAuth.getCurrentUser().getDisplayName();
+    }
+
+    /**
+     * Retrieves the email of the currently logged-in user.
+     *
+     * @return the email of the current user, or null if not logged in.
+     */
+    public String getCurrentUserEmail() {
+        if (!isLoggedIn()) {
+            return null;
+        }
+        return mAuth.getCurrentUser().getEmail();
+    }
+
+    /**
      * Updates the display name of the currently logged-in user.
      *
      * @param newName the new display name to set.
