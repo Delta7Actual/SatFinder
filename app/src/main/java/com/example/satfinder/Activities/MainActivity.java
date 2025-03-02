@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.satfinder.Adapters.SavedSatelliteAdapter;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
-import com.example.satfinder.Objects.Interfaces.ICacheUpdateCallback;
 import com.example.satfinder.Objects.Interfaces.IStorageCallback;
 import com.example.satfinder.Objects.SatelliteInfo;
 import com.example.satfinder.Objects.SatelliteTLEResponse;
@@ -27,12 +26,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "SatFinder_MainActivity";
+
     private RecyclerView recyclerSatelliteTLEList;
     private SavedSatelliteAdapter adapter;
     private List<SatelliteTLEResponse> satelliteTLEResponses;
     private TextView tvISSPassDetails;
 
     private void setupUI() {
+        Log.d(TAG, "Setting up UI components...");
         tvISSPassDetails = findViewById(R.id.tv_iss_pass_details);
         recyclerSatelliteTLEList = findViewById(R.id.recycler_satellite_list);
         satelliteTLEResponses = new ArrayList<>();
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: Activity started");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -59,95 +62,79 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateWithClosestISSPass() {
-//        SatelliteManager satelliteManager = SatelliteManager.getInstance();
+        Log.d(TAG, "Fetching closest ISS pass...");
         StorageManager storageManager = StorageManager.getInstance(this);
-        storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), new ICacheUpdateCallback() {
-
-            @Override
-            public void onComplete() {
+        storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> {
+            try {
                 String result = storageManager.spGetSatelliteClosestPass(25544);
-                if (!result.isEmpty()) {
-                    tvISSPassDetails.setText(String.format("Next pass is in: %s", SatUtils.convertUTCToLocalTime(Long.parseLong(result.split(",")[1]))));
+                Log.d(TAG, "Closest ISS pass raw data: " + result);
+
+                if (result != null && !result.startsWith("err:")) {
+                    String[] resultParts = result.split(",");
+                    if (resultParts.length >= 2) {
+                        long time = Long.parseLong(resultParts[1]);
+                        tvISSPassDetails.setText(String.format("Next pass is in: %s", SatUtils.convertUTCToLocalTime(time)));
+                    } else {
+                        Log.e(TAG, "Unexpected ISS pass data format: " + result);
+                    }
+                } else {
+                    Log.e(TAG, "Error fetching ISS pass or null result.");
                 }
-//        ObserverLocation observerLocation = storageManager.spGetUserLocation();
-//        satelliteManager.fetchSatelliteVisualPasses(25544,
-//                observerLocation.getLatitude(),
-//                observerLocation.getLongitude(),
-//                observerLocation.getAltitude(),
-//                7,
-//                30,
-//                new IN2YOCallback() {
-//                    @Override
-//                    public void onSuccess(ISatelliteResponse response) {
-//                        SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
-//                        if (svpResponse != null) {
-//                            tvISSPassDetails.setText(String.format("Next pass is in: %s",
-//                                    SatUtils.convertUTCToLocalTime(svpResponse
-//                                            .getPasses()
-//                                            .get(0)
-//                                            .getStartUTC())));
-//                        } else {
-//                            tvISSPassDetails.setText("No ISS sightings in the next week :)");
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(String errorMessage) {
-//                        Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+            } catch (Exception e) {
+                Log.e(TAG, "Exception while processing ISS pass data", e);
             }
         });
     }
 
     private void updateSavedSatelliteList() {
+        Log.d(TAG, "Fetching saved satellites...");
         StorageManager storageManager = StorageManager.getInstance(this);
-        // Refreshes data from storage
-        storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), new ICacheUpdateCallback() {
+        storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> storageManager.getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
+
             @Override
-            public void onComplete() {
-                storageManager.getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
+            public void onSuccess(List<String> result) {
+                try {
+                    satelliteTLEResponses.clear();
+                    Log.d(TAG, "Number of saved satellites: " + result.size());
 
-                    @Override
-                    public void onSuccess(List<String> result) {
-                        satelliteTLEResponses.clear();
-                        Log.d("HELP", "" + result.size());
-                        for (int i = 0; i < result.size(); i++) {
-                            String tleData = storageManager.spGetSatelliteTLE(Integer.parseInt(result.get(i)));
+                    for (String satelliteId : result) {
+                        try {
+                            Log.d(TAG, "Fetching TLE for satellite ID: " + satelliteId);
+                            String tleData = storageManager.spGetSatelliteTLE(Integer.parseInt(satelliteId));
+                            Log.d(TAG, "Raw TLE data: " + tleData);
+
                             SatelliteTLEResponse tleResponse = new SatelliteTLEResponse();
-                            if (tleData != null) {
-                                    tleResponse.setTle(tleData.split(",")[0]);
-                                    Log.d("HELP", tleData);
-                                    Log.d("HELP", result.get(i));
-                                    Log.d("HELP", storageManager.spGetSatelliteTLE(Integer.parseInt(result.get(i))));
+                            if (tleData != null && !tleData.startsWith("err:")) {
+                                String[] tleParts = tleData.split(",");
+                                Log.d(TAG, "TLE parts count: " + tleParts.length);
 
-                                    tleResponse.setInfo(new SatelliteInfo(Integer.parseInt(tleData.split(",")[1]), tleData.split(",")[2]));
+                                if (tleParts.length >= 3) {
+                                    tleResponse.setTle(tleParts[0]);
+                                    tleResponse.setInfo(new SatelliteInfo(Integer.parseInt(tleParts[1]), tleParts[2]));
+                                    satelliteTLEResponses.add(tleResponse);
+                                    adapter.notifyItemInserted(satelliteTLEResponses.size() - 1);
+                                } else {
+                                    Log.e(TAG, "Malformed TLE data: " + tleData);
+                                }
+                            } else {
+                                Log.e(TAG, "Null or error TLE data for satellite ID: " + satelliteId);
                             }
-                            satelliteTLEResponses.add(tleResponse);
-                            adapter.notifyItemInserted(satelliteTLEResponses.size() - 1);
-//                    SatelliteManager.getInstance().fetchSatelliteTLE(Integer.parseInt(result.get(i)), new IN2YOCallback() {
-//
-//                        @Override
-//                        public void onSuccess(ISatelliteResponse response) {
-//                            SatelliteTLEResponse satelliteTLEResponse = (SatelliteTLEResponse) response;
-//                            satelliteTLEResponses.add(satelliteTLEResponse);
-//                            adapter.notifyItemInserted(satelliteTLEResponses.size() - 1);
-//                        }
-//
-//                        @Override
-//                        public void onError(String errorMessage) {
-//                            Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
+                        } catch (NumberFormatException e) {
+                            Log.e(TAG, "Invalid satellite ID: " + satelliteId, e);
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            Log.e(TAG, "Array index out of bounds while parsing TLE data", e);
                         }
                     }
-
-                    @Override
-                    public void onFailure(String errorMessage) {
-                        Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                    }
-                });
+                } catch (Exception e) {
+                    Log.e(TAG, "Exception while processing saved satellite list", e);
+                }
             }
-        });
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Log.e(TAG, "Failed to fetch saved satellites: " + errorMessage);
+                Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        }));
     }
 }

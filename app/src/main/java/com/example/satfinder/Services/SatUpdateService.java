@@ -26,6 +26,8 @@ public class SatUpdateService extends Service {
     private static final String CHANNEL_ID = "sat_update_channel";
     private static final String ACTION_STOP = "STOP_SERVICE";
 
+    public static boolean isRunning = false;
+
     private Handler handler;
     private Runnable updateRunnable = new Runnable() {
         @Override
@@ -45,6 +47,7 @@ public class SatUpdateService extends Service {
         Log.d(TAG, "Service created.");
 
         handler = new Handler(Looper.getMainLooper());
+        isRunning = true;
     }
 
     @Override
@@ -66,6 +69,7 @@ public class SatUpdateService extends Service {
             handler.removeCallbacks(updateRunnable); // Remove any pending tasks
         }
         Log.d(TAG, "Service destroyed — updates halted");
+        isRunning = false;
     }
 
     @Nullable

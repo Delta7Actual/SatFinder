@@ -36,6 +36,8 @@ public class IntroActivity extends AppCompatActivity {
     private TextView tvIntroDetails;
     private LocationManager locationManager;
 
+    private boolean isInitialized = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,9 +117,18 @@ public class IntroActivity extends AppCompatActivity {
      * Proceeds with location retrieval and stale data check.
      */
     private void proceedWithInitialization() {
-        checkLocation();
-        if (UserManager.getInstance().isUserLoggedIn()) checkForStaleData();
-        startForegroundService(new Intent(this, SatUpdateService.class));
+        if (!isInitialized) {
+            checkLocation();
+            if (UserManager.getInstance().isUserLoggedIn()) checkForStaleData();
+            tvIntroDetails.setText("Starting update service...");
+
+            if (!SatUpdateService.isRunning) {
+                startForegroundService(new Intent(this, SatUpdateService.class));
+            } else {
+                Log.d(TAG, "SatUpdateService already running.");
+            }
+            isInitialized = true;
+        }
     }
 
     /**
