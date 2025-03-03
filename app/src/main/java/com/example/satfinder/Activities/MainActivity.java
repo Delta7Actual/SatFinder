@@ -13,9 +13,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.satfinder.Adapters.SavedSatelliteAdapter;
+import com.example.satfinder.Adapters.SatelliteViewAdapter;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
+import com.example.satfinder.Misc.Utility.SatUtils;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.Interfaces.IStorageCallback;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "DATA_FETCHER";
 
     private RecyclerView recyclerSatelliteTLEList;
-    private SavedSatelliteAdapter adapter;
+    private SatelliteViewAdapter adapter;
     private List<SatelliteTLEResponse> satelliteTLEResponses;
     private TextView tvISSPassDetails;
 
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         tvISSPassDetails = findViewById(R.id.tv_iss_pass_details);
         recyclerSatelliteTLEList = findViewById(R.id.recycler_satellite_list);
         satelliteTLEResponses = new ArrayList<>();
-        adapter = new SavedSatelliteAdapter(satelliteTLEResponses);
+        adapter = new SatelliteViewAdapter(satelliteTLEResponses);
         recyclerSatelliteTLEList.setLayoutManager(new LinearLayoutManager(this));
         recyclerSatelliteTLEList.setAdapter(adapter);
     }

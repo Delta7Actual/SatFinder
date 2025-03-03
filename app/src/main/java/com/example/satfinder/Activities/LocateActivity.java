@@ -19,6 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.satfinder.Misc.Utility.SatUtils;
 import com.example.satfinder.R;
 
 public class LocateActivity extends AppCompatActivity implements SensorEventListener {

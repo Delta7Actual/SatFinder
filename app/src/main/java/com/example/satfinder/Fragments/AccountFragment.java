@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.satfinder.Activities.ProfileActivity;
-import com.example.satfinder.Adapters.SatelliteIdAdapter;
+import com.example.satfinder.Adapters.SavedSatelliteAdapter;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
@@ -33,7 +33,7 @@ public class AccountFragment extends Fragment {
     private EditText etDisplayName, etSatelliteID;
     private Button btnSaveDisplayName, btnAddSatellite;
     private RecyclerView recyclerSatelliteList;
-    private SatelliteIdAdapter adapter;
+    private SavedSatelliteAdapter adapter;
     private List<String> satelliteIds;
     private TextView tvDisplayName, tvEmail;
 
@@ -53,7 +53,7 @@ public class AccountFragment extends Fragment {
 
         // Set up RecyclerView
         satelliteIds = new ArrayList<>();
-        adapter = new SatelliteIdAdapter(satelliteIds);
+        adapter = new SavedSatelliteAdapter(satelliteIds);
         recyclerSatelliteList.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerSatelliteList.setAdapter(adapter);
 

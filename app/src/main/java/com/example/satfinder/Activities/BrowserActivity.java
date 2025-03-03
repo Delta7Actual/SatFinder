@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.satfinder.Fragments.SearchFragment;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
+import com.example.satfinder.Misc.Utility.SatUtils;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.ObserverLocation;

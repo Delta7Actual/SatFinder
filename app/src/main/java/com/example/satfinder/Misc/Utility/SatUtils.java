@@ -1,4 +1,4 @@
-package com.example.satfinder.Activities;
+package com.example.satfinder.Misc.Utility;
 
 import com.example.satfinder.Objects.ObserverLocation;
 
