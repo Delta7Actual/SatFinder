@@ -79,15 +79,15 @@ public class StorageManager {
     }
 
     public String spGetSatelliteClosestPass(int satelliteId) {
-        return sharedPreferences.getString("sat_pass_" + satelliteId, "");
+        return sharedPreferences.getString("sat_pass_" + satelliteId, "NONE,,");
     }
 
     public String spGetSatellitePos(int satelliteId) {
-        return sharedPreferences.getString("sat_pos_" + satelliteId, "");
+        return sharedPreferences.getString("sat_pos_" + satelliteId, "NONE,,");
     }
 
     public String spGetSatelliteTLE(int satelliteId) {
-        return sharedPreferences.getString("sat_tle_" + satelliteId, "");
+        return sharedPreferences.getString("sat_tle_" + satelliteId, "NONE,,");
     }
 
     private boolean[] spIsSatelliteDataStale(int satelliteId) {
@@ -96,9 +96,9 @@ public class StorageManager {
         String tleData = spGetSatelliteTLE(satelliteId);
 
         return new boolean[]{
-                passData.isEmpty() || SatUtils.isStale(Long.parseLong(passData.split(",")[0])),
-                posData.isEmpty() || SatUtils.isStale(Long.parseLong(posData.split(",")[0])),
-                tleData.isEmpty() // TLE is never outdated
+                passData.equals("NONE,,") || SatUtils.isStale(Long.parseLong(passData.split(",")[0])),
+                posData.equals("NONE,,") || SatUtils.isStale(Long.parseLong(posData.split(",")[0])),
+                tleData.equals("NONE,,") // TLE is never outdated
         };
     }
 
@@ -130,6 +130,7 @@ public class StorageManager {
     }
 
     private void saveSatellitePasses(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
+        Log.d("STORAGE", "Updating data for ID: " + id);
         manager.fetchSatelliteVisualPasses(id, curr.getLatitude(), curr.getLongitude(), curr.getAltitude(), 7, 60, new IN2YOCallback() {
             @Override
             public void onSuccess(ISatelliteResponse response) {
@@ -154,6 +155,7 @@ public class StorageManager {
     }
 
     private void saveSatellitePositions(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
+        Log.d("STORAGE", "Updating data for ID: " + id);
         manager.fetchSatellitePositions(id, curr.getLatitude(), curr.getLongitude(), curr.getAltitude(), 1, new IN2YOCallback() {
             @Override
             public void onSuccess(ISatelliteResponse response) {
@@ -178,6 +180,7 @@ public class StorageManager {
     }
 
     private void saveSatelliteTLE(SharedPreferences.Editor editor, SatelliteManager manager, int id) {
+        Log.d("STORAGE", "Updating data for ID: " + id);
         manager.fetchSatelliteTLE(id, new IN2YOCallback() {
             @Override
             public void onSuccess(ISatelliteResponse response) {

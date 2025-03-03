@@ -15,7 +15,14 @@ import androidx.fragment.app.Fragment;
 import com.example.satfinder.Activities.SatUtils;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
+import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
+import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
+import com.example.satfinder.Objects.ObserverLocation;
+import com.example.satfinder.Objects.SatellitePosition;
+import com.example.satfinder.Objects.SatellitePositionsResponse;
 import com.example.satfinder.Objects.SatelliteTLE;
+import com.example.satfinder.Objects.SatelliteTLEResponse;
+import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
 import com.example.satfinder.R;
 
 public class SearchFragment extends Fragment {
@@ -75,40 +82,117 @@ public class SearchFragment extends Fragment {
         }
 
         StorageManager storageManager = StorageManager.getInstance(getContext());
-        storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> {
-            fetchSatelliteData(satelliteId);
-        });
+        storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance()
+                , () -> getSatelliteData(satelliteId));
     }
 
-    private void fetchSatelliteData(int satelliteId) {
+    private void getSatelliteData(int satelliteId) {
         StorageManager storageManager = StorageManager.getInstance(getContext());
 
         // Fetch TLE data
         String tleData = storageManager.spGetSatelliteTLE(satelliteId);
         Log.d(TAG, "TLE data: " + tleData);
-        if (tleData != null && !tleData.startsWith("err:")) {
+        if (tleData != null && !tleData.startsWith("err:") && !tleData.equals("NONE,,")) {
             displayTLEData(tleData);
         } else {
-            searchFailure("Failed to fetch TLE data.");
+            Log.w(TAG, "Failed to fetch TLE data. Calling API...");
+            fetchSatelliteTLE(satelliteId);
         }
 
         // Fetch Visual Pass
         String passData = storageManager.spGetSatelliteClosestPass(satelliteId);
         Log.d(TAG, "Pass data: " + passData);
-        if (passData != null && !passData.startsWith("err:")) {
+        if (passData != null && !passData.startsWith("err:") && !passData.equals("NONE,,")) {
             displayNextPass(passData);
         } else {
-            searchFailure("Failed to fetch next pass data.");
+            Log.w(TAG, "Failed to fetch next pass data. Calling API...");
+            fetchSatelliteVisualPass(satelliteId, storageManager.spGetUserLocation());
         }
 
         // Fetch Satellite Position
         String posData = storageManager.spGetSatellitePos(satelliteId);
         Log.d(TAG, "Position data: " + posData);
-        if (posData != null && !posData.startsWith("err:")) {
+        if (posData != null && !posData.startsWith("err:") && !posData.equals("NONE,,")) {
             displaySatellitePosition(posData);
         } else {
-            searchFailure("Failed to fetch satellite position.");
+            Log.w(TAG, "Failed to fetch satellite position.");
+            fetchSatellitePosition(satelliteId, storageManager.spGetUserLocation());
         }
+    }
+
+    private void fetchSatelliteTLE(int satelliteId) {
+        SatelliteManager manager = SatelliteManager.getInstance();
+        manager.fetchSatelliteTLE(satelliteId, new IN2YOCallback() {
+            @Override
+            public void onSuccess(ISatelliteResponse response) {
+                SatelliteTLEResponse tleResponse = (SatelliteTLEResponse) response;
+                if (tleResponse == null) {
+                    searchFailure("Null TLE response.");
+                    return;
+                }
+                displayTLEData(tleResponse.getTle() + ",NONE," + tleResponse.getInfo().getSatname());
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                searchFailure(errorMessage);
+            }
+        });
+    }
+
+    private void fetchSatelliteVisualPass(int satelliteId, ObserverLocation observerLocation) {
+        SatelliteManager manager = SatelliteManager.getInstance();
+        manager.fetchSatelliteVisualPasses(satelliteId
+                ,observerLocation.getLatitude()
+                ,observerLocation.getLongitude()
+                ,observerLocation.getAltitude()
+                ,7
+                ,30
+                , new IN2YOCallback() {
+
+                    @Override
+                    public void onSuccess(ISatelliteResponse response) {
+                        SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
+                        if (svpResponse == null) {
+                            searchFailure("Null Visual-Passes response.");
+                            return;
+                        }
+                        displayNextPass("NONE," + svpResponse
+                                .getPasses()
+                                .get(0).getStartUTC() + ",NONE");
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        Log.w(TAG, errorMessage);
+                    }
+                });
+    }
+
+    private void fetchSatellitePosition(int satelliteId, ObserverLocation observerLocation) {
+        SatelliteManager manager = SatelliteManager.getInstance();
+        manager.fetchSatellitePositions(satelliteId
+                , observerLocation.getLatitude()
+                , observerLocation.getLongitude()
+                , observerLocation.getAltitude()
+                , 1
+                , new IN2YOCallback() {
+                    @Override
+                    public void onSuccess(ISatelliteResponse response) {
+                        SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
+                        if (spResponse == null) {
+                            searchFailure("Null Positions response.");
+                            return;
+                        }
+                        SatellitePosition position = spResponse.getPositions().get(0);
+                        displaySatellitePosition("NONE," + position.getSatlatitude() + "," + position.getSatlongitude());
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        searchFailure(errorMessage);
+                    }
+                });
     }
 
     private void displayTLEData(String tleData) {
