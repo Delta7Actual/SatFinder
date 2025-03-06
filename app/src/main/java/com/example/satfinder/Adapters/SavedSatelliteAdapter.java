@@ -73,42 +73,38 @@ public class SavedSatelliteAdapter extends RecyclerView.Adapter<SavedSatelliteAd
 
         holder.btnNotify.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
-            if (adapterPosition != RecyclerView.NO_POSITION) {
-                SatelliteManager manager = SatelliteManager.getInstance();
-                ObserverLocation observerLocation = StorageManager.getInstance(holder.itemView.getContext()).spGetUserLocation();
-                manager.fetchSatelliteVisualPasses(Integer.parseInt(satelliteIds.get(adapterPosition))
-                        , observerLocation.getLatitude()
-                        , observerLocation.getLongitude()
-                        , observerLocation.getAltitude()
-                        , 7
-                        , 60
-                        , new IN2YOCallback() {
-                            @Override
-                            public void onSuccess(ISatelliteResponse response) {
-                                SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
-                                if (svpResponse != null) {
-                                    if (svpResponse.getPasses() == null) {
-                                        Toast.makeText(holder.itemView.getContext(), "No passes in the next 7 days!", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    if (svpResponse.getPasses().isEmpty()) {
-                                        Toast.makeText(holder.itemView.getContext(), "Couldn't fetch pass time!", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    AlarmScheduler.scheduleNotification(holder.itemView.getContext()
-                                            , svpResponse.getPasses().get(0).getStartUTC());
-                                    Toast.makeText(holder.itemView.getContext(), "Setting notification for " + satelliteIds.get(adapterPosition), Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(holder.itemView.getContext(), "Couldn't fetch pass time!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
+            if (adapterPosition == RecyclerView.NO_POSITION) return;
 
-                            @Override
-                            public void onError(String errorMessage) {
-                                Toast.makeText(holder.itemView.getContext(), "Couldn't fetch pass time!", Toast.LENGTH_SHORT).show();
+            SatelliteManager manager = SatelliteManager.getInstance();
+            ObserverLocation observerLocation = StorageManager.getInstance(holder.itemView.getContext()).spGetUserLocation();
+
+            manager.fetchSatelliteVisualPasses(
+                    Integer.parseInt(satelliteIds.get(adapterPosition)),
+                    observerLocation.getLatitude(),
+                    observerLocation.getLongitude(),
+                    observerLocation.getAltitude(),
+                    7,
+                    60,
+                    new IN2YOCallback() {
+                        @Override
+                        public void onSuccess(ISatelliteResponse response) {
+                            SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
+                            if (svpResponse != null && !svpResponse.getPasses().isEmpty()) {
+                                long alarmTime = svpResponse.getPasses().get(0).getStartUTC() * 1000L; // Convert to milliseconds
+                                int requestCode = satelliteIds.get(adapterPosition).hashCode();
+                                AlarmScheduler.scheduleNotification(holder.itemView.getContext(), alarmTime, requestCode);
+                                Toast.makeText(holder.itemView.getContext(), "Alarm set for " + satelliteIds.get(adapterPosition), Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(holder.itemView.getContext(), "No upcoming passes.", Toast.LENGTH_SHORT).show();
                             }
-                        });
-            }
+                        }
+
+                        @Override
+                        public void onError(String errorMessage) {
+                            Toast.makeText(holder.itemView.getContext(), "Error fetching pass times.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
         });
     }
 

@@ -15,45 +15,60 @@ import com.example.satfinder.R;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
+    private static final String TAG = "AlarmReceiver";
     private static final String CHANNEL_ID = "alarm_channel";
     private static final int NOTIFICATION_ID = 1112;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d("AlarmReceiver", "Setting alarm!");
-        trigger(context);
+        if (intent == null) {
+            Log.e(TAG, "Received null intent — aborting.");
+            return;
+        }
+
+        Log.d(TAG, "Alarm triggered! Preparing notification...");
+        showNotification(context);
     }
 
     private void createNotificationChannel(Context context) {
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (manager != null) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Satellite Over Head",
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            manager.createNotificationChannel(channel);
+        if (manager == null || manager.getNotificationChannel(CHANNEL_ID) != null) {
+            return; // Channel already exists
         }
+
+        NotificationChannel channel = new NotificationChannel(
+                CHANNEL_ID,
+                "Satellite Alerts",
+                NotificationManager.IMPORTANCE_HIGH
+        );
+        channel.setDescription("Notifies when a satellite is overhead.");
+        manager.createNotificationChannel(channel);
     }
 
-    private void trigger(Context context) {
-        Intent notificationIntent = new Intent(context, BrowserActivity.class);
+    private void showNotification(Context context) {
+        createNotificationChannel(context);
 
-        // Specify FLAG_IMMUTABLE for PendingIntent
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        Intent notificationIntent = new Intent(context, BrowserActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                notificationIntent,
+                PendingIntent.FLAG_IMMUTABLE
+        );
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.baseline_satellite_alt_24)
-                .setContentTitle("Satellite Alarm Triggered")
-                .setContentText("Your scheduled satellite event has occurred!")
+                .setContentTitle("Satellite Alarm")
+                .setContentText("A satellite event you scheduled has started.")
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (notificationManager != null) {
-            createNotificationChannel(context);
-            notificationManager.notify(NOTIFICATION_ID, builder.build());
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (manager != null) {
+            manager.notify(NOTIFICATION_ID, builder.build());
+        } else {
+            Log.e(TAG, "NotificationManager is null — cannot show notification.");
         }
     }
 }

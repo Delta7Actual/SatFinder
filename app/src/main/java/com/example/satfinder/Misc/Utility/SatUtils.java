@@ -53,17 +53,16 @@ public final class SatUtils {
 
     /**
      * Convert UTC time to local time
-     * @param utc The UTC time
+     * @param utcMillis The UTC time
      * @return The local time
      */
-    public static String convertUTCToLocalTime(long utc) {
-        Instant instant = Instant.ofEpochSecond(utc);
-
+    public static String convertUTCToLocalTime(long utcMillis) {
+        Instant instant = Instant.ofEpochMilli(utcMillis); // FIX: use milliseconds!
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM HH:mm");
-
         return localDateTime.format(formatter);
     }
+
 
     /**
      * Turn float azimuth into string direction
