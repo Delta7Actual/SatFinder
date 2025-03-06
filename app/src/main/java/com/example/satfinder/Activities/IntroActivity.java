@@ -30,7 +30,7 @@ import java.util.List;
 
 public class IntroActivity extends AppCompatActivity {
 
-    private static final String TAG = "IntroActivity";
+    private static final String TAG = "SatIntro";  // Updated TAG for logging
     private static final int PERMISSION_REQUEST_CODE = 1234;
 
     private TextView tvIntroDetails;
@@ -47,6 +47,7 @@ public class IntroActivity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            Log.d(TAG, "Applied system bar insets: " + systemBars.toString());
             return insets;
         });
 
@@ -81,10 +82,12 @@ public class IntroActivity extends AppCompatActivity {
         }
 
         if (!permissionsNeeded.isEmpty()) {
+            Log.d(TAG, "Requesting permissions: " + permissionsNeeded.toString());
             ActivityCompat.requestPermissions(this,
                     permissionsNeeded.toArray(new String[0]),
                     PERMISSION_REQUEST_CODE);
         } else {
+            Log.d(TAG, "All permissions already granted.");
             proceedWithInitialization();
         }
     }
@@ -118,11 +121,13 @@ public class IntroActivity extends AppCompatActivity {
      */
     private void proceedWithInitialization() {
         if (!isInitialized) {
+            Log.d(TAG, "Proceeding with initialization...");
             checkLocation();
             if (UserManager.getInstance().isUserLoggedIn()) checkForStaleData();
             tvIntroDetails.setText("Starting update service...");
 
             if (!SatUpdateService.isRunning) {
+                Log.d(TAG, "Starting SatUpdateService...");
                 startForegroundService(new Intent(this, SatUpdateService.class));
             } else {
                 Log.d(TAG, "SatUpdateService already running.");
@@ -152,6 +157,7 @@ public class IntroActivity extends AppCompatActivity {
             Toast.makeText(this, "GPS is off, using cached location if available.", Toast.LENGTH_SHORT).show();
             getCachedLocation();
         } else {
+            Log.d(TAG, "GPS is enabled, retrieving current location...");
             getLocation();
         }
     }
@@ -163,6 +169,7 @@ public class IntroActivity extends AppCompatActivity {
         ObserverLocation savedLocation = StorageManager.getInstance(this).spGetUserLocation();
 
         if (savedLocation.getLatitude() == 0 || savedLocation.getLongitude() == 0) {
+            Log.w(TAG, "No cached location available.");
             Toast.makeText(this, "No cached location available.", Toast.LENGTH_SHORT).show();
         } else {
             Log.d(TAG, "Using cached location: " + savedLocation);
@@ -189,6 +196,7 @@ public class IntroActivity extends AppCompatActivity {
                 location -> {
                     ObserverLocation observerLocation = new ObserverLocation(location);
                     StorageManager.getInstance(this).spSaveUserLocation(observerLocation);
+                    Log.d(TAG, "Location retrieved: " + observerLocation);
                     proceedToNextActivity();
                 });
     }
@@ -198,6 +206,7 @@ public class IntroActivity extends AppCompatActivity {
      */
     private void proceedToNextActivity() {
         tvIntroDetails.setText("Redirecting...");
+        Log.d(TAG, "Redirecting to LoginActivity...");
         startActivity(new Intent(IntroActivity.this, LoginActivity.class));
         finish();
     }

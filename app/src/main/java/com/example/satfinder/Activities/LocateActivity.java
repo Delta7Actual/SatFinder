@@ -24,6 +24,8 @@ import com.example.satfinder.R;
 
 public class LocateActivity extends AppCompatActivity implements SensorEventListener {
 
+    private static final String TAG = "SatLocate"; // Updated TAG for logging
+
     private SensorManager sensorManager;
     private ImageView ivCompass;
     private ImageView ivNeedle;
@@ -32,7 +34,6 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
     private Button btnReturn;
 
     private final float[] rMat = new float[9]; // Rotation matrix
-    // 0 is azimuth, 1 is pitch, 2 is roll
     private final float[] orientationVector = new float[3]; // Orientation vector
 
     private float satAzimuth;
@@ -45,6 +46,7 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         tvAngleValue = findViewById(R.id.tv_angle_value);
         btnReturn = findViewById(R.id.button_return);
         btnReturn.setOnClickListener(v -> {
+            Log.d(TAG, "Return button clicked, redirecting to BrowserActivity...");
             startActivity(new Intent(LocateActivity.this, BrowserActivity.class));
             finish();
         });
@@ -54,8 +56,10 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         Sensor rvSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         if (rvSensor != null) {
+            Log.d(TAG, "Rotation vector sensor found, registering listener...");
             sensorManager.registerListener(this, rvSensor, SensorManager.SENSOR_DELAY_NORMAL);
         } else {
+            Log.e(TAG, "Rotation vector sensor unavailable! Cannot triangulate orientation.");
             Toast.makeText(this, "Sensors unavailable! Cannot triangulate orientation!", Toast.LENGTH_SHORT).show();
         }
     }
@@ -68,16 +72,19 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            Log.d(TAG, "Applied system bar insets: " + systemBars.toString());
             return insets;
         });
 
         setupUI();
         setupSensors();
+
+        // Fetch satellite azimuth and pitch from intent
         satAzimuth = getIntent().getFloatExtra("sat_azimuth", 0);
         satPitch = getIntent().getFloatExtra("sat_pitch", 0);
 
-        Log.d("SAT", "SAT AZ': " + satAzimuth);
-        Log.d("SAT", "SAT PI': " + satPitch);
+        Log.d(TAG, "Satellite Azimuth: " + satAzimuth);
+        Log.d(TAG, "Satellite Pitch: " + satPitch);
     }
 
     @Override
@@ -92,23 +99,30 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
             if (azimuthInDegrees < 0) {
                 azimuthInDegrees += 360;
             }
+
             float pitchInDegrees = (float) Math.toDegrees(orientationVector[1]);
+
+            Log.d(TAG, "Sensor azimuth: " + azimuthInDegrees + "°, pitch: " + pitchInDegrees + "°");
             updateValues(azimuthInDegrees, pitchInDegrees + 90);
-            Log.d("TAG", "onSensorChanged: " + SatUtils.getDirectionFromAzimuth(azimuthInDegrees));
+
+            Log.d(TAG, "Direction from azimuth: " + SatUtils.getDirectionFromAzimuth(azimuthInDegrees));
         }
     }
 
     @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-        // TODO: Handle this
-        // Do i have to?
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Placeholder for handling sensor accuracy changes
+        Log.d(TAG, "Sensor accuracy changed: " + accuracy);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         // Sensor cleanup
-        sensorManager.unregisterListener(this);
+        if (sensorManager != null) {
+            Log.d(TAG, "Unregistering sensor listener...");
+            sensorManager.unregisterListener(this);
+        }
     }
 
     public void updateValues(float azimuth, float pitch) {
@@ -119,18 +133,24 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         ivNeedle.setRotation(azimuth);
         tvAngleValue.setText("Angle: " + String.format("%.2f", pitch) + "°");
 
+        Log.d(TAG, "Azimuth offset: " + azOffset + "°, Pitch offset: " + piOffset + "°");
+
         if (Math.abs(piOffset) < 10) {
             ivAngle.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
+            Log.d(TAG, "Pitch aligned with satellite, angle in range.");
         } else {
             if (ivAngle.getColorFilter() != null) {
                 ivAngle.clearColorFilter();
+                Log.d(TAG, "Pitch out of range, resetting color filter.");
             }
 
             if (Math.abs(azOffset) < 10) {
                 ivCompass.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
+                Log.d(TAG, "Azimuth aligned with satellite, compass in range.");
             } else {
                 if (ivCompass.getColorFilter() != null) {
                     ivCompass.clearColorFilter();
+                    Log.d(TAG, "Azimuth out of range, resetting compass filter.");
                 }
             }
         }

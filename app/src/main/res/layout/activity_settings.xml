@@ -5,38 +5,168 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background"
+    android:padding="16dp"
+    android:fitsSystemWindows="true"
     tools:context=".Activities.SettingsActivity">
 
+    <!-- Toolbar -->
     <FrameLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize">
+        android:layout_height="wrap_content"
+        android:background="@color/primary_dark"
+        android:elevation="4dp">
         <fragment
             android:name="com.example.satfinder.Fragments.ToolBarFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
 
+    <!-- Page Title -->
     <TextView
-        android:id="@+id/tv_placeholder"
+        android:id="@+id/tv_settings_title"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:textSize="45sp"
-        android:text="SETTINGS"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"/>
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textColor="@color/secondary"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="16dp" />
 
-    <Button
-        android:id="@+id/btn_kill_daemon"
+    <!-- Preferences Section -->
+    <LinearLayout
+        android:id="@+id/preferences_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="KILL FOREGROUND DAEMON" />
+        android:orientation="vertical"
+        android:background="@color/background_light"
+        android:padding="16dp"
+        android:elevation="2dp"
+        android:layout_marginBottom="12dp">
 
+        <TextView
+            android:id="@+id/tv_preferences"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Preferences"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_change_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:textColor="@color/white"
+            android:text="Change Theme"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btn_clear_cache"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:textColor="@color/white"
+            android:text="Clear Cache"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <!-- Tests Section -->
+    <LinearLayout
+        android:id="@+id/tests_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/background_light"
+        android:padding="16dp"
+        android:elevation="2dp"
+        android:layout_marginBottom="12dp">
+
+        <TextView
+            android:id="@+id/tv_tests"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tests"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_test_notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:textColor="@color/white"
+            android:text="Test Notification"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btn_test_api"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:textColor="@color/white"
+            android:text="Test API Call"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
+    </LinearLayout>
+
+    <!-- Danger Zone Section -->
+    <LinearLayout
+        android:id="@+id/danger_zone_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/background_light"
+        android:padding="16dp"
+        android:elevation="2dp"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:id="@+id/tv_danger_zone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Danger Zone"
+            android:textColor="@color/red"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_kill_daemon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/red"
+            android:text="Kill Foreground Daemon"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
+
+        <Button
+            android:id="@+id/btn_reset_app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:textColor="@color/white"
+            android:text="Reset App Data"
+            android:textSize="16sp"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
+
+    <!-- Back Button -->
     <Button
         android:id="@+id/btn_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="back" />
+        android:background="@color/primary_dark"
+        android:textColor="@color/white"
+        android:text="Back"
+        android:textSize="16sp"
+        android:layout_marginTop="12dp" />
 
 </LinearLayout>

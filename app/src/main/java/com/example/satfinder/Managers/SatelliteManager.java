@@ -19,7 +19,7 @@ import retrofit2.Response;
  */
 public class SatelliteManager {
 
-    private static final String TAG = "SatelliteManager";
+    private static final String TAG = "SATELLITE";
     private static SatelliteManager instance;
     private final N2YOClientService clientService;
 
