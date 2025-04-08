@@ -29,7 +29,6 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
     private SensorManager sensorManager;
     private ImageView ivCompass;
     private ImageView ivNeedle;
-    private ImageView ivAngle;
     private TextView tvAngleValue;
     private Button btnReturn;
 
@@ -37,12 +36,10 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
     private final float[] orientationVector = new float[3]; // Orientation vector
 
     private float satAzimuth;
-    private float satPitch;
 
     private void setupUI() {
         ivCompass = findViewById(R.id.iv_compass);
         ivNeedle = findViewById(R.id.iv_compass_needle);
-        ivAngle = findViewById(R.id.iv_angle);
         tvAngleValue = findViewById(R.id.tv_angle_value);
         btnReturn = findViewById(R.id.button_return);
         btnReturn.setOnClickListener(v -> {
@@ -81,7 +78,8 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
 
         // Fetch satellite azimuth and pitch from intent
         satAzimuth = getIntent().getFloatExtra("sat_azimuth", 0);
-        satPitch = getIntent().getFloatExtra("sat_pitch", 0);
+        float satPitch = getIntent().getFloatExtra("sat_pitch", 0);
+        tvAngleValue.setText("Satellite Elevation: " + satPitch + "°");
 
         Log.d(TAG, "Satellite Azimuth: " + satAzimuth);
         Log.d(TAG, "Satellite Pitch: " + satPitch);
@@ -103,7 +101,7 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
             float pitchInDegrees = (float) Math.toDegrees(orientationVector[1]);
 
             Log.d(TAG, "Sensor azimuth: " + azimuthInDegrees + "°, pitch: " + pitchInDegrees + "°");
-            updateValues(azimuthInDegrees, pitchInDegrees + 90);
+            updateValues(azimuthInDegrees);
 
             Log.d(TAG, "Direction from azimuth: " + SatUtils.getDirectionFromAzimuth(azimuthInDegrees));
         }
@@ -125,34 +123,23 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
         }
     }
 
-    public void updateValues(float azimuth, float pitch) {
-        float azOffset = satAzimuth - azimuth;
-        float piOffset = satPitch - pitch;
+    public void updateValues(float azimuth) {
+        float azOffset = getAngleDifference(satAzimuth, azimuth);
 
         // Keep compass the same, rotate needle to show where user is looking
         ivNeedle.setRotation(azimuth);
-        tvAngleValue.setText("Angle: " + String.format("%.2f", pitch) + "°");
+        Log.d(TAG, "Azimuth offset: " + azOffset + "°");
 
-        Log.d(TAG, "Azimuth offset: " + azOffset + "°, Pitch offset: " + piOffset + "°");
-
-        if (Math.abs(piOffset) < 10) {
-            ivAngle.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
-            Log.d(TAG, "Pitch aligned with satellite, angle in range.");
+        if (Math.abs(azOffset) < 10) {
+            ivCompass.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
+            Log.d(TAG, "Azimuth aligned with satellite, compass in range.");
         } else {
-            if (ivAngle.getColorFilter() != null) {
-                ivAngle.clearColorFilter();
-                Log.d(TAG, "Pitch out of range, resetting color filter.");
-            }
-
-            if (Math.abs(azOffset) < 10) {
-                ivCompass.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
-                Log.d(TAG, "Azimuth aligned with satellite, compass in range.");
-            } else {
-                if (ivCompass.getColorFilter() != null) {
-                    ivCompass.clearColorFilter();
-                    Log.d(TAG, "Azimuth out of range, resetting compass filter.");
-                }
-            }
+            ivCompass.clearColorFilter();
         }
     }
+
+    private float getAngleDifference(float target, float current) {
+        return (target - current + 180 + 360) % 360 - 180;
+    }
+
 }

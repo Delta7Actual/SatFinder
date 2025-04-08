@@ -78,13 +78,13 @@
                 android:layout_height="170dp"
                 android:src="@drawable/angle"
                 android:layout_weight="1"
-                android:layout_marginLeft="-124dp"/>
+                android:layout_marginLeft="-12dp"/>
 
             <TextView
                 android:id="@+id/tv_angle_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Angle: 0°"
+                android:text="Satellite Elevation: 0°"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"

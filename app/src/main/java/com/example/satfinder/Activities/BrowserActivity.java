@@ -17,7 +17,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.satfinder.Fragments.SearchFragment;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
-import com.example.satfinder.Misc.Utility.SatUtils;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.ObserverLocation;
@@ -95,10 +94,7 @@ public class BrowserActivity extends AppCompatActivity {
                                 // Only start the activity if the satellite position is successfully fetched
                                 Intent intent = new Intent(BrowserActivity.this, LocateActivity.class);
                                 intent.putExtra("sat_azimuth", satPosition.getAzimuth());
-                                intent.putExtra("sat_pitch", SatUtils.getAngleFromHorizon(currentLocation,
-                                        new ObserverLocation(satPosition.getSatlatitude(),
-                                                satPosition.getSatlongitude(),
-                                                satPosition.getSataltitude())));
+                                intent.putExtra("sat_pitch", satPosition.getElevation());
                                 startActivity(intent);
                                 finish();
                             } else {

@@ -10,6 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.example.satfinder.Activities.LoginActivity;
+import com.example.satfinder.Activities.MoreActivity;
 import com.example.satfinder.Activities.ProfileActivity;
 import com.example.satfinder.Activities.SettingsActivity;
 import com.example.satfinder.R;
@@ -34,8 +35,9 @@ public class ToolBarFragment extends Fragment {
 
         int itemId = item.getItemId();
         if (itemId == R.id.action_more) {
-            // Handle "More" action
-            // TODO: Implement MoreActivity
+            if (isNotCurrentActivity(context, MoreActivity.class)) {
+                context.startActivity(new Intent(context, MoreActivity.class));
+            }
             return true;
         } else if (itemId == R.id.action_options) {
             if (isNotCurrentActivity(context, SettingsActivity.class)) {
