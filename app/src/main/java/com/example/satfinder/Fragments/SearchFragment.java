@@ -115,7 +115,7 @@ public class SearchFragment extends Fragment {
         if (posData != null && !posData.startsWith("err:") && !posData.equals("NONE,,")) {
             displaySatellitePosition(posData);
         } else {
-            Log.w(TAG, "Failed to fetch satellite position.");
+            Log.w(TAG, "Failed to fetch satellite position. Calling API...");
             fetchSatellitePosition(satelliteId, storageManager.spGetUserLocation());
         }
     }
@@ -127,7 +127,11 @@ public class SearchFragment extends Fragment {
             public void onSuccess(ISatelliteResponse response) {
                 SatelliteTLEResponse tleResponse = (SatelliteTLEResponse) response;
                 if (tleResponse == null) {
-                    searchFailure("Null TLE response.");
+                    searchFailure("Received null TLE response. Make sure ID is valid!");
+                    return;
+                }
+                if (tleResponse.getTle().isEmpty()) {
+                    searchFailure("Received empty TLE data. Make sure ID is valid!");
                     return;
                 }
                 displayTLEData(tleResponse.getTle() + ",NONE," + tleResponse.getInfo().getSatname());
@@ -154,7 +158,11 @@ public class SearchFragment extends Fragment {
                     public void onSuccess(ISatelliteResponse response) {
                         SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
                         if (svpResponse == null) {
-                            searchFailure("Null Visual-Passes response.");
+                            searchFailure("Received null Visual-Passes response. Make sure ID is valid!");
+                            return;
+                        }
+                        if (svpResponse.getPasses() == null || svpResponse.getPasses().isEmpty()) {
+                            searchFailure("Received empty Visual-Passes data. Make sure ID is valid!");
                             return;
                         }
                         displayNextPass("NONE," + svpResponse
@@ -181,7 +189,11 @@ public class SearchFragment extends Fragment {
                     public void onSuccess(ISatelliteResponse response) {
                         SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
                         if (spResponse == null) {
-                            searchFailure("Null Positions response.");
+                            searchFailure("Received null Positions response. Make sure ID is valid!");
+                            return;
+                        }
+                        if (spResponse.getPositions() == null || spResponse.getPositions().isEmpty()) {
+                            searchFailure("Received empty Positions data. Make sure ID is valid!");
                             return;
                         }
                         SatellitePosition position = spResponse.getPositions().get(0);

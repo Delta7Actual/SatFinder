@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:padding="16dp">
+    android:layout_margin="16dp">
 
     <LinearLayout
         android:orientation="vertical"
@@ -111,7 +111,7 @@
             android:id="@+id/about_feedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="[ Feel free to send feedback and collaborate on GitHub! ]"
+            android:text="[ Feel free to collaborate on GitHub! ]"
             android:textColor="@color/secondary_light"
             android:textSize="14sp"
             android:layout_marginBottom="22dp"
@@ -132,7 +132,7 @@
             android:id="@+id/about_thanks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="* ISS Detector — for inspiring this app's vision\n* N2YO.com — for satellite tracking API services\n* FlatIcons.com &amp; Pixabay — for design assets"
+            android:text="* ISS Detector — for inspiring this app\n* N2YO.com — for satellite tracking services\n* FlatIcons.com &amp; Pixabay — for assets"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:layout_marginLeft="24dp"
