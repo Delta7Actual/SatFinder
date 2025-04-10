@@ -117,6 +117,28 @@ public class StorageManager {
         };
     }
 
+    public void clearCachedSatData(ICacheUpdateCallback callback) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        List<String> favIds = spGetUserFavoriteSatellites();
+        if (favIds.isEmpty()) {
+            Log.w("STORAGE", "Empty favorite list. Nothing to clear.");
+            callback.onComplete();
+            return;
+        }
+
+        Log.d("STORAGE", "Clearing cached satellite data (Items to clear:" + favIds.size() + ")...");
+        for (String id : favIds) {
+            editor.remove("sat_pass_" + id);
+            editor.remove("sat_pos_" + id);
+            editor.remove("sat_tle_" + id);
+        }
+
+        editor.apply();
+        Log.d("STORAGE", "Satellite data cache cleared. Favorites and location preserved.");
+        callback.onComplete();
+    }
+
     public void spSaveAndUpdateSatelliteData(SatelliteManager satelliteManager, ICacheUpdateCallback callback) {
         List<String> satelliteIds = spGetUserFavoriteSatellites();
         if (satelliteIds.isEmpty()) {

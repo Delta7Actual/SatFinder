@@ -13,8 +13,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.satfinder.Managers.SatelliteManager;
+import com.example.satfinder.Managers.StorageManager;
 import com.example.satfinder.Managers.UserManager;
 import com.example.satfinder.Misc.AlarmScheduler;
+import com.example.satfinder.Objects.Interfaces.ICacheUpdateCallback;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
@@ -31,14 +33,8 @@ public class SettingsActivity extends AppCompatActivity {
     private void setupUI() {
         Log.d(TAG, "Setting up UI components...");
 
-        btnBack = findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(v -> {
-            Log.d(TAG, "Back button clicked. Navigating to MainActivity.");
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        });
-
-        btnClearCache = findViewById(R.id.btn_clear_cache);
+        btnKillDaemon = findViewById(R.id.btn_kill_daemon);
+        btnKillDaemon.setOnClickListener(v -> killDaemon());
 
         btnTestNotification = findViewById(R.id.btn_test_notification);
         btnTestNotification.setOnClickListener(v -> testNotification());
@@ -46,8 +42,18 @@ public class SettingsActivity extends AppCompatActivity {
         btnTestAPI = findViewById(R.id.btn_test_api);
         btnTestAPI.setOnClickListener(v -> testAPI());
 
-        btnKillDaemon = findViewById(R.id.btn_kill_daemon);
-        btnKillDaemon.setOnClickListener(v -> killDaemon());
+        btnClearCache = findViewById(R.id.btn_clear_cache);
+        btnClearCache.setOnClickListener(v -> clearCache());
+
+        btnDeleteUser = findViewById(R.id.btn_delete_user);
+        btnDeleteUser.setOnClickListener(v -> deleteUser());
+
+        btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> {
+            Log.d(TAG, "Back button clicked. Navigating to MainActivity.");
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
     }
 
     @Override
@@ -107,7 +113,15 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void clearCache() {
         Log.d(TAG, "Clear Cache button clicked. Clearing cache...");
-        // Implement cache clearing logic here
+
+        StorageManager manager = StorageManager.getInstance(this);
+        manager.clearCachedSatData(new ICacheUpdateCallback() {
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "Cache cleared successfully");
+                Toast.makeText(SettingsActivity.this, "Cache data cleared successfully!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void deleteUser() {
