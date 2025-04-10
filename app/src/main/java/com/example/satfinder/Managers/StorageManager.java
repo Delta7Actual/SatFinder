@@ -51,7 +51,10 @@ public class StorageManager {
 
     public void spSaveUserLocation(ObserverLocation location) {
         sharedPreferences.edit()
-                .putString("userLocation", location.getLatitude() + "," + location.getLongitude() + "," + location.getAltitude())
+                .putString("userLocation",  System.currentTimeMillis()
+                        + "," + location.getLatitude()
+                        + "," + location.getLongitude()
+                        + "," + location.getAltitude())
                 .apply();
     }
 
@@ -59,11 +62,22 @@ public class StorageManager {
         String location = sharedPreferences.getString("userLocation", null);
         if (location != null) {
             String[] parts = location.split(",");
-            if (parts.length == 3) {
-                return new ObserverLocation(Float.parseFloat(parts[0]), Float.parseFloat(parts[1]), Float.parseFloat(parts[2]));
+            if (parts.length == 4) {
+                return new ObserverLocation(Float.parseFloat(parts[1]), Float.parseFloat(parts[2]), Float.parseFloat(parts[3]));
             }
         }
         return new ObserverLocation();
+    }
+
+    public long spGetUserLocationTime() {
+        String location = sharedPreferences.getString("userLocation", null);
+        if (location != null) {
+            String[] parts = location.split(",");
+            if (parts.length == 4) {
+                return Long.parseLong(parts[0]);
+            }
+        }
+        return -1;
     }
 
     public void spSaveUserFavoriteSatellites(List<String> satelliteIds) {
@@ -95,9 +109,10 @@ public class StorageManager {
         String posData = spGetSatellitePos(satelliteId);
         String tleData = spGetSatelliteTLE(satelliteId);
 
+        long threshold = 3600; // One hour
         return new boolean[]{
-                passData.equals("NONE,,") || SatUtils.isStale(Long.parseLong(passData.split(",")[0])),
-                posData.equals("NONE,,") || SatUtils.isStale(Long.parseLong(posData.split(",")[0])),
+                passData.equals("NONE,,") || SatUtils.isStale(Long.parseLong(passData.split(",")[0]), threshold),
+                posData.equals("NONE,,") || SatUtils.isStale(Long.parseLong(posData.split(",")[0]), threshold),
                 tleData.equals("NONE,,") // TLE is never outdated
         };
     }

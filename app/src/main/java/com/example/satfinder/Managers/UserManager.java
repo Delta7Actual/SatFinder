@@ -93,6 +93,15 @@ public class UserManager {
     }
 
     /**
+     * Logs out the currently logged-in user.
+     *
+     * @param callback The callback to notify on success or failure.
+     */
+    public void logOutUser(IUserAuthCallback callback) {
+        userService.logOut(callback);
+    }
+
+    /**
      * Sends a password reset email to the provided email address.
      *
      * @param email The email address to send the reset email to.
@@ -100,5 +109,14 @@ public class UserManager {
      */
     public void recoverPassword(String email, IUserAuthCallback callback) {
         userService.recoverPassword(email, callback);
+    }
+
+    /**
+     * Deletes the currently logged-in user.
+     *
+     * @param callback The callback to notify on success or failure.
+     */
+    public void deleteUser(IUserAuthCallback callback) {
+        userService.deleteCurrentUser(callback);
     }
 }

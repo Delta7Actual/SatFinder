@@ -125,6 +125,20 @@ public class UserService {
     }
 
     /**
+     * Logs out the currently logged-in user.
+     *
+     * @param callback the callback to notify of success or failure.
+     */
+    public void logOut(IUserAuthCallback callback) {
+        if (!isLoggedIn()) {
+            callback.onFailure("User not logged in!");
+            return;
+        }
+        mAuth.signOut();
+        callback.onSuccess(null);
+    }
+
+    /**
      * Signs up a new user with the provided name, email, and password.
      *
      * @param name the name of the user.
@@ -155,6 +169,30 @@ public class UserService {
     public void recoverPassword(String email, IUserAuthCallback callback) {
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
             if (!task.isSuccessful()){
+                callback.onFailure(task.getException().getMessage());
+            }
+        });
+    }
+
+    /**
+     * Deletes the currently logged-in user.
+     *
+     * @param callback the callback to notify of success or failure.
+     */
+    public void deleteCurrentUser(IUserAuthCallback callback) {
+        if (!isLoggedIn()) {
+            callback.onFailure("User not logged in!");
+            return;
+        }
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            callback.onFailure("User not logged in!");
+            return;
+        }
+        currentUser.delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onSuccess(currentUser);
+            } else {
                 callback.onFailure(task.getException().getMessage());
             }
         });

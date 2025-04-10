@@ -66,12 +66,12 @@
             android:layout_marginTop="8dp" />
 
         <Button
-            android:id="@+id/btn_clear_cache"
+            android:id="@+id/btn_kill_daemon"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primary"
             android:textColor="@color/white"
-            android:text="Clear Cache"
+            android:text="Stop Foreground Updates"
             android:textSize="16sp"
             android:layout_marginTop="8dp" />
     </LinearLayout>
@@ -112,7 +112,7 @@
             android:layout_height="wrap_content"
             android:background="@color/primary"
             android:textColor="@color/white"
-            android:text="Test API Call"
+            android:text="Test API Status"
             android:textSize="16sp"
             android:layout_marginTop="8dp" />
     </LinearLayout>
@@ -138,22 +138,22 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btn_kill_daemon"
+            android:id="@+id/btn_clear_cache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:backgroundTint="@color/red"
-            android:text="Kill Foreground Daemon"
+            android:text="Clear Cached Data"
             android:textSize="16sp"
             android:layout_marginTop="4dp" />
 
         <Button
-            android:id="@+id/btn_reset_app"
+            android:id="@+id/btn_delete_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/red"
             android:textColor="@color/white"
-            android:text="Reset App Data"
+            android:text="Delete My User"
             android:textSize="16sp"
             android:layout_marginTop="4dp" />
     </LinearLayout>

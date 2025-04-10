@@ -29,12 +29,13 @@ public class SatUpdateService extends Service {
     public static boolean isRunning = false;
 
     private Handler handler;
-    private Runnable updateRunnable = new Runnable() {
+    private final Runnable updateRunnable = new Runnable() {
         @Override
         public void run() {
             Log.d(TAG, "Updating satellite data...");
             StorageManager.getInstance(SatUpdateService.this)
-                    .spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> Log.d(TAG, "run: Cache save and update complete"));
+                    .spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(),
+                            () -> Log.d(TAG, "run: Cache save and update complete"));
             handler.postDelayed(this, UPDATE_INTERVAL_MILLIS);
         }
     };

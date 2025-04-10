@@ -15,10 +15,10 @@ public final class SatUtils {
     /**
      * Check if data is stale based on timestamp
      * @param timestamp A datapoint's UTC timestamp
+     * @param threshold The threshold to consider data stale in seconds
      * @return True if data is stale, false otherwise
      */
-    public static boolean isStale(long timestamp) {
-        long threshold = 3600; // One hour
+    public static boolean isStale(long timestamp, long threshold) {
         long currentTime = System.currentTimeMillis() / 1000;
         return (currentTime - timestamp) > threshold;
     }
