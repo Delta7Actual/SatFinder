@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.satfinder.Misc.Utility.SatUtils;
+import com.example.satfinder.Misc.Utility.MathUtils;
 
 public class AlarmScheduler {
 
@@ -16,7 +16,7 @@ public class AlarmScheduler {
     public static void scheduleNotification(Context context, long futureTimeInMillis, int requestCode) {
         if (futureTimeInMillis <= System.currentTimeMillis()) {
             Log.w(TAG, "Alarm time in the past!");
-            Log.w(TAG, "Current: " + SatUtils.convertUTCToLocalTime(System.currentTimeMillis()) + ", Alarm: " + SatUtils.convertUTCToLocalTime(futureTimeInMillis));
+            Log.w(TAG, "Current: " + MathUtils.convertUTCToLocalTime(System.currentTimeMillis()) + ", Alarm: " + MathUtils.convertUTCToLocalTime(futureTimeInMillis));
             Toast.makeText(context, "Cannot schedule alarm in the past!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -34,7 +34,7 @@ public class AlarmScheduler {
             Log.d(TAG, "Scheduling alarm -> Current: " + System.currentTimeMillis() + ", Alarm: " + futureTimeInMillis);
 
             if (alarmManager.canScheduleExactAlarms()) {
-                Log.d(TAG, "Using setExact() for alarm at UTC: " + SatUtils.convertUTCToLocalTime(futureTimeInMillis));
+                Log.d(TAG, "Using setExact() for alarm at UTC: " + MathUtils.convertUTCToLocalTime(futureTimeInMillis));
                 alarmManager.setExact(AlarmManager.RTC_WAKEUP, futureTimeInMillis, alarmPendingIntent);
             } else {
                 Log.w(TAG, "Using setExactAndAllowWhileIdle() due to restricted background activity.");

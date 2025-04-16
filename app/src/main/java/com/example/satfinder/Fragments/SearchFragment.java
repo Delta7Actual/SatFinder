@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
-import com.example.satfinder.Misc.Utility.SatUtils;
+import com.example.satfinder.Misc.Utility.MathUtils;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.ObserverLocation;
@@ -232,7 +232,7 @@ public class SearchFragment extends Fragment {
             String[] passParts = passData.split(",");
             if (passParts.length >= 2) {
                 long passTime = Long.parseLong(passParts[1]);
-                detailsFragment.updateNextPass(SatUtils.convertUTCToLocalTime(passTime));
+                detailsFragment.updateNextPass(MathUtils.convertUTCToLocalTime(passTime));
             } else {
                 Log.e(TAG, "Unexpected pass data format: " + passData);
             }

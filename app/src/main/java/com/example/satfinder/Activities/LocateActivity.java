@@ -19,7 +19,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.satfinder.Misc.Utility.SatUtils;
+import com.example.satfinder.Misc.Utility.MathUtils;
 import com.example.satfinder.R;
 
 public class LocateActivity extends AppCompatActivity implements SensorEventListener {
@@ -103,7 +103,7 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
             Log.d(TAG, "Sensor azimuth: " + azimuthInDegrees + "°, pitch: " + pitchInDegrees + "°");
             updateValues(azimuthInDegrees);
 
-            Log.d(TAG, "Direction from azimuth: " + SatUtils.getDirectionFromAzimuth(azimuthInDegrees));
+            Log.d(TAG, "Direction from azimuth: " + MathUtils.getDirectionFromAzimuth(azimuthInDegrees));
         }
     }
 

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.example.satfinder.Misc.Utility.SatUtils;
+import com.example.satfinder.Misc.Utility.MathUtils;
 import com.example.satfinder.Objects.Interfaces.ICacheUpdateCallback;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
@@ -23,6 +23,46 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+/*
+ * ============================
+ *  STORAGE STRUCTURE OVERVIEW
+ * ============================
+ * 1. SharedPreferences ("user_data")
+ * └── userLocation : String
+ *     └── Format: "timestamp,Lat,Long,Alt"
+ *
+ * └── app_theme : String
+ *      └── Format: "Theme"
+ *
+ * └── fav_sat : String
+ *     └── Comma-separated list of favorite satellite IDs
+ *     └── Format: "25544,12345,..."
+ *
+ * └── sat_pass_<satId> : String
+ *     └── Format: "timestamp,startUTC"
+ *     └── Error Format: "err:<message>"
+ *
+ * └── sat_pos_<satId> : String
+ *     └── Format: "timestamp,Lat,Long,Alt"
+ *     └── Error Format: "err:<message>"
+ *
+ * └── sat_tle_<satId> : String
+ *     └── Format: "TLE,satid,satname"
+ *     └── Error Format: "err:<message>"
+ *
+ * ============================
+ *
+ * 2. Firestore ("users" collection)
+ * └── users
+ *     └── {userId} : Document
+ *         └── favouriteSatelliteIds : Array<String>
+ *             └── Format: ["25544", "12345", ...]
+ *
+ */
+
+/**
+ * Manages storage and retrieval with SharedStorage and FireStore.
+ */
 public class StorageManager {
 
     private static StorageManager instance;
@@ -111,8 +151,8 @@ public class StorageManager {
 
         long threshold = 3600; // One hour
         return new boolean[]{
-                passData.equals("NONE,,") || SatUtils.isStale(Long.parseLong(passData.split(",")[0]), threshold),
-                posData.equals("NONE,,") || SatUtils.isStale(Long.parseLong(posData.split(",")[0]), threshold),
+                passData.equals("NONE,,") || MathUtils.isStale(Long.parseLong(passData.split(",")[0]), threshold),
+                posData.equals("NONE,,") || MathUtils.isStale(Long.parseLong(posData.split(",")[0]), threshold),
                 tleData.equals("NONE,,") // TLE is never outdated
         };
     }

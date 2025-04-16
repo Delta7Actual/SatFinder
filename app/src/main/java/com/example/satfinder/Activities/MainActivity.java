@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.satfinder.Adapters.SatelliteViewAdapter;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
-import com.example.satfinder.Misc.Utility.SatUtils;
+import com.example.satfinder.Misc.Utility.MathUtils;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.Interfaces.IStorageCallback;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 if (result != null && !result.startsWith("err:") && !result.equals("NONE,,")) {
                     String[] resultParts = result.split(",");
                     long time = Long.parseLong(resultParts[1]);
-                    tvISSPassDetails.setText(String.format("Next pass is in: %s", SatUtils.convertUTCToLocalTime(time)));
+                    tvISSPassDetails.setText(String.format("Next pass is in: %s", MathUtils.convertUTCToLocalTime(time)));
                     Log.d(TAG, "ISS pass time updated: " + time);
                 } else {
                     Log.w(TAG, "Error fetching ISS pass or null result.");
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
                         if (svpResponse != null) {
                             tvISSPassDetails.setText(String.format("Next pass is in: %s",
-                                    SatUtils.convertUTCToLocalTime(svpResponse
+                                    MathUtils.convertUTCToLocalTime(svpResponse
                                             .getPasses()
                                             .get(0)
                                             .getStartUTC())));

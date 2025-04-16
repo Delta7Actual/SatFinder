@@ -18,17 +18,5 @@
 
         <item name="statusBarBackground">@color/green</item>
         <item name="statusBarForeground">@color/red</item>
-
-        <!-- Add this line to include the animation style -->
-        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
     </style>
-
-    <style name="WindowAnimationTransition">
-        <item name="android:activityOpenEnterAnimation">@transition/fade_in_transition</item>
-        <item name="android:activityOpenExitAnimation">@transition/fade_out_transition</item>
-        <item name="android:activityCloseEnterAnimation">@transition/fade_in_transition</item>
-        <item name="android:activityCloseExitAnimation">@transition/fade_out_transition</item>
-    </style>
-
-    <style name="Theme.SatFinder" parent="Base.Theme.SatFinder" />
 </resources>

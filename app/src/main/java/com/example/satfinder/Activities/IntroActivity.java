@@ -22,7 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
 import com.example.satfinder.Managers.UserManager;
-import com.example.satfinder.Misc.Utility.SatUtils;
+import com.example.satfinder.Misc.Utility.MathUtils;
 import com.example.satfinder.Objects.ObserverLocation;
 import com.example.satfinder.R;
 import com.example.satfinder.Services.SatUpdateService;
@@ -161,7 +161,7 @@ public class IntroActivity extends AppCompatActivity {
         ObserverLocation savedLocation = StorageManager.getInstance(this).spGetUserLocation();
         long threshold = 3 * 24 * 60 * 60; // 3 days
 
-        boolean isStale = SatUtils.isStale(StorageManager.getInstance(this).spGetUserLocationTime(), threshold);
+        boolean isStale = MathUtils.isStale(StorageManager.getInstance(this).spGetUserLocationTime(), threshold);
 
         if (savedLocation.getLatitude() == 0 || savedLocation.getLongitude() == 0 || savedLocation.getAltitude() == 0) {
             Log.w(TAG, "No cached location available.");
@@ -188,7 +188,7 @@ public class IntroActivity extends AppCompatActivity {
         // Try last known location first
         Location lastKnown = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         long threshold = 5 * 60 * 1000; // 5 minutes
-        if (lastKnown != null && !SatUtils.isStale(lastKnown.getTime(), threshold)) {
+        if (lastKnown != null && !MathUtils.isStale(lastKnown.getTime(), threshold)) {
             ObserverLocation loc = new ObserverLocation(lastKnown);
             StorageManager.getInstance(this).spSaveUserLocation(loc);
             Log.d(TAG, "Using recent last known location: " + loc);

@@ -146,6 +146,8 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onFailure(String error) {
                         Log.e(TAG, "Failed to logout user! - " + error);
                         Toast.makeText(SettingsActivity.this, "Failed to logout user, Please restart app!", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
+                        finish();
                     }
                 });
             }

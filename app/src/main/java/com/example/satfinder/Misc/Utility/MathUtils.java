@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-public final class SatUtils {
-    private SatUtils() {
+public final class MathUtils {
+    private MathUtils() {
         // Utility class
     }
 
