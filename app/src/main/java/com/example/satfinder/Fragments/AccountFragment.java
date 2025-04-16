@@ -1,5 +1,6 @@
 package com.example.satfinder.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -151,6 +152,7 @@ public class AccountFragment extends Fragment {
 
     private void updateSatelliteList() {
         StorageManager.getInstance(this.getContext()).getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onSuccess(List<String> result) {
                 satelliteIds.clear();

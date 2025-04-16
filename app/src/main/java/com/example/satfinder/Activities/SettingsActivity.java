@@ -16,7 +16,6 @@ import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
 import com.example.satfinder.Managers.UserManager;
 import com.example.satfinder.Misc.AlarmScheduler;
-import com.example.satfinder.Objects.Interfaces.ICacheUpdateCallback;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
 import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
@@ -28,7 +27,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private static final String TAG = "SatSettings"; // Updated TAG for logging
 
-    private Button btnChangeTheme, btnKillDaemon, btnTestNotification, btnTestAPI, btnClearCache, btnDeleteUser, btnBack;
+    private Button btnUpdateCache, btnKillDaemon, btnTestNotification, btnTestAPI, btnClearCache, btnDeleteUser, btnBack;
 
     private void setupUI() {
         Log.d(TAG, "Setting up UI components...");
@@ -74,9 +73,12 @@ public class SettingsActivity extends AppCompatActivity {
         setupUI();
     }
 
-    private void changeTheme() {
-        Log.d(TAG, "Change Theme button clicked. Changing theme...");
-        // Implement theme change logic here
+    private void updateCache() {
+        Log.d(TAG, "Update Cache button clicked. Retrieving and updaing cache...");
+        StorageManager.getInstance(this).spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> {
+            Toast.makeText(SettingsActivity.this, "Cache updated successfully!", Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "Cache save and update complete");
+        });
     }
 
     private void killDaemon() {
@@ -115,12 +117,9 @@ public class SettingsActivity extends AppCompatActivity {
         Log.d(TAG, "Clear Cache button clicked. Clearing cache...");
 
         StorageManager manager = StorageManager.getInstance(this);
-        manager.clearCachedSatData(new ICacheUpdateCallback() {
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "Cache cleared successfully");
-                Toast.makeText(SettingsActivity.this, "Cache data cleared successfully!", Toast.LENGTH_SHORT).show();
-            }
+        manager.spClearSatelliteData(() -> {
+            Log.d(TAG, "Cache cleared successfully");
+            Toast.makeText(SettingsActivity.this, "Cache data cleared successfully!", Toast.LENGTH_SHORT).show();
         });
     }
 

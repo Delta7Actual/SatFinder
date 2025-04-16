@@ -149,7 +149,7 @@ public class StorageManager {
         String posData = spGetSatellitePos(satelliteId);
         String tleData = spGetSatelliteTLE(satelliteId);
 
-        long threshold = 3600; // One hour
+        long threshold = 60 * 60; // One hour
         return new boolean[]{
                 passData.equals("NONE,,") || MathUtils.isStale(Long.parseLong(passData.split(",")[0]), threshold),
                 posData.equals("NONE,,") || MathUtils.isStale(Long.parseLong(posData.split(",")[0]), threshold),
@@ -157,7 +157,7 @@ public class StorageManager {
         };
     }
 
-    public void clearCachedSatData(ICacheUpdateCallback callback) {
+    public void spClearSatelliteData(ICacheUpdateCallback callback) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         List<String> favIds = spGetUserFavoriteSatellites();
