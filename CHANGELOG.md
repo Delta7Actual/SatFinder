@@ -38,7 +38,7 @@
 - 🔧 Added local storage structure for TLE/pass caching  
 - 🎨 Updated search results and detail layout  
 
-### [1.5.0] - 2025-03-15  
+### [1.5.0] - 2025-03-15 - "The Cache Me If You Can Update"
 - 💥 **Satellite tracking optimization**: Introduced advanced tracking algorithms for real-time satellite position calculation using TLE data.
 - 🚀 Caching mechanism for frequently used satellite data to improve load times and reduce server dependency.
 - 🔧 Refined the app's data flow, optimizing how satellite information is fetched and stored.
@@ -61,7 +61,7 @@
 - 🔧 Updated card layout on home screen  
 - 🔧 Improved network error handling  
 
-### [1.4.0] - 2025-03-06  
+### [1.4.0] - 2025-03-06 - "The Right Direction Update"
 - 🚀 Compass view UI added  
 - 🔧 Stubbed needle orientation logic  
 - 🎨 Refined icon set  
@@ -77,14 +77,14 @@
 - 🐛 Fixed crash for invalid satellite ID  
 - 🔧 Improved DetailsFragment stability  
 
-### [1.3.0] - 2025-02-28  
+### [1.3.0] - 2025-02-28 "The Search Party Update"
 - 🚀 Satellite search by ID  
 - 🔧 Hidden fragment container for result display  
 - 🔧 Layout bug fixes  
 
 ---
 
-### [1.2.0] - 2025-02-27  
+### [1.2.0] - 2025-02-27 - "The AP(I)-ocalypse Update"
 - 🚀 Integrated N2YO API (positions, passes, TLE)  
 - 🚀 Added satellite details fragment  
 - 🎨 Styled satellite list with highlight colors  
@@ -92,14 +92,14 @@
 
 ---
 
-### [1.1.0] - 2025-02-25  
+### [1.1.0] - 2025-02-25 - "The Pass Me By Update"
 - 🚀 ISS pass layout and live data setup  
 - 🚀 Satellite list with scrollable view  
 - 🔧 New icon assets and padding fixes  
 
 ---
 
-### [1.0.0] - 2025-02-24  
+### [1.0.0] - 2025-02-24 - "The 1.0 Update"
 🎉 Initial public release  
 - 🚀 Splash, login, sign-up, and home screens  
 - 🚀 Firebase authentication integration  
@@ -108,22 +108,22 @@
 
 ---
 
-### [0.4.0] - 2025-02-20  
+### [0.4.0] - 2025-02-20 - "The (Fire)-Base Of Operations Update"
 - 🚀 Complete Firebase integration  
 - 🔧 Auth logic finalized with Firestore support  
 - 🔧 Theme color system introduced  
 
-### [0.3.0] - 2025-02-17  
+### [0.3.0] - 2025-02-17 - "The U(I)-topia Update"
 - 🚀 Basic UI setup: toolbar, bottom nav, fragments  
 - 🔧 Stubbed API services for satellite and ISS data  
 - 🎨 Early styling pass for main screens  
 
-### [0.2.0] - 2025-02-12  
+### [0.2.0] - 2025-02-12 - "The Setup Update"
 - 🚀 Layout planning and mock fragment structure  
 - 🔧 Login/signup fragment logic prototyped  
 - 🔧 Firebase dependency setup  
 
-### [0.1.0] - 2025-02-08  
+### [0.1.0] - 2025-02-08 - "The Humble Beginnnings Update"
 🧪 Project initialized  
 - 🛠️ Basic folder structure  
 - 🔧 Gradle setup and dependency stubs  
