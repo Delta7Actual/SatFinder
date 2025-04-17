@@ -1,0 +1,126 @@
+# 📦 SatFinder — Changelog
+
+> All notable changes to the project will be documented in this file.  
+> Follows semantic versioning: `MAJOR.MINOR.PATCH`  
+> Current version: **1.5.6**
+
+---
+
+### [1.5.6] - 2025-04-17  
+- 🐛 Minor layout bug fixes  
+- 🔧 Improved responsiveness of bottom navigation  
+- 🔧 Final pre-release cleanup  
+
+### [1.5.5] - 2025-04-16  
+- 🚀 Added persistent caching and storage manager  
+- 🔧 Finalized logic for saving passes and favorites  
+- 🎨 UI polish: smooth fragment transitions and loading indicators  
+
+### [1.5.4] - 2025-04-10  
+- 🐛 Fixed compass orientation issue on certain devices  
+- 🔧 Refined compass needle animation timing  
+
+### [1.5.3] - 2025-04-08  
+- 🚀 Visual compass direction logic implemented  
+- 🔧 Improved azimuth accuracy  
+- 🎨 Cardinal direction labels styled and positioned  
+
+### [1.5.2] - 2025-03-23  
+- 🚀 Offline support added for saved passes  
+- 🧪 Added experimental offline TLE parsing logic  
+- 🔧 RecyclerView performance improvements  
+
+### [1.5.1] - 2025-03-19  
+- 🔧 Refactored API logic into service classes  
+- 🔧 Introduced threading for background tasks  
+- 🔧 Added local storage structure for TLE/pass caching  
+- 🎨 Updated search results and detail layout  
+
+### [1.5.0] - 2025-03-15  
+- 🚀 "About" screen with app version and contact info  
+- 🔧 Unified font and text appearance  
+- 🎨 Improved transitions and animations  
+
+---
+
+### [1.4.3] - 2025-03-12  
+- 🚀 User preferences persist in Settings  
+- 🚀 Notification toggle implemented  
+- 🔧 AlarmManager setup for pass alerts  
+
+### [1.4.2] - 2025-03-10  
+- 🐛 Fixed issue with saving favorites  
+- 🎨 Corrected theme color bug in dark mode  
+
+### [1.4.1] - 2025-03-09  
+- 🚀 Favorites functionality for satellites  
+- 🔧 Updated card layout on home screen  
+- 🔧 Improved network error handling  
+
+### [1.4.0] - 2025-03-06  
+- 🚀 Compass view UI added  
+- 🔧 Stubbed needle orientation logic  
+- 🎨 Refined icon set  
+
+---
+
+### [1.3.2] - 2025-03-03  
+- 🚀 Local TLE parsing logic added  
+- 🔧 Optimized API request frequency  
+- 🔧 Improved splash-to-home transition speed  
+
+### [1.3.1] - 2025-03-01  
+- 🐛 Fixed crash for invalid satellite ID  
+- 🔧 Improved DetailsFragment stability  
+
+### [1.3.0] - 2025-02-28  
+- 🚀 Satellite search by ID  
+- 🔧 Hidden fragment container for result display  
+- 🔧 Layout bug fixes  
+
+---
+
+### [1.2.0] - 2025-02-27  
+- 🚀 Integrated N2YO API (positions, passes, TLE)  
+- 🚀 Added satellite details fragment  
+- 🎨 Styled satellite list with highlight colors  
+- 🔧 Refactored layout and data separation  
+
+---
+
+### [1.1.0] - 2025-02-25  
+- 🚀 ISS pass layout and live data setup  
+- 🚀 Satellite list with scrollable view  
+- 🔧 New icon assets and padding fixes  
+
+---
+
+### [1.0.0] - 2025-02-24  
+🎉 Initial public release  
+- 🚀 Splash, login, sign-up, and home screens  
+- 🚀 Firebase authentication integration  
+- 🔧 Toolbar and bottom navigation fragments  
+- 🔧 Base layout structure established  
+
+---
+
+### [0.4.0] - 2025-02-20  
+- 🚀 Complete Firebase integration  
+- 🔧 Auth logic finalized with Firestore support  
+- 🔧 Theme color system introduced  
+
+### [0.3.0] - 2025-02-17  
+- 🚀 Basic UI setup: toolbar, bottom nav, fragments  
+- 🔧 Stubbed API services for satellite and ISS data  
+- 🎨 Early styling pass for main screens  
+
+### [0.2.0] - 2025-02-12  
+- 🚀 Layout planning and mock fragment structure  
+- 🔧 Login/signup fragment logic prototyped  
+- 🔧 Firebase dependency setup  
+
+### [0.1.0] - 2025-02-08  
+🧪 Project initialized  
+- 🛠️ Basic folder structure  
+- 🔧 Gradle setup and dependency stubs  
+- 🎨 Theme baseline created  
