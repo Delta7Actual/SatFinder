@@ -214,9 +214,12 @@ public class IntroActivity extends AppCompatActivity {
             return;
         }
         tvIntroDetails.setText("Redirecting...");
-        Log.d(TAG, "Redirecting to LoginActivity...");
-        startActivity(new Intent(IntroActivity.this, LoginActivity.class));
-        finish();
+        Log.d(TAG, "Redirecting to LoginActivity in 2 seconds...");
+
+        new android.os.Handler(android.os.Looper.getMainLooper()).postDelayed(() -> {
+            startActivity(new Intent(IntroActivity.this, LoginActivity.class));
+            finish();
+        }, 2000); // 2 seconds
     }
 
     @Override

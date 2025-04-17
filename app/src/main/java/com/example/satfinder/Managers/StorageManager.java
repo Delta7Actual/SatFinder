@@ -181,6 +181,7 @@ public class StorageManager {
 
     public void spSaveAndUpdateSatelliteData(SatelliteManager satelliteManager, ICacheUpdateCallback callback) {
         List<String> satelliteIds = spGetUserFavoriteSatellites();
+        Log.d("STORAGE", "IDS to update: " + satelliteIds.size() + " items");
         if (satelliteIds.isEmpty()) {
             callback.onComplete();
             return;

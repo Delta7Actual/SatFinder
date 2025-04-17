@@ -32,6 +32,9 @@ public class SettingsActivity extends AppCompatActivity {
     private void setupUI() {
         Log.d(TAG, "Setting up UI components...");
 
+        btnUpdateCache = findViewById(R.id.btn_update_cache);
+        btnUpdateCache.setOnClickListener(v -> updateCache());
+
         btnKillDaemon = findViewById(R.id.btn_kill_daemon);
         btnKillDaemon.setOnClickListener(v -> killDaemon());
 

@@ -17,10 +17,14 @@ import androidx.fragment.app.Fragment;
 
 import com.example.satfinder.Fragments.LoginFragment;
 import com.example.satfinder.Fragments.SignUpFragment;
+import com.example.satfinder.Managers.StorageManager;
 import com.example.satfinder.Managers.UserManager;
+import com.example.satfinder.Objects.Interfaces.IStorageCallback;
 import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.example.satfinder.R;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -125,6 +129,24 @@ public class LoginActivity extends AppCompatActivity {
             public void onSuccess(FirebaseUser user) {
                 Log.d(TAG, "Login successful for user: " + user.getDisplayName());
                 Toast.makeText(LoginActivity.this, "Logged in successfully! Hello " + user.getDisplayName(), Toast.LENGTH_LONG).show();
+
+                // Fetch and save favourite satellite IDs locally
+                StorageManager.getInstance(LoginActivity.this).getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
+                    @Override
+                    public void onSuccess(List<String> result) {
+                        if (result == null) {
+                            Log.e(TAG, "Fetched NULL IDs!");
+                        }
+                        Log.d(TAG, "Fetched IDs: " + result.size() + " items");
+                        StorageManager.getInstance(LoginActivity.this).spSaveUserFavoriteSatellites(result);
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        Log.e(TAG, "Failed to retrieve IDs from Firestore");
+                        Toast.makeText(LoginActivity.this, "Couldn't fetch favourite satellites", Toast.LENGTH_SHORT).show();
+                    }
+                });
                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 finish();
             }
