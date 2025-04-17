@@ -16,6 +16,8 @@ I’ve been inspired by the **ISS Detector** app, which already exists as a grea
 - **Minimalist design**: A simple, modern UI focused on providing clear, accessible information without unnecessary clutter.
 - **Notifications and alarms**: Get notified when a tracked satellite is overhead.
 
+---
+
 # Latest Major Update: **"Cache me if you can!" (v1.5)**
 
 ### What's New?
@@ -30,3 +32,8 @@ In the **v1.5** update, we focused on improving the app’s performance and reli
 ### Why This Update Matters
 
 With an ever-growing dataset and frequent API calls, managing storage and reducing unnecessary network usage is essential for providing a seamless user experience. This update addresses performance bottlenecks and ensures that users have a smooth, responsive app even when they’re not connected to the internet or have limited network access. These changes make the app faster, more reliable, and ready for future enhancements.
+
+---
+
+## 📦 Changelog
+See [CHANGELOG.md](./CHANGELOG.md) for a full list of updates.
