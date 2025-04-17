@@ -17,7 +17,7 @@
             android:id="@+id/about_app_icon"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@mipmap/ic_launcher_2"
+            android:src="@mipmap/ic_final"
             android:contentDescription="@string/app_name"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="16dp" />
@@ -28,8 +28,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SatFinder"
-            android:textSize="26sp"
-            android:textStyle="bold"
+            android:textSize="40sp"
+            style="@style/TextAppearance.SatFinder.Light"
             android:textColor="@color/secondary"
             android:layout_marginBottom="4dp" />
 

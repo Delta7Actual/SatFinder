@@ -1,19 +1,47 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Base.Theme.SatFinder" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
+    <!-- Base application theme -->
+    <style name="Base.Theme.SatFinder" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Colors -->
         <item name="colorPrimaryVariant">@color/primary_dark</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
-
         <item name="colorSecondary">@color/secondary</item>
         <item name="colorOnSecondary">@color/secondary_light</item>
 
+        <!-- System Colors -->
         <item name="android:statusBarColor">@color/secondary_light</item>
         <item name="android:navigationBarColor">@color/primary</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="android:textColor">@color/white</item>
+
+        <!-- Typography using medium as the base -->
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.SatFinder.Medium</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.SatFinder.Medium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.SatFinder.Medium</item>
+
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.SatFinder.Medium</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.SatFinder.Medium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.SatFinder.Medium</item>
+
+        <!-- Global default -->
+        <item name="android:textViewStyle">@style/TextAppearance.SatFinder.Medium</item>
+        <item name="android:fontFamily">@font/fs_sinclair_medium</item>
+        <item name="fontFamily">@font/fs_sinclair_medium</item>
+
     </style>
+
+    <!-- Default app font (Medium) -->
+    <style name="TextAppearance.SatFinder.Medium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/fs_sinclair_medium</item>
+        <item name="android:fontFamily">@font/fs_sinclair_medium</item>
+    </style>
+
+    <!-- Optional: Light variant for manual use -->
+    <style name="TextAppearance.SatFinder.Light" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/fs_sinclair_light</item>
+        <item name="android:fontFamily">@font/fs_sinclair_light</item>
+    </style>
+
 </resources>
