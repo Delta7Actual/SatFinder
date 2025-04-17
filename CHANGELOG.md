@@ -17,8 +17,9 @@
 - 🎨 UI polish: smooth fragment transitions and loading indicators  
 
 ### [1.5.4] - 2025-04-10  
-- 🐛 Fixed compass orientation issue on certain devices  
-- 🔧 Refined compass needle animation timing  
+- 🐛 Fixed compass orientation issue on certain devices
+- 🐛 Fixed issue where invalid cache would be read  
+- 🔧 Refined compass needle animation timing
 
 ### [1.5.3] - 2025-04-08  
 - 🚀 Visual compass direction logic implemented  
@@ -28,7 +29,8 @@
 ### [1.5.2] - 2025-03-23  
 - 🚀 Offline support added for saved passes  
 - 🧪 Added experimental offline TLE parsing logic  
-- 🔧 RecyclerView performance improvements  
+- 🔧 RecyclerView performance improvements
+- 🎨 Improved offline location tracking
 
 ### [1.5.1] - 2025-03-19  
 - 🔧 Refactored API logic into service classes  
@@ -37,9 +39,11 @@
 - 🎨 Updated search results and detail layout  
 
 ### [1.5.0] - 2025-03-15  
-- 🚀 "About" screen with app version and contact info  
-- 🔧 Unified font and text appearance  
-- 🎨 Improved transitions and animations  
+- 💥 **Satellite tracking optimization**: Introduced advanced tracking algorithms for real-time satellite position calculation using TLE data.
+- 🚀 Caching mechanism for frequently used satellite data to improve load times and reduce server dependency.
+- 🔧 Refined the app's data flow, optimizing how satellite information is fetched and stored.
+- 🎨Reduced API calls through local caching and offloaded heavy computations for improved app performance.
+
 
 ---
 
