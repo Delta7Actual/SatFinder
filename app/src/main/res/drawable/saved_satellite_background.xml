@@ -1,0 +1,20 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Glow background layer -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" /> <!-- subtle white glow -->
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+
+    <!-- Gradient overlay -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/background"
+                android:endColor="@color/background_light"
+                android:angle="270" />
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+</layer-list>

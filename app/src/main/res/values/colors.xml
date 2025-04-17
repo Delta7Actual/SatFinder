@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#232323</color>
     <color name="background_light">#2D2D2D</color>
+    <color name="background_accent">#1C1C3A</color>
     <color name="primary">#194EA9</color>
     <color name="primary_dark">#1a2e6c</color>"
     <color name="secondary">#488ad5</color>
