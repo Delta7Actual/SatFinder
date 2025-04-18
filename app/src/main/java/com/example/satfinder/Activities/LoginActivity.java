@@ -3,7 +3,6 @@ package com.example.satfinder.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,61 +27,64 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String TAG = "SatLogin"; // Updated TAG for logging
+    private static final String TAG = "SatLogin";
 
     private Button btnSwitch;
     private TextView tvLoginSignup;
     private boolean isLogin = true;
-
-    private void setupUI() {
-        btnSwitch = findViewById(R.id.btn_switch);
-        tvLoginSignup = findViewById(R.id.tv_login_signup);
-        btnSwitch.setOnClickListener(this::onClick);
-        Log.d(TAG, "UI components initialized.");
-    }
-
-    private void onClick(View view) {
-        if (view == btnSwitch) {
-            Log.d(TAG, "Switch button clicked, toggling fragment.");
-            toggleFragment();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            Log.d(TAG, "Applied system bar insets: " + systemBars.toString());
             return insets;
         });
+        
+        handleInterruptedSession();
+        setupUI();
+        toggleFragment();
+    }
 
-        // Check if user is logged in before toggling fragments
+    private void setupUI() {
+        Log.d(TAG, "Setting up UI components...");
+        
+        btnSwitch = findViewById(R.id.btn_switch);
+        tvLoginSignup = findViewById(R.id.tv_login_signup);
+        btnSwitch.setOnClickListener(v -> handleSwitchClick());
+    }
+
+    // User might still be logged in from a previous session
+    private void handleInterruptedSession() {
+        Log.d(TAG, "Checking if user has an open session already...");
+        
         if (UserManager.getInstance().isUserLoggedIn()) {
             Log.d(TAG, "User already logged in, continuing previous session.");
             Toast.makeText(this, "Continuing previous session", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
-            return; // Don't show the login fragment if user is already logged in
         }
-
-        setupUI();
-        toggleFragment();
+    }
+    
+    private void handleSwitchClick() {
+            Log.d(TAG, "Switch button clicked, toggling fragment.");
+            toggleFragment();
     }
 
     private void toggleFragment() {
         Log.d(TAG, "Toggling fragment. Current mode: " + (isLogin ? "Login" : "Sign Up"));
         if (isLogin) {
             replaceFragment(new SignUpFragment());
-            btnSwitch.setText("Switch to Login");
-            tvLoginSignup.setText("SIGN UP");
+            btnSwitch.setText(R.string.switch_to_login);
+            tvLoginSignup.setText(R.string.sign_up);
         } else {
             replaceFragment(new LoginFragment());
-            btnSwitch.setText("Switch to Sign Up");
-            tvLoginSignup.setText("LOGIN");
+            btnSwitch.setText(R.string.switch_to_sign_up);
+            tvLoginSignup.setText(R.string.login);
         }
         this.isLogin = !isLogin;
     }
@@ -98,17 +100,16 @@ public class LoginActivity extends AppCompatActivity {
 
     public void signUpUser(String name, String email, String password, String confirmPassword) {
         Log.d(TAG, "Attempting to sign up user with email: " + email + "/ password: " + password);
-        if (!isPasswordValid(password)) {
-            return;
-        }
+
+        if (isPasswordinValid(password)) return;
 
         if (!password.equals(confirmPassword)) {
             Log.d(TAG, "Passwords do not match.");
             Toast.makeText(LoginActivity.this, "Passwords do not match!", Toast.LENGTH_LONG).show();
             return;
         }
-        UserManager manager = UserManager.getInstance();
-        manager.signUpUser(name, email, password, new IUserAuthCallback() {
+
+        UserManager.getInstance().signUpUser(name, email, password, new IUserAuthCallback() {
             @Override
             public void onSuccess(FirebaseUser user) {
                 Log.d(TAG, "User created successfully: " + user.getEmail());
@@ -127,12 +128,10 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginUser(String email, String password) {
         Log.d(TAG, "Attempting to log in user with email: " + email + "/ password: " + password);
-        if (!isPasswordValid(password)) {
-            return;
-        }
 
-        UserManager manager = UserManager.getInstance();
-        manager.loginUser(email, password, new IUserAuthCallback() {
+        if (isPasswordinValid(password)) return;
+
+        UserManager.getInstance().loginUser(email, password, new IUserAuthCallback() {
             @Override
             public void onSuccess(FirebaseUser user) {
                 Log.d(TAG, "Login successful for user: " + user.getDisplayName());
@@ -144,9 +143,10 @@ public class LoginActivity extends AppCompatActivity {
                     public void onSuccess(List<String> result) {
                         if (result == null) {
                             Log.e(TAG, "Fetched NULL IDs!");
+                        } else {
+                            Log.d(TAG, "Fetched IDs: " + result.size() + " items");
+                            StorageManager.getInstance(LoginActivity.this).spSaveUserFavoriteSatellites(result);
                         }
-                        Log.d(TAG, "Fetched IDs: " + result.size() + " items");
-                        StorageManager.getInstance(LoginActivity.this).spSaveUserFavoriteSatellites(result);
                     }
 
                     @Override
@@ -169,9 +169,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void recoverPassword(String email) {
         Log.d(TAG, "Attempting to recover password for email: " + email);
-        UserManager manager = UserManager.getInstance();
-        manager.recoverPassword(email, new IUserAuthCallback() {
 
+        UserManager.getInstance().recoverPassword(email, new IUserAuthCallback() {
             @Override
             public void onSuccess(FirebaseUser user) {
                 Log.d(TAG, "Password reset email sent successfully.");
@@ -186,38 +185,34 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private boolean isPasswordValid(String password) {
+    private boolean isPasswordinValid(String password) {
         Log.d(TAG, "Checking password: " + password + "...");
         if (password.length() < 6) {
             Log.e(TAG, "Password too short! Length: " + password.length());
             Toast.makeText(LoginActivity.this, "Password should be at least 6 digits!", Toast.LENGTH_LONG).show();
-            return false;
+            return true;
         }
 
         boolean hasUppercase = false;
         boolean hasDigit = false;
 
         for (char c : password.toCharArray()) {
-            if (Character.isUpperCase(c)) {
-                hasUppercase = true;
-            }
-            if (Character.isDigit(c)) {
-                hasDigit = true;
-            }
+            if (Character.isUpperCase(c)) hasUppercase = true;
+            if (Character.isDigit(c)) hasDigit = true;
         }
 
         if (!hasUppercase) {
             Log.e(TAG, "Password does not contain uppercase: " + password);
             Toast.makeText(LoginActivity.this, "Password should contain at least one uppercase letter!", Toast.LENGTH_LONG).show();
-            return false;
+            return true;
         }
 
         if (!hasDigit) {
             Log.e(TAG, "Password does not contain digit: " + password);
             Toast.makeText(LoginActivity.this, "Password should contain at least one digit!", Toast.LENGTH_LONG).show();
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 }

@@ -28,7 +28,6 @@
                 android:id="@+id/tv_satellite_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/satellite_name"
                 android:textColor="@color/primary"
                 android:textSize="20sp"
                 android:textStyle="bold"

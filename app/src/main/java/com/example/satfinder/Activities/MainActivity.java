@@ -31,30 +31,17 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "SatMain"; // Updated TAG for logging
+    private static final String TAG = "SatMain";
 
-    private RecyclerView recyclerSatelliteTLEList;
     private SatelliteViewAdapter adapter;
     private List<SatelliteTLEResponse> satelliteTLEResponses;
     private TextView tvISSPassDetails;
-
-    private void setupUI() {
-        Log.d(TAG, "Setting up UI components...");
-        tvISSPassDetails = findViewById(R.id.tv_iss_pass_details);
-        recyclerSatelliteTLEList = findViewById(R.id.recycler_satellite_list);
-        satelliteTLEResponses = new ArrayList<>();
-        adapter = new SatelliteViewAdapter(satelliteTLEResponses);
-        recyclerSatelliteTLEList.setLayoutManager(new LinearLayoutManager(this));
-        recyclerSatelliteTLEList.setAdapter(adapter);
-        Log.d(TAG, "UI components initialized: RecyclerView and TLE list adapter.");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate: Activity started");
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -67,8 +54,24 @@ public class MainActivity extends AppCompatActivity {
         updateSavedSatelliteList();
     }
 
+    private void setupUI() {
+        Log.d(TAG, "Setting up UI components...");
+
+        tvISSPassDetails = findViewById(R.id.tv_iss_pass_details);
+
+        RecyclerView recyclerSatelliteTLEList = findViewById(R.id.recycler_satellite_list);
+        satelliteTLEResponses = new ArrayList<>();
+        adapter = new SatelliteViewAdapter(satelliteTLEResponses);
+        recyclerSatelliteTLEList.setLayoutManager(new LinearLayoutManager(this));
+        recyclerSatelliteTLEList.setAdapter(adapter);
+
+        Log.d(TAG, "UI components initialized: RecyclerView and TLE list adapter.");
+    }
+
+    // Try to fetch from cache before calling API
     private void updateWithClosestISSPass() {
         Log.d(TAG, "Fetching closest ISS pass...");
+
         StorageManager storageManager = StorageManager.getInstance(this);
         storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> {
             try {
@@ -79,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
                     String[] resultParts = result.split(",");
                     long time = Long.parseLong(resultParts[1]);
                     tvISSPassDetails.setText(String.format("Next pass is in: %s", MathUtils.convertUTCToLocalTime(time)));
-                    Log.d(TAG, "ISS pass time updated: " + time);
+                    Log.d(TAG, "ISS pass time updated: " + MathUtils.convertUTCToLocalTime(time));
                 } else {
-                    Log.w(TAG, "Error fetching ISS pass or null result.");
+                    Log.w(TAG, "Error fetching ISS pass or null result in cache.");
                     fetchClosestISSPass();
                 }
             } catch (Exception e) {
@@ -91,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchClosestISSPass() {
-        Log.d(TAG, "Calling API for ISS pass...");
+        Log.d(TAG, "Calling API for ISS (25544) pass...");
+
         SatelliteManager satelliteManager = SatelliteManager.getInstance();
         StorageManager storageManager = StorageManager.getInstance(this);
 
@@ -114,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
                                             .getStartUTC())));
                             Log.d(TAG, "Closest ISS pass fetched successfully.");
                         } else {
-                            tvISSPassDetails.setText("No ISS sightings in the next week :)");
-                            Log.d(TAG, "No ISS passes in the next week.");
+                            tvISSPassDetails.setText(R.string.no_iss_sightings_in_the_next_week);
+                            Log.w(TAG, "No ISS passes in the next week.");
                         }
                     }
 
@@ -129,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateSavedSatelliteList() {
         Log.d(TAG, "Fetching saved satellites...");
+
         StorageManager storageManager = StorageManager.getInstance(this);
         storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance()
                 , () -> storageManager.getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {
@@ -184,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchSatelliteTLE(int satelliteId) {
         Log.d(TAG, "Fetching TLE for satellite ID: " + satelliteId);
+
         SatelliteManager.getInstance().fetchSatelliteTLE(satelliteId, new IN2YOCallback() {
 
             @Override

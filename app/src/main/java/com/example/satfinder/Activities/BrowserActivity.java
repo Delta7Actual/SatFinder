@@ -3,7 +3,6 @@ package com.example.satfinder.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,28 +25,13 @@ import com.example.satfinder.R;
 
 public class BrowserActivity extends AppCompatActivity {
 
-    private static final String TAG = "SatBrowser";  // Tag for logging
-    private Button btnLocate;
+    private static final String TAG = "SatBrowser";
     private SearchFragment searchFragment;
     private SatellitePosition satPosition;
-    private ObserverLocation currentLocation;
-
-    private void setupUI() {
-        Log.d(TAG, "Setting up UI");
-        searchFragment = new SearchFragment();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.browser_fragment_container, searchFragment)
-                .addToBackStack(null)
-                .commit();
-        btnLocate = findViewById(R.id.btn_locate);
-        btnLocate.setOnClickListener(this::locateSatellite);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "Activity created");
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_browser);
 
@@ -60,55 +44,90 @@ public class BrowserActivity extends AppCompatActivity {
         setupUI();
     }
 
-    private void locateSatellite(View view) {
-        Log.d(TAG, "Locate button clicked");
-        if (view.getId() == R.id.btn_locate) {
-            String satIdString = ((EditText) searchFragment.getView().findViewById(R.id.et_satellite_id)).getText().toString();
-            if (satIdString.isEmpty()) {
-                Log.w(TAG, "Satellite ID field is empty");
-                Toast.makeText(this, "Please fill in satellite ID", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            int satId = Integer.parseInt(satIdString);
-            Log.d(TAG, "Fetching satellite position for ID: " + satId);
+    private void setupUI() {
+        Log.d(TAG, "setupUI: Initializing UI components");
 
-            StorageManager storageManager = StorageManager.getInstance(this);
-            currentLocation = storageManager.spGetUserLocation();
-            Log.d(TAG, "Current location fetched: " + currentLocation);
+        // Initialize the SearchFragment
+        searchFragment = new SearchFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.browser_fragment_container, searchFragment)
+                .addToBackStack(null)
+                .commit();
 
-            SatelliteManager satelliteManager = SatelliteManager.getInstance();
-            satelliteManager.fetchSatellitePositions(satId,
-                    currentLocation.getLatitude(),
-                    currentLocation.getLongitude(),
-                    currentLocation.getAltitude(),
-                    1,
-                    new IN2YOCallback() {
-                        @Override
-                        public void onSuccess(ISatelliteResponse response) {
-                            Log.d(TAG, "Satellite positions fetched successfully");
-                            SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
-                            if (spResponse != null && !spResponse.getPositions().isEmpty()) {
-                                satPosition = spResponse.getPositions().get(0);
-                                Log.d(TAG, "Satellite position: " + satPosition);
+        Button btnLocate = findViewById(R.id.btn_locate);
+        btnLocate.setOnClickListener(v -> locateSatellite());
+    }
 
-                                // Only start the activity if the satellite position is successfully fetched
-                                Intent intent = new Intent(BrowserActivity.this, LocateActivity.class);
-                                intent.putExtra("sat_azimuth", satPosition.getAzimuth());
-                                intent.putExtra("sat_pitch", satPosition.getElevation());
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                Log.w(TAG, "No satellite data found");
-                                Toast.makeText(BrowserActivity.this, "No satellite data found", Toast.LENGTH_SHORT).show();
-                            }
-                        }
+    private void locateSatellite() {
+        Log.d(TAG, "locateSatellite: Locate button clicked");
 
-                        @Override
-                        public void onError(String errorMessage) {
-                            Log.e(TAG, "Error fetching satellite location: " + errorMessage);
-                            Toast.makeText(BrowserActivity.this, "Failed to fetch satellite location, make sure you have a correct ID", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        if (searchFragment.getView() == null) {
+            Log.e(TAG, "locateSatellite: Fragment view is null");
+            Toast.makeText(this, "Unable to access search input. Please try again.", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        EditText etSatelliteId = searchFragment.getView().findViewById(R.id.et_satellite_id);
+        String satIdString = etSatelliteId.getText().toString().trim();
+
+        if (satIdString.isEmpty()) {
+            Log.w(TAG, "locateSatellite: Empty Satellite ID");
+            Toast.makeText(this, "Please enter a satellite ID", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Handle invalid satellite ID
+        int satId;
+        try {
+            satId = Integer.parseInt(satIdString);
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "locateSatellite: Invalid Satellite ID");
+            Toast.makeText(this, "Invalid satellite ID", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Log.d(TAG, "locateSatellite: Fetching satellite position for ID " + satId);
+
+        StorageManager storageManager = StorageManager.getInstance(this);
+        ObserverLocation currentLocation = storageManager.spGetUserLocation();
+
+        Log.d(TAG, "locateSatellite: Current location: " + currentLocation);
+
+        // Fetch satellite position from API
+        SatelliteManager.getInstance().fetchSatellitePositions(
+                satId,
+                currentLocation.getLatitude(),
+                currentLocation.getLongitude(),
+                currentLocation.getAltitude(),
+                1,
+                new IN2YOCallback() {
+                    @Override
+                    public void onSuccess(ISatelliteResponse response) {
+                        SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;
+
+                        if (spResponse == null || spResponse.getPositions().isEmpty()) {
+                            Log.w(TAG, "locateSatellite: No satellite data found");
+                            Toast.makeText(BrowserActivity.this, "No satellite data found", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        satPosition = spResponse.getPositions().get(0);
+                        Log.d(TAG, "locateSatellite: Satellite position: " + satPosition);
+
+                        Intent intent = new Intent(BrowserActivity.this, LocateActivity.class);
+                        intent.putExtra("sat_azimuth", satPosition.getAzimuth());
+                        intent.putExtra("sat_pitch", satPosition.getElevation());
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        Log.e(TAG, "locateSatellite: API error - " + errorMessage);
+                        Toast.makeText(BrowserActivity.this, "Failed to fetch satellite location. Check the ID and try again.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
     }
 }

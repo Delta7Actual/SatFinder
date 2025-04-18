@@ -2,6 +2,7 @@ package com.example.satfinder.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
@@ -13,16 +14,6 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.satfinder.R;
 
 public class MoreActivity extends AppCompatActivity {
-
-    private Button btnBackMore;
-
-    private void setupUI() {
-        btnBackMore = findViewById(R.id.btn_back_more);
-        btnBackMore.setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        });
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,5 +27,16 @@ public class MoreActivity extends AppCompatActivity {
         });
 
         setupUI();
+    }
+
+    private void setupUI() {
+        String TAG = "SatMore"; // Using it only once
+        Log.d(TAG, "Setting up UI components");
+
+        Button btnBackMore = findViewById(R.id.btn_back_more);
+        btnBackMore.setOnClickListener(v -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
     }
 }

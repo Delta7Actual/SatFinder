@@ -18,36 +18,36 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private static final String TAG = "SatProfile"; // Updated TAG for logging
-
-    private void setupUI() {
-        Log.d(TAG, "Setting up UI: Replacing AccountFragment in fragment container...");
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, new AccountFragment())
-                .commit();
-        Log.d(TAG, "AccountFragment transaction committed.");
-    }
+    private static final String TAG = "SatProfile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: ProfileActivity started.");
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_profile);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            Log.d(TAG, "Applied system bar insets: " + systemBars.toString());
             return insets;
         });
 
         setupUI();
     }
 
+    private void setupUI() {
+        Log.d(TAG, "Setting up UI: Initializing AccountFragment in fragment container...");
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, new AccountFragment())
+                .commit();
+        Log.d(TAG, "AccountFragment successfully initialized.");
+    }
+
     public String getUserDisplayName() {
         Log.d(TAG, "Fetching current user display name...");
+
         UserManager manager = UserManager.getInstance();
         String displayName = manager.getCurrentUserDisplayName();
         Log.d(TAG, "Current user display name: " + displayName);
@@ -56,6 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public String getUserEmail() {
         Log.d(TAG, "Fetching current user email...");
+
         UserManager manager = UserManager.getInstance();
         String userEmail = manager.getCurrentUserEmail();
         Log.d(TAG, "Current user email: " + userEmail);
@@ -64,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     public void setUserDisplayName(String newName) {
         Log.d(TAG, "Attempting to update user display name to: " + newName);
+
         UserManager manager = UserManager.getInstance();
         manager.setUserDisplayName(newName, new IUserAuthCallback() {
             @Override
@@ -74,7 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(String error) {
-                Log.e(TAG, "Failed to update display name: " + error);
+                Log.w(TAG, "Failed to update display name: " + error);
                 Toast.makeText(ProfileActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         });

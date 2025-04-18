@@ -1,5 +1,6 @@
 package com.example.satfinder.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -19,127 +20,128 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.satfinder.Misc.Utility.MathUtils;
 import com.example.satfinder.R;
 
 public class LocateActivity extends AppCompatActivity implements SensorEventListener {
 
-    private static final String TAG = "SatLocate"; // Updated TAG for logging
+    private static final String TAG = "SatLocate";
 
     private SensorManager sensorManager;
     private ImageView ivCompass;
     private ImageView ivNeedle;
     private TextView tvAngleValue;
-    private Button btnReturn;
 
-    private final float[] rMat = new float[9]; // Rotation matrix
-    private final float[] orientationVector = new float[3]; // Orientation vector
+    // Sensor data
+    private final float[] rotationMatrix = new float[9];
+    private final float[] orientationAngles = new float[3];
 
+    // Unlike pitch we need the azimuth globally
     private float satAzimuth;
-
-    private void setupUI() {
-        ivCompass = findViewById(R.id.iv_compass);
-        ivNeedle = findViewById(R.id.iv_compass_needle);
-        tvAngleValue = findViewById(R.id.tv_angle_value);
-        btnReturn = findViewById(R.id.button_return);
-        btnReturn.setOnClickListener(v -> {
-            Log.d(TAG, "Return button clicked, redirecting to BrowserActivity...");
-            startActivity(new Intent(LocateActivity.this, BrowserActivity.class));
-            finish();
-        });
-    }
-
-    private void setupSensors() {
-        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        Sensor rvSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        if (rvSensor != null) {
-            Log.d(TAG, "Rotation vector sensor found, registering listener...");
-            sensorManager.registerListener(this, rvSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        } else {
-            Log.e(TAG, "Rotation vector sensor unavailable! Cannot triangulate orientation.");
-            Toast.makeText(this, "Sensors unavailable! Cannot triangulate orientation!", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_locate);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            Log.d(TAG, "Applied system bar insets: " + systemBars.toString());
             return insets;
         });
 
         setupUI();
         setupSensors();
+        loadIntentData();
+    }
 
-        // Fetch satellite azimuth and pitch from intent
-        satAzimuth = getIntent().getFloatExtra("sat_azimuth", 0);
-        float satPitch = getIntent().getFloatExtra("sat_pitch", 0);
-        tvAngleValue.setText("Satellite Elevation: " + satPitch + "°");
+    private void setupUI() {
+        Log.d(TAG, "setupUI: Initializing UI components");
+        
+        ivCompass = findViewById(R.id.iv_compass);
+        ivNeedle = findViewById(R.id.iv_compass_needle);
+        tvAngleValue = findViewById(R.id.tv_angle_value);
 
-        Log.d(TAG, "Satellite Azimuth: " + satAzimuth);
-        Log.d(TAG, "Satellite Pitch: " + satPitch);
+        Button btnReturn = findViewById(R.id.button_return);
+        btnReturn.setOnClickListener(v -> {
+            Log.d(TAG, "Return button clicked");
+            startActivity(new Intent(this, BrowserActivity.class));
+            finish();
+        });
+    }
+
+    private void setupSensors() {
+        Log.d(TAG, "Setting up sensors...");
+        
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        Sensor rotationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+
+        if (rotationSensor != null) {
+            sensorManager.registerListener(this, rotationSensor, SensorManager.SENSOR_DELAY_UI);
+        } else {
+            Log.e(TAG, "Rotation vector sensor unavailable.");
+            Toast.makeText(this, "Sensor unavailable! Cannot detect orientation.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Get the data provided with the Intent from BrowserActivity
+    @SuppressLint("SetTextI18n")
+    private void loadIntentData() {
+        satAzimuth = getIntent().getFloatExtra("sat_azimuth", 0f);
+        float satElevation = getIntent().getFloatExtra("sat_pitch", 0f);
+
+        tvAngleValue.setText("Satellite Elevation: " + satElevation + "°");
+
+        Log.d(TAG, "Azimuth from intent: " + satAzimuth);
+        Log.d(TAG, "Pitch from intent: " + satElevation);
     }
 
     @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        if (sensorEvent.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-            // Extract the orientation from the rotation vector
-            SensorManager.getRotationMatrixFromVector(rMat, sensorEvent.values);
-            SensorManager.getOrientation(rMat, orientationVector);
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
+            SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
+            SensorManager.getOrientation(rotationMatrix, orientationAngles);
 
-            float azimuthInDegrees = (float) Math.toDegrees(orientationVector[0]);
-            // Normalize azimuth to 0-360 degrees
-            if (azimuthInDegrees < 0) {
-                azimuthInDegrees += 360;
-            }
+            float azimuth = (float) Math.toDegrees(orientationAngles[0]);
+            float pitch = (float) Math.toDegrees(orientationAngles[1]);
 
-            float pitchInDegrees = (float) Math.toDegrees(orientationVector[1]);
+            // Normalize azimuth
+            if (azimuth < 0) azimuth += 360;
 
-            Log.d(TAG, "Sensor azimuth: " + azimuthInDegrees + "°, pitch: " + pitchInDegrees + "°");
-            updateValues(azimuthInDegrees);
-
-            Log.d(TAG, "Direction from azimuth: " + MathUtils.getDirectionFromAzimuth(azimuthInDegrees));
+            Log.d(TAG, String.format("Device Azimuth: %.1f°, Pitch: %.1f°", azimuth, pitch));
+            updateCompass(azimuth);
         }
+    }
+
+    private void updateCompass(float currentAzimuth) {
+        float offset = calculateAzimuthOffset(currentAzimuth, satAzimuth);
+
+        ivNeedle.setRotation(currentAzimuth);
+
+        if (Math.abs(offset) < 10f) {
+            ivCompass.setColorFilter(getResources().getColor(R.color.green, getTheme()));
+        } else {
+            ivCompass.clearColorFilter();
+        }
+
+        Log.d(TAG, "Azimuth offset from satellite: " + offset + "°");
+    }
+
+    private float calculateAzimuthOffset(float current, float target) {
+        return (target - current + 540) % 360 - 180;
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Placeholder for handling sensor accuracy changes
         Log.d(TAG, "Sensor accuracy changed: " + accuracy);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Sensor cleanup
         if (sensorManager != null) {
-            Log.d(TAG, "Unregistering sensor listener...");
             sensorManager.unregisterListener(this);
+            Log.d(TAG, "Sensor listener unregistered");
         }
     }
-
-    public void updateValues(float azimuth) {
-        float azOffset = getAngleDifference(satAzimuth, azimuth);
-
-        // Keep compass the same, rotate needle to show where user is looking
-        ivNeedle.setRotation(azimuth);
-        Log.d(TAG, "Azimuth offset: " + azOffset + "°");
-
-        if (Math.abs(azOffset) < 10) {
-            ivCompass.setColorFilter(getResources().getColor(R.color.green, this.getTheme()));
-            Log.d(TAG, "Azimuth aligned with satellite, compass in range.");
-        } else {
-            ivCompass.clearColorFilter();
-        }
-    }
-
-    private float getAngleDifference(float target, float current) {
-        return (target - current + 180 + 360) % 360 - 180;
-    }
-
 }

@@ -11,7 +11,6 @@
         android:id="@+id/tv_satellite_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/satellite_name"
         android:textColor="@color/secondary"
         android:textSize="26sp"
         android:textStyle="bold"
@@ -33,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -84,7 +83,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="6dp">
+            android:layout_marginBottom="2dp">
 
             <TextView
                 android:text="@string/latitude"
@@ -107,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="6dp">
+            android:layout_marginBottom="2dp">
 
             <TextView
                 android:text="@string/longitude"

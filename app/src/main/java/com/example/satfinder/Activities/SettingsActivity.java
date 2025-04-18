@@ -26,43 +26,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private static final String TAG = "SatSettings"; // Updated TAG for logging
-
-    private Button btnUpdateCache, btnKillDaemon, btnTestNotification, btnTestAPI, btnClearCache, btnDeleteUser, btnBack;
-
-    private void setupUI() {
-        Log.d(TAG, "Setting up UI components...");
-
-        btnUpdateCache = findViewById(R.id.btn_update_cache);
-        btnUpdateCache.setOnClickListener(v -> updateCache());
-
-        btnKillDaemon = findViewById(R.id.btn_kill_daemon);
-        btnKillDaemon.setOnClickListener(v -> killDaemon());
-
-        btnTestNotification = findViewById(R.id.btn_test_notification);
-        btnTestNotification.setOnClickListener(v -> testNotification());
-
-        btnTestAPI = findViewById(R.id.btn_test_api);
-        btnTestAPI.setOnClickListener(v -> testAPI());
-
-        btnClearCache = findViewById(R.id.btn_clear_cache);
-        btnClearCache.setOnClickListener(v -> clearCache());
-
-        btnDeleteUser = findViewById(R.id.btn_delete_user);
-        btnDeleteUser.setOnClickListener(v -> deleteUser());
-
-        btnBack = findViewById(R.id.btn_back);
-        btnBack.setOnClickListener(v -> {
-            Log.d(TAG, "Back button clicked. Navigating to MainActivity.");
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        });
-    }
+    private static final String TAG = "SatSettings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate: SettingsActivity started.");
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
@@ -70,11 +38,39 @@ public class SettingsActivity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            Log.d(TAG, "Applied system bar insets: " + systemBars);
             return insets;
         });
 
         setupUI();
+    }
+
+    private void setupUI() {
+        Log.d(TAG, "Setting up UI components...");
+
+        Button btnUpdateCache = findViewById(R.id.btn_update_cache);
+        btnUpdateCache.setOnClickListener(v -> updateCache());
+
+        Button btnKillDaemon = findViewById(R.id.btn_kill_daemon);
+        btnKillDaemon.setOnClickListener(v -> killDaemon());
+
+        Button btnTestNotification = findViewById(R.id.btn_test_notification);
+        btnTestNotification.setOnClickListener(v -> testNotification());
+
+        Button btnTestAPI = findViewById(R.id.btn_test_api);
+        btnTestAPI.setOnClickListener(v -> testAPI());
+
+        Button btnClearCache = findViewById(R.id.btn_clear_cache);
+        btnClearCache.setOnClickListener(v -> clearCache());
+
+        Button btnDeleteUser = findViewById(R.id.btn_delete_user);
+        btnDeleteUser.setOnClickListener(v -> deleteUser());
+
+        Button btnBack = findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(v -> {
+            Log.d(TAG, "Back button clicked. Navigating to MainActivity.");
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
     }
 
     private void updateCache() {
