@@ -1,7 +1,5 @@
 package com.example.satfinder.Misc.Utility;
 
-import com.example.satfinder.Objects.ObserverLocation;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,34 +19,6 @@ public final class MathUtils {
     public static boolean isStale(long timestamp, long threshold) {
         long currentTime = System.currentTimeMillis() / 1000;
         return (currentTime - timestamp) > threshold;
-    }
-
-    /**
-     * Calculate the angle above the horizon needed to see target from source
-     * @param source The observer's location
-     * @param target The target's location
-     * @return The angle above the horizon in degrees
-     */
-    public static float getAngleFromHorizon(ObserverLocation source, ObserverLocation target) {
-        double lat1 = Math.toRadians(source.getLatitude());
-        double lon1 = Math.toRadians(source.getLongitude());
-        double lat2 = Math.toRadians(target.getLatitude());
-        double lon2 = Math.toRadians(target.getLongitude());
-
-        double dLat = lat2 - lat1;
-        double dLon = lon2 - lon1;
-
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        // Radius of the Earth in kilometers
-        double R = 6371.0;
-        double distance = R * c;
-        double altitudeDiff = target.getAltitude() - source.getAltitude();
-
-        double angleRad = Math.atan2(altitudeDiff, distance * 1000); // Convert distance to meters
-        return (float) Math.toDegrees(angleRad);
     }
 
     /**

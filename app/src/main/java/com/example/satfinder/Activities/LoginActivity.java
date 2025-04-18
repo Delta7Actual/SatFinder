@@ -97,7 +97,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signUpUser(String name, String email, String password, String confirmPassword) {
-        Log.d(TAG, "Attempting to sign up user with email: " + email);
+        Log.d(TAG, "Attempting to sign up user with email: " + email + "/ password: " + password);
+        if (!isPasswordValid(password)) {
+            return;
+        }
+
         if (!password.equals(confirmPassword)) {
             Log.d(TAG, "Passwords do not match.");
             Toast.makeText(LoginActivity.this, "Passwords do not match!", Toast.LENGTH_LONG).show();
@@ -122,7 +126,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginUser(String email, String password) {
-        Log.d(TAG, "Attempting to log in user with email: " + email);
+        Log.d(TAG, "Attempting to log in user with email: " + email + "/ password: " + password);
+        if (!isPasswordValid(password)) {
+            return;
+        }
+
         UserManager manager = UserManager.getInstance();
         manager.loginUser(email, password, new IUserAuthCallback() {
             @Override
@@ -176,5 +184,40 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, error, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private boolean isPasswordValid(String password) {
+        Log.d(TAG, "Checking password: " + password + "...");
+        if (password.length() < 6) {
+            Log.e(TAG, "Password too short! Length: " + password.length());
+            Toast.makeText(LoginActivity.this, "Password should be at least 6 digits!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        boolean hasUppercase = false;
+        boolean hasDigit = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                hasUppercase = true;
+            }
+            if (Character.isDigit(c)) {
+                hasDigit = true;
+            }
+        }
+
+        if (!hasUppercase) {
+            Log.e(TAG, "Password does not contain uppercase: " + password);
+            Toast.makeText(LoginActivity.this, "Password should contain at least one uppercase letter!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        if (!hasDigit) {
+            Log.e(TAG, "Password does not contain digit: " + password);
+            Toast.makeText(LoginActivity.this, "Password should contain at least one digit!", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return true;
     }
 }
