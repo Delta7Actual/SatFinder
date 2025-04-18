@@ -111,7 +111,11 @@ public class SavedSatelliteAdapter extends RecyclerView.Adapter<SavedSatelliteAd
                                 int requestCode = satId.hashCode();
 
                                 Log.i(TAG, "Pass found! Scheduling alarm at " + alarmTime + " for satellite: " + satId);
-                                AlarmScheduler.scheduleNotification(holder.itemView.getContext(), alarmTime, requestCode);
+                                StorageManager.getInstance(v.getContext()).spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(),
+                                        () -> AlarmScheduler.scheduleNotification(holder.itemView.getContext(),
+                                                alarmTime,
+                                                requestCode,
+                                                Integer.parseInt(satId)));
                                 Toast.makeText(holder.itemView.getContext(), "Alarm set for " + satId, Toast.LENGTH_SHORT).show();
                             } else {
                                 Log.w(TAG, "No upcoming passes found for satellite: " + satId);

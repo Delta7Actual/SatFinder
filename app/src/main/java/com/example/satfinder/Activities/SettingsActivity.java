@@ -90,8 +90,8 @@ public class SettingsActivity extends AppCompatActivity {
     private void testNotification() {
         Log.d(TAG, "Test Notification button clicked. Scheduling a notification...");
         AlarmScheduler.scheduleNotification(this,
-                System.currentTimeMillis() + 5000,
-                1234);
+                System.currentTimeMillis() + (1000 * 5), // 5 seconds
+                1234, -1); // Call with a dummy satellite ID
     }
 
     private void testAPI() {

@@ -238,7 +238,7 @@ public class StorageManager {
      */
     public void spSaveAndUpdateSatelliteData(SatelliteManager satelliteManager, ICacheUpdateCallback callback) {
         List<String> satelliteIds = spGetUserFavoriteSatellites();
-        Log.d(TAG, "IDS to update: " + satelliteIds.size() + " items");
+        Log.i(TAG, "IDS to update: " + satelliteIds.size() + " items");
         if (satelliteIds.isEmpty()) {
             callback.onComplete();
             return;
@@ -255,9 +255,9 @@ public class StorageManager {
             Log.d(TAG, "tle/" + satelliteId + ": " + spGetSatelliteTLE(id));
 
             boolean[] stale = spIsSatelliteDataStale(id);
-            if (stale[0]) saveSatellitePasses(editor, satelliteManager, id, curr);
-            if (stale[1]) saveSatellitePositions(editor, satelliteManager, id, curr);
-            if (stale[2]) saveSatelliteTLE(editor, satelliteManager, id);
+            if (stale[0]) spSaveSatellitePasses(editor, satelliteManager, id, curr);
+            if (stale[1]) spSaveSatellitePositions(editor, satelliteManager, id, curr);
+            if (stale[2]) spSaveSatelliteTLE(editor, satelliteManager, id);
         }
 
         editor.apply();
@@ -271,7 +271,7 @@ public class StorageManager {
      * @param id The NORAD ID of the satellite.
      * @param curr The current observer location.
      */
-    private void saveSatellitePasses(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
+    private void spSaveSatellitePasses(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
         Log.d(TAG, "Updating data for ID: " + id);
         manager.fetchSatelliteVisualPasses(id, curr.getLatitude(), curr.getLongitude(), curr.getAltitude(), 7, 60, new IN2YOCallback() {
             @Override
@@ -303,7 +303,7 @@ public class StorageManager {
      * @param id The NORAD ID of the satellite.
      * @param curr The current observer location.
      */
-    private void saveSatellitePositions(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
+    private void spSaveSatellitePositions(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
         Log.d(TAG, "Updating data for ID: " + id);
         manager.fetchSatellitePositions(id, curr.getLatitude(), curr.getLongitude(), curr.getAltitude(), 1, new IN2YOCallback() {
             @Override
@@ -334,7 +334,7 @@ public class StorageManager {
      * @param manager The satellite manager for fetching data.
      * @param id The NORAD ID of the satellite.
      */
-    private void saveSatelliteTLE(SharedPreferences.Editor editor, SatelliteManager manager, int id) {
+    private void spSaveSatelliteTLE(SharedPreferences.Editor editor, SatelliteManager manager, int id) {
         Log.d(TAG, "Updating data for ID: " + id);
         manager.fetchSatelliteTLE(id, new IN2YOCallback() {
             @Override

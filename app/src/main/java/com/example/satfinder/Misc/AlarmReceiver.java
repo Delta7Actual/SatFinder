@@ -18,7 +18,7 @@ import com.example.satfinder.R;
  */
 public class AlarmReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "AlarmReceiver";
+    private static final String TAG = "SatAR";
     private static final String CHANNEL_ID = "alarm_channel";
     private static final int NOTIFICATION_ID = 1112;
 
@@ -29,11 +29,19 @@ public class AlarmReceiver extends BroadcastReceiver {
             return;
         }
 
-        Log.d(TAG, "Alarm triggered! Preparing notification...");
-        showNotification(context);
+        Log.i(TAG, "Alarm triggered! Preparing notification...");
+
+        String satName = intent.getStringExtra("satName");
+        if (satName == null || satName.isEmpty()) {
+            satName = "Unknown Satellite";
+        }
+
+        Log.d(TAG, "Retrieved satellite name: " + satName);
+        showNotification(context, satName);
     }
 
     private void createNotificationChannel(Context context) {
+        Log.d(TAG, "Creating notification channel...");
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager == null || manager.getNotificationChannel(CHANNEL_ID) != null) {
             return; // Channel already exists
@@ -48,7 +56,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         manager.createNotificationChannel(channel);
     }
 
-    private void showNotification(Context context) {
+    private void showNotification(Context context, String satName) {
         createNotificationChannel(context);
 
         Intent notificationIntent = new Intent(context, BrowserActivity.class);
@@ -59,16 +67,19 @@ public class AlarmReceiver extends BroadcastReceiver {
                 PendingIntent.FLAG_IMMUTABLE
         );
 
+        String content = "Satellite " + satName + " is visible right now!";
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.baseline_satellite_alt_24)
-                .setContentTitle("Satellite Alarm")
-                .setContentText("A satellite event you scheduled has started.")
+                .setContentTitle(satName + " is visible!")
+                .setContentText(content)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
         NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null) {
+            Log.i(TAG, "Showing notification for satellite: " + satName);
             manager.notify(NOTIFICATION_ID, builder.build());
         } else {
             Log.e(TAG, "NotificationManager is null — cannot show notification.");
