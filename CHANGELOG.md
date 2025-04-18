@@ -6,7 +6,21 @@
 
 ---
 
-### [1.6.0] - 2025-04-20 - "The Dust-Off Update"
+### [1.6.3] - 2025-04-18
+- 🎨 Improved documentation and cleaned up the code
+- 🔧 Improved and refactored the handling of alarms and notifications
+
+### [1.6.2] - 2025-04-18
+- 🔧 Improved and refactored fragments
+- 🔧 Improved and refactored adapters
+- 🎨 Minor UI changes
+
+### [1.6.1] - 2025-04-18  
+- 🎨 Added comments, documentations and guidelines
+- 🐛 Patched minor bugs
+- 🔧 Improved and refactored activities
+
+### [1.6.0] - 2025-04-18 - "The Dust-Off Update"
 - 🔧 Separated UI, service, and data logic for better maintainability  
 - 🔧 Standardized navigation and layout structure
 - 🚀 Added utility methods to streamline repetitive code  
