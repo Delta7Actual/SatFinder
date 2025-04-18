@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Utility class for mathematical operations.
+ */
 public final class MathUtils {
     private MathUtils() {
         // Utility class

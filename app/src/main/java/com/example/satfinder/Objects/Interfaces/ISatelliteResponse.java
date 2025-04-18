@@ -1,7 +1,7 @@
 package com.example.satfinder.Objects.Interfaces;
 
 /**
- * Interface for satellite response objects.
+ * Interface for bundling satellite response objects.
  */
 public interface ISatelliteResponse {
 }

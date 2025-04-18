@@ -18,6 +18,9 @@ import com.example.satfinder.Managers.SatelliteManager;
 import com.example.satfinder.Managers.StorageManager;
 import com.example.satfinder.R;
 
+/**
+ * Service to periodically update and cache satellite data.
+ */
 public class SatUpdateService extends Service {
 
     private static final String TAG = "SatUpdateService";

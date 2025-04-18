@@ -13,6 +13,9 @@ import androidx.core.app.NotificationCompat;
 import com.example.satfinder.Activities.BrowserActivity;
 import com.example.satfinder.R;
 
+/**
+ * Broadcast receiver for handling alarm notifications.
+ */
 public class AlarmReceiver extends BroadcastReceiver {
 
     private static final String TAG = "AlarmReceiver";

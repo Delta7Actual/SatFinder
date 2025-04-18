@@ -9,6 +9,9 @@ import android.widget.Toast;
 
 import com.example.satfinder.Misc.Utility.MathUtils;
 
+/**
+ * Class for scheduling alarms and notifications.
+ */
 public class AlarmScheduler {
 
     private static final String TAG = "AlarmScheduler";
