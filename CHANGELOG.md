@@ -12,7 +12,7 @@
 - 🧰 Added utility methods to streamline repetitive code  
 - 💥 Centralized all string literals into string resources  
 - 💥 Removed deprecated code and unused layout elements  
-- 🐛 Fixed multiple small UI and state bugs  
+- 🐛 Fixed multiple small UI and silent failure states  
 
 ---
 
