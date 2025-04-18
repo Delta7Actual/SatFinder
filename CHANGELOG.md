@@ -2,9 +2,14 @@
 
 > All notable changes to the project will be documented in this file.  
 > Follows semantic versioning: `MAJOR.MINOR.PATCH`  
-> Current version: **1.5.6**
+> Current version: **1.5.7**
 
 ---
+
+### [1.5.7] - 2025-04-18
+- 🐛 Fixed bug in user deletion process
+- 🎨 Improved UI and UX
+- 🎨 Unified app design
 
 ### [1.5.6] - 2025-04-17  
 - 🐛 Minor layout bug fixes  
