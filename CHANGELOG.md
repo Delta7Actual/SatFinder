@@ -9,7 +9,7 @@
 ### [1.6.0] - 2025-04-20 - "The Dust-Off Update"
 - 🔧 Separated UI, service, and data logic for better maintainability  
 - 🔧 Standardized navigation and layout structure
-- 🧰 Added utility methods to streamline repetitive code  
+- 🚀 Added utility methods to streamline repetitive code  
 - 💥 Centralized all string literals into string resources  
 - 💥 Removed deprecated code and unused layout elements  
 - 🐛 Fixed multiple small UI and silent failure states  
