@@ -1,5 +1,6 @@
 package com.example.satfinder.Adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,8 @@ import java.util.List;
 
 public class SavedSatelliteAdapter extends RecyclerView.Adapter<SavedSatelliteAdapter.ViewHolder> {
 
-    private List<String> satelliteIds;
+    private final String TAG = "SatSavedAdapter";
+    private final List<String> satelliteIds;
 
     public SavedSatelliteAdapter(List<String> satelliteIds) {
         this.satelliteIds = satelliteIds;
@@ -34,6 +36,7 @@ public class SavedSatelliteAdapter extends RecyclerView.Adapter<SavedSatelliteAd
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(TAG, "Creating new ViewHolder...");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_satellite_id, parent, false);
         return new ViewHolder(view);
     }
@@ -41,45 +44,59 @@ public class SavedSatelliteAdapter extends RecyclerView.Adapter<SavedSatelliteAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String satelliteId = satelliteIds.get(position);
+        Log.d(TAG, "Binding satellite ID: " + satelliteId + " at position " + position);
         holder.satelliteIdText.setText(satelliteId);
 
         holder.btnRemove.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
             if (adapterPosition != RecyclerView.NO_POSITION) {
                 String idToRemove = satelliteIds.get(adapterPosition);
+                Log.i(TAG, "Attempting to remove satellite ID: " + idToRemove);
 
                 try {
                     int id = Integer.parseInt(idToRemove);
 
-                    // Remove from storage via StorageManager
                     StorageManager.getInstance(null).removeFavouriteSatelliteId(id, new IStorageCallback<Void>() {
                         @Override
                         public void onSuccess(Void result) {
+                            Log.i(TAG, "Successfully removed satellite ID: " + id);
                             satelliteIds.remove(adapterPosition);
                             notifyItemRemoved(adapterPosition);
                         }
 
                         @Override
                         public void onFailure(String errorMessage) {
+                            Log.e(TAG, "Failed to remove satellite ID: " + id + " - " + errorMessage);
                             Toast.makeText(holder.itemView.getContext(), errorMessage, Toast.LENGTH_SHORT).show();
                         }
                     });
                 } catch (NumberFormatException e) {
-                    // We really shouldn't arrive here
+                    Log.e(TAG, "Invalid satellite ID format: " + idToRemove);
                     Toast.makeText(holder.itemView.getContext(), "Invalid satellite ID format", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Log.w(TAG, "btnRemove clicked but adapter position was NO_POSITION");
             }
         });
 
         holder.btnNotify.setOnClickListener(v -> {
             int adapterPosition = holder.getAdapterPosition();
-            if (adapterPosition == RecyclerView.NO_POSITION) return;
+            if (adapterPosition == RecyclerView.NO_POSITION) {
+                Log.w(TAG, "btnNotify clicked but adapter position was NO_POSITION");
+                return;
+            }
+
+            String satId = satelliteIds.get(adapterPosition);
+            Log.i(TAG, "Scheduling notification for satellite ID: " + satId);
 
             SatelliteManager manager = SatelliteManager.getInstance();
             ObserverLocation observerLocation = StorageManager.getInstance(holder.itemView.getContext()).spGetUserLocation();
 
+            Log.d(TAG, "Fetching passes for ID: " + satId + ", Lat: " + observerLocation.getLatitude() +
+                    ", Lon: " + observerLocation.getLongitude() + ", Alt: " + observerLocation.getAltitude());
+
             manager.fetchSatelliteVisualPasses(
-                    Integer.parseInt(satelliteIds.get(adapterPosition)),
+                    Integer.parseInt(satId),
                     observerLocation.getLatitude(),
                     observerLocation.getLongitude(),
                     observerLocation.getAltitude(),
@@ -90,17 +107,21 @@ public class SavedSatelliteAdapter extends RecyclerView.Adapter<SavedSatelliteAd
                         public void onSuccess(ISatelliteResponse response) {
                             SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
                             if (svpResponse != null && !svpResponse.getPasses().isEmpty()) {
-                                long alarmTime = svpResponse.getPasses().get(0).getStartUTC() * 1000L; // Convert to milliseconds
-                                int requestCode = satelliteIds.get(adapterPosition).hashCode();
+                                long alarmTime = svpResponse.getPasses().get(0).getStartUTC() * 1000L;
+                                int requestCode = satId.hashCode();
+
+                                Log.i(TAG, "Pass found! Scheduling alarm at " + alarmTime + " for satellite: " + satId);
                                 AlarmScheduler.scheduleNotification(holder.itemView.getContext(), alarmTime, requestCode);
-                                Toast.makeText(holder.itemView.getContext(), "Alarm set for " + satelliteIds.get(adapterPosition), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(holder.itemView.getContext(), "Alarm set for " + satId, Toast.LENGTH_SHORT).show();
                             } else {
+                                Log.w(TAG, "No upcoming passes found for satellite: " + satId);
                                 Toast.makeText(holder.itemView.getContext(), "No upcoming passes.", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         @Override
                         public void onError(String errorMessage) {
+                            Log.e(TAG, "Error fetching passes for satellite " + satId + ": " + errorMessage);
                             Toast.makeText(holder.itemView.getContext(), "Error fetching pass times.", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -110,6 +131,7 @@ public class SavedSatelliteAdapter extends RecyclerView.Adapter<SavedSatelliteAd
 
     @Override
     public int getItemCount() {
+        Log.v(TAG, "Total satellite items: " + satelliteIds.size());
         return satelliteIds.size();
     }
 

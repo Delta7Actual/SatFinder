@@ -1,5 +1,9 @@
 package com.example.satfinder.Adapters;
 
+import static java.lang.String.format;
+
+import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,42 +17,43 @@ import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.R;
 
 import java.util.List;
-import java.util.Objects;
 
 public class SatelliteViewAdapter extends RecyclerView.Adapter<SatelliteViewAdapter.ViewHolder> {
 
-    private List<SatelliteTLEResponse> satelliteList;
+    private static final String TAG = "SatelliteViewAdapter";
+    private final List<SatelliteTLEResponse> satelliteList;
 
     public SatelliteViewAdapter(List<SatelliteTLEResponse> satelliteList) {
         this.satelliteList = satelliteList;
+        Log.d(TAG, "Adapter initialized with " + satelliteList.size() + " satellites");
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(TAG, "Creating ViewHolder");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_saved_satellite, parent, false);
         return new ViewHolder(view);
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        SatelliteTLEResponse satelliteResponse = satelliteList.get(position);
-        SatelliteTLE satelliteTLE = new SatelliteTLE(satelliteResponse.getTle());
-        if (Objects.equals(satelliteTLE.getLine1(), "") || Objects.equals(satelliteTLE.getLine2(), "")) {
-            holder.tvSatelliteName.setText("Invalid Satellite");
-            holder.tvSatelliteId.setText("Make sure you");
-            holder.tvOrbitalPeriod.setText("have entered");
-            holder.tvInclination.setText("the right");
-            holder.tvApogee.setText("satellite");
-            holder.tvPerigee.setText("ID");
-        }
-        else {
-            holder.tvSatelliteName.setText(satelliteResponse.getInfo().getSatname());
-            holder.tvSatelliteId.setText(String.format("ID: %d", satelliteResponse.getInfo().getSatid()));
-            holder.tvOrbitalPeriod.setText(String.format("Orbital Period: %.1f min", satelliteTLE.getOrbitalPeriod()));
-            holder.tvInclination.setText(String.format("Inclination: %.1f°", satelliteTLE.getInclination()));
-            holder.tvApogee.setText(String.format("Apogee: %.1f km", satelliteTLE.getApogee()));
-            holder.tvPerigee.setText(String.format("Perigee: %.1f km", satelliteTLE.getPerigee()));
+        SatelliteTLEResponse response = satelliteList.get(position);
+        SatelliteTLE tle = new SatelliteTLE(response.getTle());
+
+        String name = response.getInfo().getSatname();
+        int id = response.getInfo().getSatid();
+
+        Log.d(TAG, "Binding satellite: " + name + " (ID: " + id + ") at position " + position);
+
+        if (tle.getLine1().isEmpty() || tle.getLine2().isEmpty()) {
+            Log.w(TAG, "Invalid TLE data for satellite: " + name);
+            holder.bindInvalid();
+        } else {
+            Log.d(TAG, format("TLE parsed - Period: %.1f | Incl: %.1f | Apo: %.1f | Peri: %.1f",
+                    tle.getOrbitalPeriod(), tle.getInclination(), tle.getApogee(), tle.getPerigee()));
+            holder.bindData(name, id, tle);
         }
     }
 
@@ -58,16 +63,35 @@ public class SatelliteViewAdapter extends RecyclerView.Adapter<SatelliteViewAdap
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvSatelliteName, tvSatelliteId, tvOrbitalPeriod, tvInclination, tvApogee, tvPerigee;
+        private final TextView tvName, tvId, tvPeriod, tvInclination, tvApogee, tvPerigee;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvSatelliteName = itemView.findViewById(R.id.tv_satellite_name);
-            tvSatelliteId = itemView.findViewById(R.id.tv_satellite_id);
-            tvOrbitalPeriod = itemView.findViewById(R.id.tv_orbital_period);
+            tvName = itemView.findViewById(R.id.tv_satellite_name);
+            tvId = itemView.findViewById(R.id.tv_satellite_id);
+            tvPeriod = itemView.findViewById(R.id.tv_orbital_period);
             tvInclination = itemView.findViewById(R.id.tv_inclination);
             tvApogee = itemView.findViewById(R.id.tv_apogee);
             tvPerigee = itemView.findViewById(R.id.tv_perigee);
+        }
+
+        public void bindInvalid() {
+            tvName.setText(R.string.invalid);
+            tvId.setText(R.string.invalid);
+            tvPeriod.setText(R.string.invalid);
+            tvInclination.setText(R.string.invalid);
+            tvApogee.setText(R.string.invalid);
+            tvPerigee.setText(R.string.invalid);
+        }
+
+        @SuppressLint("DefaultLocale")
+        public void bindData(String name, int id, SatelliteTLE tle) {
+            tvName.setText(name);
+            tvId.setText(format("ID: %d", id));
+            tvPeriod.setText(format("Orbital Period: %.1f min", tle.getOrbitalPeriod()));
+            tvInclination.setText(format("Inclination: %.1f°", tle.getInclination()));
+            tvApogee.setText(format("Apogee: %.1f km", tle.getApogee()));
+            tvPerigee.setText(format("Perigee: %.1f km", tle.getPerigee()));
         }
     }
 }

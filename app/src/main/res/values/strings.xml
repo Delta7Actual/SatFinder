@@ -82,4 +82,5 @@
     <string name="switch_to_login">Switch to Login</string>
     <string name="switch_to_sign_up">Switch to Sign Up</string>
     <string name="no_iss_sightings_in_the_next_week">No ISS sightings in the next week :)</string>
+    <string name="invalid">Invalid</string>
 </resources>
