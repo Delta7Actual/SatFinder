@@ -1,77 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_background"
+    android:background="@android:color/transparent"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="8dp"
-        android:fitsSystemWindows="true">
+        android:padding="16dp"
+        android:gravity="top|center_horizontal"
+        android:fitsSystemWindows="true"
+        tools:context=".Fragments.ProfileFragment">
 
-        <!-- ProfileFragment Layout -->
-        <LinearLayout
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
+        <!-- SECTION: Current Display Info -->
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:context=".Fragments.ProfileFragment"
-            android:orientation="vertical"
-            android:gravity="center|top"
-            android:layout_marginBottom="12dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Your Current Display Name"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/secondary"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:id="@+id/tv_display_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/primary"
-                android:padding="12dp"
-                android:textAlignment="center"
-                android:text="DISPLAY NAME HERE"
-                android:textColor="@color/white"
-                android:layout_marginBottom="16dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Your associated E-Mail"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/secondary"
-                android:layout_marginBottom="8dp"/>
-
-            <TextView
-                android:id="@+id/tv_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/primary"
-                android:padding="12dp"
-                android:textAlignment="center"
-                android:text="EMAIL ADDRESS HERE"
-                android:textColor="@color/white"/>
-
-        </LinearLayout>
+            android:text="Your Current Display Name"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/secondary"
+            android:layout_marginBottom="6dp" />
 
         <TextView
+            android:id="@+id/tv_display_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:text="-   -   -   -   -   -   -   -   -   -   -   -   -   -   -   -"
+            android:background="@color/primary"
+            android:padding="14dp"
+            android:text="DISPLAY NAME HERE"
             android:textAlignment="center"
-            android:layout_marginBottom="12dp"
-            android:textColor="@color/secondary_light"/>
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Associated E-Mail"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/secondary"
+            android:layout_marginBottom="6dp" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:padding="14dp"
+            android:text="EMAIL ADDRESS HERE"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- SECTION: Edit Display Name -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -79,7 +66,7 @@
             android:textColor="@color/secondary"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="6dp" />
 
         <EditText
             android:id="@+id/et_display_name"
@@ -87,10 +74,11 @@
             android:layout_height="wrap_content"
             android:hint="Enter your display name"
             android:textColor="@color/secondary_light"
+            android:textColorHint="@color/secondary"
             android:background="@color/background_light"
-            android:padding="12dp"
+            android:padding="14dp"
             android:textSize="14sp"
-            android:layout_marginBottom="6dp" />
+            android:layout_marginBottom="8dp" />
 
         <Button
             android:id="@+id/btn_save_display_name"
@@ -99,10 +87,11 @@
             android:text="Save"
             android:textColor="@android:color/white"
             android:background="@color/primary"
-            android:textSize="14sp"
-            android:layout_marginBottom="16dp"
-            android:padding="6dp" />
+            android:textSize="15sp"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp" />
 
+        <!-- SECTION: Add Satellite ID -->
         <TextView
             android:id="@+id/tv_satellite_id"
             android:layout_width="wrap_content"
@@ -111,7 +100,7 @@
             android:textColor="@color/secondary"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="6dp" />
 
         <EditText
             android:id="@+id/et_satellite_id"
@@ -119,8 +108,9 @@
             android:layout_height="wrap_content"
             android:hint="Enter Satellite ID"
             android:textColor="@color/secondary_light"
+            android:textColorHint="@color/secondary"
             android:background="@color/background_light"
-            android:padding="12dp"
+            android:padding="14dp"
             android:textSize="14sp"
             android:layout_marginBottom="8dp" />
 
@@ -131,10 +121,11 @@
             android:text="Add Satellite"
             android:textColor="@android:color/white"
             android:background="@color/primary"
-            android:textSize="14sp"
-            android:layout_marginBottom="16dp"
-            android:padding="12dp" />
+            android:textSize="15sp"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp" />
 
+        <!-- SECTION: Saved Satellites -->
         <TextView
             android:id="@+id/tv_satellite_list_title"
             android:layout_width="wrap_content"
@@ -143,15 +134,14 @@
             android:textColor="@color/secondary"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="12dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_satellite_list"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@color/background"
-            android:clipToPadding="false"
-            android:paddingTop="8dp" />
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="@android:color/transparent"
+            android:clipToPadding="false" />
     </LinearLayout>
 </ScrollView>

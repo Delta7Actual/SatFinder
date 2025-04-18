@@ -18,6 +18,7 @@ import com.example.satfinder.Managers.UserManager;
 import com.example.satfinder.Misc.AlarmScheduler;
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
 import com.example.satfinder.Objects.Interfaces.ISatelliteResponse;
+import com.example.satfinder.Objects.Interfaces.IStorageCallback;
 import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.example.satfinder.R;
 import com.example.satfinder.Services.SatUpdateService;
@@ -129,16 +130,31 @@ public class SettingsActivity extends AppCompatActivity {
     private void deleteUser() {
         Log.d(TAG, "Delete User button clicked. Deleting user...");
         UserManager manager = UserManager.getInstance();
-        manager.deleteUser(new IUserAuthCallback() {
+        String userId = manager.getCurrentUserUid();
 
+        if (!manager.isUserLoggedIn() || userId == null) {
+            Log.e(TAG, "User is not authenticated. Unable to delete user data.");
+            Toast.makeText(SettingsActivity.this, "You are not logged in. Please log in again.", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        // Delete the user document before signing them out
+        StorageManager.getInstance(SettingsActivity.this).deleteUserDocument(userId, new IStorageCallback<Void>() {
             @Override
-            public void onSuccess(FirebaseUser user) {
-                Log.d(TAG, "User deleted successfully. Signing out...");
-                manager.logOutUser(new IUserAuthCallback() {
+            public void onSuccess(Void result) {
+                Log.d(TAG, "Successfully deleted user document!");
 
+                // Now proceed to delete the user from Firebase
+                manager.deleteUser(new IUserAuthCallback() {
                     @Override
                     public void onSuccess(FirebaseUser user) {
-                        Log.d(TAG, "User successfully logged out. Redirecting...");
+                        Log.d(TAG, "User deleted successfully. Signing out...");
+                        if (!manager.isUserLoggedIn()) {
+                            Log.d(TAG, "User successfully logged out. Redirecting...");
+                        }
+
                         Toast.makeText(SettingsActivity.this, "Redirecting to Login page!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
                         finish();
@@ -146,18 +162,16 @@ public class SettingsActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(String error) {
-                        Log.e(TAG, "Failed to logout user! - " + error);
-                        Toast.makeText(SettingsActivity.this, "Failed to logout user, Please restart app!", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(SettingsActivity.this, LoginActivity.class));
-                        finish();
+                        Log.e(TAG, "Failed to delete current user! - " + error);
+                        Toast.makeText(SettingsActivity.this, "Failed to delete user, Try again later!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
             @Override
-            public void onFailure(String error) {
-                Log.e(TAG, "Failed to delete current user! - " + error);
-                Toast.makeText(SettingsActivity.this, "Failed to delete user, Try again later!", Toast.LENGTH_SHORT).show();
+            public void onFailure(String errorMessage) {
+                Log.e(TAG, "Failed to delete user document!");
+                Toast.makeText(SettingsActivity.this, "Some user data couldn't be deleted, please contact for manual removal!", Toast.LENGTH_SHORT).show();
             }
         });
     }

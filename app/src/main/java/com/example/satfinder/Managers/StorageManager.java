@@ -344,4 +344,15 @@ public class StorageManager {
                 })
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
+
+    public void deleteUserDocument(String userId, IStorageCallback<Void> callback) {
+        if (userId == null || userId.isEmpty()) {
+            callback.onFailure("Invalid user ID");
+            return;
+        }
+        firestore.collection("users").document(userId)
+                .delete()
+                .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+                .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
+    }
 }
