@@ -20,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.satfinder.Misc.Utility.MathUtils;
 import com.example.satfinder.R;
 
 public class LocateActivity extends AppCompatActivity implements SensorEventListener {
@@ -92,7 +93,7 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
 
         tvAngleValue.setText("Satellite Elevation: " + satElevation + "°");
 
-        Log.d(TAG, "Azimuth from intent: " + satAzimuth);
+        Log.d(TAG, "Azimuth from intent: " + satAzimuth + " -> " + MathUtils.getDirectionFromAzimuth(satAzimuth));
         Log.d(TAG, "Pitch from intent: " + satElevation);
     }
 

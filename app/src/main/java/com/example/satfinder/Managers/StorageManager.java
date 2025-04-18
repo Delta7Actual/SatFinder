@@ -65,6 +65,9 @@ import java.util.List;
  */
 public class StorageManager {
 
+
+    private static final String TAG = "STORAGE";
+    
     private static StorageManager instance;
     private final SharedPreferences sharedPreferences;
     private final FirebaseFirestore firestore;
@@ -78,6 +81,11 @@ public class StorageManager {
         userManager = UserManager.getInstance();
     }
 
+    /**
+     * Gets the singleton instance of StorageManager.
+     * @param context The current application context.
+     * @return The singleton instance of StorageManager.
+     */
     public static synchronized StorageManager getInstance(Context context) {
         if (instance == null) {
             instance = new StorageManager(context);
@@ -89,6 +97,10 @@ public class StorageManager {
     /* SHAREDPREFERENCES BASED METHODS */
     /////////////////////////////////////
 
+    /**
+     * Saves the user's current location to SharedPreferences.
+     * @param location The current location to save.
+     */
     public void spSaveUserLocation(ObserverLocation location) {
         sharedPreferences.edit()
                 .putString("userLocation",  System.currentTimeMillis()
@@ -98,6 +110,10 @@ public class StorageManager {
                 .apply();
     }
 
+    /**
+     * Retrieves the user's current location from SharedPreferences.
+     * @return The user's current location.
+     */
     public ObserverLocation spGetUserLocation() {
         String location = sharedPreferences.getString("userLocation", null);
         if (location != null) {
@@ -109,6 +125,10 @@ public class StorageManager {
         return new ObserverLocation();
     }
 
+    /**
+     * Retrieves the time of the user's last location update from SharedPreferences.
+     * @return The UTC timestamp of the last location update.
+     */
     public long spGetUserLocationTime() {
         String location = sharedPreferences.getString("userLocation", null);
         if (location != null) {
@@ -120,6 +140,10 @@ public class StorageManager {
         return -1;
     }
 
+    /**
+     * Saves a list of favorite satellite IDs to SharedPreferences.
+     * @param satelliteIds The list of favorite satellite IDs.
+     */
     public void spSaveUserFavoriteSatellites(List<String> satelliteIds) {
         String favoriteSatellites = String.join(",", satelliteIds);
         sharedPreferences.edit()
@@ -127,23 +151,47 @@ public class StorageManager {
                 .apply();
     }
 
+    /**
+     * Retrieves the list of favorite satellite IDs from SharedPreferences.
+     * @return The list of favorite satellite IDs.
+     */
     public List<String> spGetUserFavoriteSatellites() {
         String favoriteSatellites = sharedPreferences.getString("fav_sat", "");
         return favoriteSatellites.isEmpty() ? new ArrayList<>() : new ArrayList<>(Arrays.asList(favoriteSatellites.split(",")));
     }
 
+    /**
+     * Retrieves the closest pass data for a satellite from SharedPreferences.
+     * @param satelliteId The NORAD ID of the satellite.
+     * @return The closest pass data as a comma-separated string.
+     */
     public String spGetSatelliteClosestPass(int satelliteId) {
         return sharedPreferences.getString("sat_pass_" + satelliteId, "NONE,,");
     }
 
+    /**
+     * Retrieves the satellite position data for a satellite from SharedPreferences.
+     * @param satelliteId The NORAD ID of the satellite.
+     * @return The satellite position data as a comma-separated string.
+     */
     public String spGetSatellitePos(int satelliteId) {
         return sharedPreferences.getString("sat_pos_" + satelliteId, "NONE,,");
     }
 
+    /**
+     * Retrieves the TLE data for a satellite from SharedPreferences.
+     * @param satelliteId The NORAD ID of the satellite.
+     * @return The TLE data as a comma-separated string.
+     */
     public String spGetSatelliteTLE(int satelliteId) {
         return sharedPreferences.getString("sat_tle_" + satelliteId, "NONE,,");
     }
 
+    /**
+     * Checks if the cached satellite data for a satellite is stale.
+     * @param satelliteId The NORAD ID of the satellite.
+     * @return An array of boolean values indicating if the pass, position, and TLE data are stale.
+     */
     private boolean[] spIsSatelliteDataStale(int satelliteId) {
         String passData = spGetSatelliteClosestPass(satelliteId);
         String posData = spGetSatellitePos(satelliteId);
@@ -157,17 +205,21 @@ public class StorageManager {
         };
     }
 
+    /**
+     * Clears the cached satellite data for all favorites.
+     * @param callback The callback to notify on completion.
+     */
     public void spClearSatelliteData(ICacheUpdateCallback callback) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
         List<String> favIds = spGetUserFavoriteSatellites();
         if (favIds.isEmpty()) {
-            Log.w("STORAGE", "Empty favorite list. Nothing to clear.");
+            Log.w(TAG, "Empty favorite list. Nothing to clear.");
             callback.onComplete();
             return;
         }
 
-        Log.d("STORAGE", "Clearing cached satellite data (Items to clear:" + favIds.size() + ")...");
+        Log.d(TAG, "Clearing cached satellite data (Items to clear:" + favIds.size() + ")...");
         for (String id : favIds) {
             editor.remove("sat_pass_" + id);
             editor.remove("sat_pos_" + id);
@@ -175,13 +227,18 @@ public class StorageManager {
         }
 
         editor.apply();
-        Log.d("STORAGE", "Satellite data cache cleared. Favorites and location preserved.");
+        Log.d(TAG, "Satellite data cache cleared. Favorites and location preserved.");
         callback.onComplete();
     }
 
+    /**
+     * Updates the cached satellite data for all favorites.
+     * @param satelliteManager The satellite manager for fetching data.
+     * @param callback The callback to notify on completion.
+     */
     public void spSaveAndUpdateSatelliteData(SatelliteManager satelliteManager, ICacheUpdateCallback callback) {
         List<String> satelliteIds = spGetUserFavoriteSatellites();
-        Log.d("STORAGE", "IDS to update: " + satelliteIds.size() + " items");
+        Log.d(TAG, "IDS to update: " + satelliteIds.size() + " items");
         if (satelliteIds.isEmpty()) {
             callback.onComplete();
             return;
@@ -193,9 +250,9 @@ public class StorageManager {
         for (String satelliteId : satelliteIds) {
             int id = Integer.parseInt(satelliteId);
 
-            Log.d("STORAGE", "pass/" + satelliteId + ": " + spGetSatelliteClosestPass(id));
-            Log.d("STORAGE", "pos/" + satelliteId + ": " + spGetSatellitePos(id));
-            Log.d("STORAGE", "tle/" + satelliteId + ": " + spGetSatelliteTLE(id));
+            Log.d(TAG, "pass/" + satelliteId + ": " + spGetSatelliteClosestPass(id));
+            Log.d(TAG, "pos/" + satelliteId + ": " + spGetSatellitePos(id));
+            Log.d(TAG, "tle/" + satelliteId + ": " + spGetSatelliteTLE(id));
 
             boolean[] stale = spIsSatelliteDataStale(id);
             if (stale[0]) saveSatellitePasses(editor, satelliteManager, id, curr);
@@ -207,8 +264,15 @@ public class StorageManager {
         callback.onComplete();
     }
 
+    /**
+     * Updates the cached satellite data for a single satellite.
+     * @param editor The SharedPreferences editor.
+     * @param manager The satellite manager for fetching data.
+     * @param id The NORAD ID of the satellite.
+     * @param curr The current observer location.
+     */
     private void saveSatellitePasses(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
-        Log.d("STORAGE", "Updating data for ID: " + id);
+        Log.d(TAG, "Updating data for ID: " + id);
         manager.fetchSatelliteVisualPasses(id, curr.getLatitude(), curr.getLongitude(), curr.getAltitude(), 7, 60, new IN2YOCallback() {
             @Override
             public void onSuccess(ISatelliteResponse response) {
@@ -232,8 +296,15 @@ public class StorageManager {
         });
     }
 
+    /**
+     * Updates the cached satellite position data for a single satellite.
+     * @param editor The SharedPreferences editor.
+     * @param manager The satellite manager for fetching data.
+     * @param id The NORAD ID of the satellite.
+     * @param curr The current observer location.
+     */
     private void saveSatellitePositions(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
-        Log.d("STORAGE", "Updating data for ID: " + id);
+        Log.d(TAG, "Updating data for ID: " + id);
         manager.fetchSatellitePositions(id, curr.getLatitude(), curr.getLongitude(), curr.getAltitude(), 1, new IN2YOCallback() {
             @Override
             public void onSuccess(ISatelliteResponse response) {
@@ -257,8 +328,14 @@ public class StorageManager {
         });
     }
 
+    /**
+     * Updates the cached satellite TLE data for a single satellite.
+     * @param editor The SharedPreferences editor.
+     * @param manager The satellite manager for fetching data.
+     * @param id The NORAD ID of the satellite.
+     */
     private void saveSatelliteTLE(SharedPreferences.Editor editor, SatelliteManager manager, int id) {
-        Log.d("STORAGE", "Updating data for ID: " + id);
+        Log.d(TAG, "Updating data for ID: " + id);
         manager.fetchSatelliteTLE(id, new IN2YOCallback() {
             @Override
             public void onSuccess(ISatelliteResponse response) {
@@ -285,6 +362,11 @@ public class StorageManager {
     /*    FIRESTORE BASED METHODS      */
     /////////////////////////////////////
 
+    /**
+     * Adds a satellite to the user's favorite list.
+     * @param satelliteId The NORAD ID of the satellite to add.
+     * @param callback The callback to notify on completion.
+     */
     public void addFavouriteSatelliteId(int satelliteId, IStorageCallback<Void> callback) {
         String userId = userManager.getCurrentUserUid();
         if (userId == null) {
@@ -310,6 +392,11 @@ public class StorageManager {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
+    /**
+     * Removes a satellite from the user's favorite list.
+     * @param satelliteId The NORAD ID of the satellite to remove.
+     * @param callback The callback to notify on completion.
+     */
     public void removeFavouriteSatelliteId(int satelliteId, IStorageCallback<Void> callback) {
         String userId = userManager.getCurrentUserUid();
         if (userId == null) {
@@ -329,6 +416,10 @@ public class StorageManager {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
+    /**
+     * Retrieves the user's favorite satellite IDs.
+     * @param callback The callback to notify with the result.
+     */
     public void getFavouriteSatelliteIds(IStorageCallback<List<String>> callback) {
         String userId = userManager.getCurrentUserUid();
         if (userId == null) {
@@ -345,6 +436,11 @@ public class StorageManager {
                 .addOnFailureListener(e -> callback.onFailure(e.getMessage()));
     }
 
+    /**
+     * Deletes the user's document from Firestore.
+     * @param userId The UID of the user.
+     * @param callback The callback to notify on completion.
+     */
     public void deleteUserDocument(String userId, IStorageCallback<Void> callback) {
         if (userId == null || userId.isEmpty()) {
             callback.onFailure("Invalid user ID");

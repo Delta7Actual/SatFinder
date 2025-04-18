@@ -5,11 +5,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.util.Objects;
+
 /**
  * A service class for interacting with Firebase Authentication.
  * This service is responsible for user authentication and management using Firebase.
  */
 public class UserService {
+
+    private static final String TAG = "USERSERVICE";
+
     private static UserService instance;
     private final FirebaseAuth mAuth;
 
@@ -47,7 +52,7 @@ public class UserService {
         if (!isLoggedIn()) {
             return null;
         }
-        return mAuth.getCurrentUser().getUid();
+        return Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
     }
 
     /**
@@ -59,7 +64,7 @@ public class UserService {
         if (!isLoggedIn()) {
             return null;
         }
-        return mAuth.getCurrentUser().getDisplayName();
+        return Objects.requireNonNull(mAuth.getCurrentUser()).getDisplayName();
     }
 
     /**
@@ -71,7 +76,7 @@ public class UserService {
         if (!isLoggedIn()) {
             return null;
         }
-        return mAuth.getCurrentUser().getEmail();
+        return Objects.requireNonNull(mAuth.getCurrentUser()).getEmail();
     }
 
     /**
@@ -88,6 +93,10 @@ public class UserService {
         }
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null) {
+            callback.onFailure("User not logged in!");
+            return;
+        }
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(newName)
                 .build();
@@ -96,7 +105,7 @@ public class UserService {
             if (profileUpdateTask.isSuccessful()) {
                 callback.onSuccess(currentUser);
             } else {
-                callback.onFailure(profileUpdateTask.getException().getMessage());
+                callback.onFailure(Objects.requireNonNull(profileUpdateTask.getException()).getMessage());
             }
         });
     }
@@ -119,23 +128,9 @@ public class UserService {
             if (task.isSuccessful()) {
                 callback.onSuccess(mAuth.getCurrentUser());
             } else {
-                callback.onFailure(task.getException().getMessage());
+                callback.onFailure(Objects.requireNonNull(task.getException()).getMessage());
             }
         });
-    }
-
-    /**
-     * Logs out the currently logged-in user.
-     *
-     * @param callback the callback to notify of success or failure.
-     */
-    public void logOut(IUserAuthCallback callback) {
-        if (!isLoggedIn()) {
-            callback.onFailure("User not logged in!");
-            return;
-        }
-        mAuth.signOut();
-        callback.onSuccess(null);
     }
 
     /**
@@ -155,7 +150,7 @@ public class UserService {
                 }
                 setDisplayName(name, callback);
             } else {
-                callback.onFailure(task.getException().getMessage());
+                callback.onFailure(Objects.requireNonNull(task.getException()).getMessage());
             }
         });
     }
@@ -169,7 +164,7 @@ public class UserService {
     public void recoverPassword(String email, IUserAuthCallback callback) {
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
             if (!task.isSuccessful()){
-                callback.onFailure(task.getException().getMessage());
+                callback.onFailure(Objects.requireNonNull(task.getException()).getMessage());
             }
         });
     }
@@ -193,7 +188,7 @@ public class UserService {
             if (task.isSuccessful()) {
                 callback.onSuccess(currentUser);
             } else {
-                callback.onFailure(task.getException().getMessage());
+                callback.onFailure(Objects.requireNonNull(task.getException()).getMessage());
             }
         });
     }

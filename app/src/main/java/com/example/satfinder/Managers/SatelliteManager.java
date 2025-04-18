@@ -27,6 +27,10 @@ public class SatelliteManager {
         this.clientService = N2YOClientService.getInstance();
     }
 
+    /**
+     * Gets the singleton instance of SatelliteManager.
+     * @return The singleton instance of SatelliteManager.
+     */
     public static synchronized SatelliteManager getInstance() {
         if (instance == null) {
             instance = new SatelliteManager();

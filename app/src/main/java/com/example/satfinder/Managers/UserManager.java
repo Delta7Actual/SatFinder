@@ -1,5 +1,7 @@
 package com.example.satfinder.Managers;
 
+import android.util.Log;
+
 import com.example.satfinder.Objects.Interfaces.IUserAuthCallback;
 import com.example.satfinder.Services.UserService;
 
@@ -7,6 +9,9 @@ import com.example.satfinder.Services.UserService;
  * Manages user authentication and profile actions.
  */
 public class UserManager {
+
+    private static final String TAG = "USER";
+
     private static UserManager instance;
     private final UserService userService;
 
@@ -15,6 +20,11 @@ public class UserManager {
         userService = UserService.getInstance();
     }
 
+    /**
+     * Gets the singleton instance of UserManager.
+     *
+     * @return The singleton instance of UserManager.
+     */
     public static synchronized UserManager getInstance() {
         if (instance == null) {
             instance = new UserManager();
@@ -22,13 +32,13 @@ public class UserManager {
         return instance;
     }
 
-
     /**
      * Checks if a user is currently logged in.
      *
      * @return {@code true} if the user is logged in, {@code false} otherwise.
      */
     public boolean isUserLoggedIn() {
+        Log.d(TAG, "isUserLoggedIn: " + userService.isLoggedIn());
         return userService.isLoggedIn();
     }
 
@@ -38,6 +48,7 @@ public class UserManager {
      * @return The UID of the current user, or {@code null} if no user is logged in.
      */
     public String getCurrentUserUid() {
+        Log.d(TAG, "getCurrentUserUid: " + userService.getCurrentUserUid());
         return userService.getCurrentUserUid();
     }
 
@@ -47,6 +58,7 @@ public class UserManager {
      * @return The display name of the current user, or {@code null} if no user is logged in.
      */
     public String getCurrentUserDisplayName() {
+        Log.d(TAG, "getCurrentUserDisplayName: " + userService.getCurrentUserDisplayName());
         return userService.getCurrentUserDisplayName();
     }
 
@@ -56,6 +68,7 @@ public class UserManager {
      * @return The email address of the current user, or {@code null} if no user is logged in.
      */
     public String getCurrentUserEmail() {
+        Log.d(TAG, "getCurrentUserEmail: " + userService.getCurrentUserEmail());
         return userService.getCurrentUserEmail();
     }
 
@@ -66,6 +79,7 @@ public class UserManager {
      * @param callback The callback to notify on success or failure.
      */
     public void setUserDisplayName(String newName, IUserAuthCallback callback) {
+        Log.d(TAG, "setUserDisplayName: " + newName);
         userService.setDisplayName(newName, callback);
     }
 
@@ -77,6 +91,7 @@ public class UserManager {
      * @param callback The callback to notify on success or failure.
      */
     public void loginUser(String email, String password, IUserAuthCallback callback) {
+        Log.d(TAG, "loginUser: " + email);
         userService.login(email, password, callback);
     }
 
@@ -89,16 +104,8 @@ public class UserManager {
      * @param callback The callback to notify on success or failure.
      */
     public void signUpUser(String name, String email, String password, IUserAuthCallback callback) {
+        Log.d(TAG, "signUpUser: " + email);
         userService.signUp(name, email, password, callback);
-    }
-
-    /**
-     * Logs out the currently logged-in user.
-     *
-     * @param callback The callback to notify on success or failure.
-     */
-    public void logOutUser(IUserAuthCallback callback) {
-        userService.logOut(callback);
     }
 
     /**
@@ -108,6 +115,7 @@ public class UserManager {
      * @param callback The callback to notify on success or failure.
      */
     public void recoverPassword(String email, IUserAuthCallback callback) {
+        Log.d(TAG, "recoverPassword: " + email);
         userService.recoverPassword(email, callback);
     }
 
@@ -117,6 +125,7 @@ public class UserManager {
      * @param callback The callback to notify on success or failure.
      */
     public void deleteUser(IUserAuthCallback callback) {
+        Log.d(TAG, "deleteUser");
         userService.deleteCurrentUser(callback);
     }
 }
