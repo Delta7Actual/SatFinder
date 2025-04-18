@@ -18,20 +18,21 @@ I’ve been inspired by the **ISS Detector** app, which already exists as a grea
 
 ---
 
-# Latest Major Update: **"Cache me if you can!" (v1.5)**
+# Latest Major Update: **"Dust-Off" (v1.6)**
 
 ### What's New?
 
-In the **v1.5** update, we focused on improving the app’s performance and reliability with a major overhaul of the storage and caching mechanisms. Here's what's been added and improved:
+The **v1.6** update is all about tightening up the codebase, cleaning behind the scenes, and preparing the foundation for future features. While it might not look flashy on the surface, this version brings major under-the-hood improvements that developers (and power users) will appreciate:
 
-- **Enhanced caching system**: Satellite data and user settings are now stored and cached more efficiently, reducing the need for frequent network requests and ensuring a smoother experience.
-- **User location storage**: The app now caches the user's location and retrieves it even when GPS is off, ensuring faster startup times and more reliable location handling.
-- **Stale data handling**: Improved detection and management of stale data, ensuring that users always see the most relevant and up-to-date satellite information.
-- **Optimized satellite data storage**: Satellite information is stored in a more compact format, reducing app data usage and ensuring quicker access to the necessary data.
+- **Separation of concerns**: Refactored the codebase to split responsibilities between services, utilities, UI logic, and data layers—making everything cleaner, more modular, and easier to maintain.
+- **Utility functions**: Introduced new helper methods and reusable utilities to reduce code duplication and increase clarity throughout the app.
+- **Centralized string resources**: All static texts are now pulled from string resource files, ensuring better localization support and consistency across screens.
+- **Bug fixing**: Addressed lingering silent failure states and logic bugs since the last release cycle.
+- **Layout and logic cleanup**: Simplified fragment navigation logic, standardized API handling, and removed deprecated or redundant code.
 
 ### Why This Update Matters
 
-With an ever-growing dataset and frequent API calls, managing storage and reducing unnecessary network usage is essential for providing a seamless user experience. This update addresses performance bottlenecks and ensures that users have a smooth, responsive app even when they’re not connected to the internet or have limited network access. These changes make the app faster, more reliable, and ready for future enhancements.
+"Dust-Off" might not come with shiny new features, but it's a crucial part of keeping SatFinder stable and future-ready. By organizing and optimizing the internals, we’re paving the way for faster development, easier bug fixes, and cleaner feature rollouts down the line. Less spaghetti, more clarity.
 
 ---
 
