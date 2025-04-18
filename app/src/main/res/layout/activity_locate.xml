@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/primary_dark">
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/toolbar_fragment"
             android:name="com.example.satfinder.Fragments.ToolBarFragment"
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
         android:textColor="@color/secondary"
         android:gravity="center"
         android:padding="16dp"
-        android:text="Point your camera so the arrow points up, then adjust your angle!" />
+        android:text="@string/locate_prompt" />
 
     <!-- Compass and Angle container -->
     <LinearLayout
@@ -54,6 +54,7 @@
                 android:id="@+id/iv_compass"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/compass_desc"
                 android:src="@drawable/compass" />
 
             <ImageView
@@ -61,6 +62,7 @@
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:contentDescription="@string/needle_desc"
                 android:src="@drawable/baseline_north_24"
                 android:tintMode="src_atop" />
         </FrameLayout>
@@ -77,15 +79,17 @@
                 android:id="@+id/iv_angle"
                 android:layout_width="wrap_content"
                 android:layout_height="170dp"
+                android:contentDescription="@string/angle_desc"
                 android:src="@drawable/angle"
                 android:layout_weight="1"
-                android:layout_marginLeft="-12dp"/>
+                android:layout_marginLeft="-12dp"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:id="@+id/tv_angle_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Satellite Elevation: 0°"
+                android:text="@string/satellite_elevation_0"
                 android:textSize="22sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
@@ -100,6 +104,6 @@
         android:layout_height="wrap_content"
         android:background="@color/primary"
         android:textColor="@color/white"
-        android:text="RETURN"
+        android:text="@string/back"
         android:layout_margin="16dp" />
 </LinearLayout>

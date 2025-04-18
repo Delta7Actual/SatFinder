@@ -11,7 +11,7 @@
         android:id="@+id/tv_search_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Search Satellite by ID"
+        android:text="@string/search_satellite_by_id"
         android:textColor="@color/secondary"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -22,7 +22,8 @@
         android:id="@+id/et_satellite_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter satellite ID"
+        android:hint="@string/enter_satellite_id"
+        android:importantForAutofill="no"
         android:inputType="textEmailAddress"
         android:textColor="@color/secondary"
         android:textColorHint="@color/secondary"
@@ -36,7 +37,7 @@
         android:id="@+id/btn_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Search"
+        android:text="@string/search"
         android:textColor="@color/white"
         android:background="@color/primary"
         android:padding="14dp"
@@ -50,7 +51,7 @@
         android:layout_weight="1"
         android:visibility="gone">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/details_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

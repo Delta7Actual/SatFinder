@@ -16,7 +16,7 @@
         android:layout_height="24dp"
         android:src="@drawable/baseline_star_border_24"
         android:layout_marginEnd="12dp"
-        android:contentDescription="Favorite Icon" />
+        android:contentDescription="@string/favorite_icon" />
 
     <!-- Satellite ID Text -->
     <TextView
@@ -24,7 +24,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Satellite ID"
+        android:text="@string/satellite_id"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -37,14 +37,14 @@
         android:backgroundTint="@android:color/transparent"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:src="@drawable/baseline_notifications_active_24"
-        android:contentDescription="Notify" />
+        android:contentDescription="@string/notify" />
 
     <!-- Remove Button -->
     <Button
         android:id="@+id/btn_remove_satellite_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remove"
+        android:text="@string/remove"
         android:textColor="@android:color/white"
         android:textSize="14sp"
         android:background="@color/primary"

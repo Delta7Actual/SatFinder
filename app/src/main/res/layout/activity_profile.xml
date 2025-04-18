@@ -13,7 +13,8 @@
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize">
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/toolbar_fragment"
             android:name="com.example.satfinder.Fragments.ToolBarFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -31,7 +32,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom">
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/bottom_navigation_fragment"
             android:name="com.example.satfinder.Fragments.BottomNavigationFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

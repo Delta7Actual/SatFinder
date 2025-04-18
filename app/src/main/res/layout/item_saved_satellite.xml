@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,7 +28,7 @@
                 android:id="@+id/tv_satellite_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Satellite Name"
+                android:text="@string/satellite_name"
                 android:textColor="@color/primary"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -37,10 +38,11 @@
                 android:id="@+id/tv_satellite_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="ID: 12345"
+                android:text="@string/id_12345"
                 android:textColor="@color/secondary"
                 android:textSize="18sp"
-                android:paddingStart="8dp"/>
+                android:paddingLeft="8dp"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
         </LinearLayout>
 
         <!-- Satellite Details (Orbital Period, Inclination) -->
@@ -54,7 +56,7 @@
                 android:id="@+id/tv_orbital_period"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Orbital Period: 90 min"
+                android:text="@string/orbital_period_12345_min"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_weight="2"/>
@@ -63,11 +65,12 @@
                 android:id="@+id/tv_inclination"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Inclination: 51.6°"
+                android:text="@string/inclination_123"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_weight="1"
-                android:paddingStart="8dp"/>
+                android:paddingLeft="8dp"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
         </LinearLayout>
 
         <!-- Apogee and Perigee -->
@@ -80,7 +83,7 @@
                 android:id="@+id/tv_apogee"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Apogee: 420 km"
+                android:text="@string/apogee_12345_km"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_weight="2"/>
@@ -89,12 +92,12 @@
                 android:id="@+id/tv_perigee"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Perigee: 410 km"
+                android:text="@string/perigee_123_km"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_weight="1"
-                android:paddingStart="8dp"/>
+                android:paddingLeft="8dp"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
         </LinearLayout>
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>

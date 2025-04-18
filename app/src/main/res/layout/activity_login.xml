@@ -21,17 +21,18 @@
             android:id="@+id/tv_title_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome to "
+            android:text="@string/welcome_to"
             android:textColor="@color/white"
             android:textSize="28sp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SatFinder"
+            android:text=" SatFinder"
             android:textColor="@color/white"
             android:textSize="28sp"
             android:gravity="center"
-            style="@style/TextAppearance.SatFinder.Light"/>
+            style="@style/TextAppearance.SatFinder.Light"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <!-- Switch between Login and Signup -->
@@ -39,7 +40,7 @@
         android:id="@+id/tv_login_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign Up:"
+        android:text="@string/sign_up"
         android:textColor="@color/secondary"
         android:textSize="32sp"
         android:layout_marginTop="32dp"
@@ -57,7 +58,7 @@
         android:id="@+id/btn_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Already have an account?"
+        android:text="@string/already_have_an_account"
         android:textColor="@color/white"
         android:background="@color/primary"
         android:textSize="16sp"

@@ -4,18 +4,18 @@
     <item
         android:id="@+id/action_more"
         android:icon="@drawable/baseline_info_outline_24"
-        android:title="More"
+        android:title="@string/more"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_options"
         android:icon="@drawable/baseline_settings_24"
-        android:title="Options"
+        android:title="@string/options"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_logout"
         android:icon="@drawable/baseline_logout_24"
-        android:title="Logout"
+        android:title="@string/logout"
         app:showAsAction="ifRoom" />
 </menu>

@@ -18,7 +18,7 @@
         android:background="@color/primary_dark"
         android:elevation="4dp">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/toolbar_fragment"
             android:name="com.example.satfinder.Fragments.ToolBarFragment"
             android:layout_width="match_parent"
@@ -45,7 +45,7 @@
                 android:id="@+id/tv_iss_pass_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Next ISS Pass"
+                android:text="@string/next_iss_pass"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -54,7 +54,7 @@
                 android:id="@+id/tv_iss_pass_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No pass information available yet."
+                android:text="@string/no_data_available"
                 android:textColor="@color/secondary_light"
                 android:textSize="16sp"
                 android:layout_marginTop="8dp" />
@@ -81,7 +81,7 @@
             android:id="@+id/tv_tracked_satellites_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your Tracked Satellites"
+            android:text="@string/your_tracked_satellites"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -114,10 +114,10 @@
         android:layout_height="wrap_content"
         android:background="@color/primary_dark">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/bottom_navigation_fragment"
             android:name="com.example.satfinder.Fragments.BottomNavigationFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
-
 </LinearLayout>

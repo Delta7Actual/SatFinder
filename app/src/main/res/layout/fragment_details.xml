@@ -11,7 +11,7 @@
         android:id="@+id/tv_satellite_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Satellite Name"
+        android:text="@string/satellite_name"
         android:textColor="@color/secondary"
         android:textSize="26sp"
         android:textStyle="bold"
@@ -38,7 +38,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Next Visual Pass"
+            android:text="@string/next_visual_pass"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -48,7 +48,7 @@
             android:id="@+id/tv_next_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No data available"
+            android:text="@string/no_data_available"
             android:textColor="@color/secondary_light"
             android:textSize="16sp"
             android:gravity="center" />
@@ -74,7 +74,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Current Position:"
+            android:text="@string/current_position"
             android:textColor="@color/secondary"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -87,7 +87,7 @@
             android:layout_marginBottom="6dp">
 
             <TextView
-                android:text="Latitude:"
+                android:text="@string/latitude"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_width="0dp"
@@ -96,7 +96,7 @@
 
             <TextView
                 android:id="@+id/tv_latitude"
-                android:text="--"
+                android:text="@string/empty"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
             android:layout_marginBottom="6dp">
 
             <TextView
-                android:text="Longitude:"
+                android:text="@string/longitude"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_width="0dp"
@@ -119,7 +119,7 @@
 
             <TextView
                 android:id="@+id/tv_longitude"
-                android:text="--"
+                android:text="@string/empty"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"
@@ -132,7 +132,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:text="Inclination:"
+                android:text="@string/inclination"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_width="0dp"
@@ -141,7 +141,7 @@
 
             <TextView
                 android:id="@+id/tv_inclination"
-                android:text="--"
+                android:text="@string/empty"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:layout_width="wrap_content"

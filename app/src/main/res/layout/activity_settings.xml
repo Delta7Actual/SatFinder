@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -11,142 +10,150 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <!-- Toolbar -->
+        <!-- Toolbar (no padding applied here) -->
         <FrameLayout
             android:id="@+id/toolbar_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primary_dark"
-            android:elevation="4dp"
-            android:layout_marginBottom="16dp">
-            <fragment
+            android:elevation="4dp">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/toolbar_fragment"
                 android:name="com.example.satfinder.Fragments.ToolBarFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </FrameLayout>
 
-        <!-- Page Title -->
-        <TextView
-            android:id="@+id/tv_settings_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Settings"
-            android:textColor="@color/secondary"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <!-- SECTION: General Actions -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="General Actions"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btn_update_cache"
+        <!-- Settings Content with Padding -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary"
-            android:textColor="@color/white"
-            android:text="Update Cached Data"
-            android:textSize="16sp"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <Button
-            android:id="@+id/btn_kill_daemon"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primary"
-            android:textColor="@color/white"
-            android:text="Stop Foreground Updates"
-            android:textSize="16sp"
-            android:padding="12dp"
-            android:layout_marginBottom="20dp" />
+            <!-- Page Title -->
+            <TextView
+                android:id="@+id/tv_settings_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_title"
+                android:textColor="@color/secondary"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
 
-        <!-- SECTION: Tests -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Testing Tools"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:layout_marginBottom="8dp" />
+            <!-- SECTION: General Actions -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/general_actions"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
 
-        <Button
-            android:id="@+id/btn_test_notification"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primary"
-            android:textColor="@color/white"
-            android:text="Test Notification"
-            android:textSize="16sp"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp" />
+            <Button
+                android:id="@+id/btn_update_cache"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                android:textColor="@color/white"
+                android:text="@string/update_cached_data"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp" />
 
-        <Button
-            android:id="@+id/btn_test_api"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primary"
-            android:textColor="@color/white"
-            android:text="Test API Status"
-            android:textSize="16sp"
-            android:padding="12dp"
-            android:layout_marginBottom="20dp" />
+            <Button
+                android:id="@+id/btn_kill_daemon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                android:textColor="@color/white"
+                android:text="@string/stop_foreground_updates"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:layout_marginBottom="20dp" />
 
-        <!-- SECTION: Danger Zone -->
-        <TextView
-            android:id="@+id/tv_danger_zone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Danger Zone"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/red"
-            android:layout_marginBottom="8dp" />
+            <!-- SECTION: Tests -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/testing_tools"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
 
-        <Button
-            android:id="@+id/btn_clear_cache"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
-            android:textColor="@color/white"
-            android:text="Clear Cached Data"
-            android:textSize="16sp"
-            android:padding="12dp"
-            android:layout_marginBottom="10dp" />
+            <Button
+                android:id="@+id/btn_test_notification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                android:textColor="@color/white"
+                android:text="@string/test_notification"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp" />
 
-        <Button
-            android:id="@+id/btn_delete_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
-            android:textColor="@color/white"
-            android:text="Delete My User"
-            android:textSize="16sp"
-            android:padding="12dp"
-            android:layout_marginBottom="30dp" />
+            <Button
+                android:id="@+id/btn_test_api"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary"
+                android:textColor="@color/white"
+                android:text="@string/test_api_status"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:layout_marginBottom="20dp" />
 
-        <!-- Back Button -->
-        <Button
-            android:id="@+id/btn_back"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primary_dark"
-            android:textColor="@color/white"
-            android:text="Back"
-            android:textSize="16sp"
-            android:padding="12dp"
-            android:textAllCaps="false"
-            android:layout_marginBottom="20dp" />
+            <!-- SECTION: Danger Zone -->
+            <TextView
+                android:id="@+id/tv_danger_zone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/danger_zone"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/red"
+                android:layout_marginBottom="8dp" />
+
+            <Button
+                android:id="@+id/btn_clear_cache"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red"
+                android:textColor="@color/white"
+                android:text="@string/clear_cached_data"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:layout_marginBottom="10dp" />
+
+            <Button
+                android:id="@+id/btn_delete_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/red"
+                android:textColor="@color/white"
+                android:text="@string/delete_my_user"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:layout_marginBottom="30dp" />
+
+            <!-- Back Button -->
+            <Button
+                android:id="@+id/btn_back"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primary_dark"
+                android:textColor="@color/white"
+                android:text="@string/back"
+                android:textSize="16sp"
+                android:padding="12dp"
+                android:textAllCaps="false"
+                android:layout_marginBottom="20dp" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

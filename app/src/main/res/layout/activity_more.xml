@@ -22,6 +22,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:contentDescription="@string/satfinder_logo"
                 android:src="@drawable/glow_background"
                 android:scaleType="centerCrop" />
 
@@ -40,7 +41,7 @@
             android:id="@+id/about_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SatFinder"
+            android:text="@string/satfinder"
             android:textSize="36sp"
             style="@style/TextAppearance.SatFinder.Light"
             android:textColor="@color/secondary" />
@@ -48,7 +49,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Satellite Location Reimagined"
+            android:text="@string/satellite_location_reimagined"
             android:textSize="14sp"
             android:textColor="@color/secondary_light"
             android:layout_marginBottom="12dp" />
@@ -57,7 +58,7 @@
             android:id="@+id/about_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Version 1.5.6"
+            android:text="@string/version"
             android:textColor="@color/white"
             android:background="@color/primary"
             android:padding="6dp"
@@ -76,7 +77,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SatFinder helps you locate satellites using built-in sensors, orbital math, and N2YO's satellite tracking data."
+                android:text="@string/more_par_1"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_marginBottom="12dp" />
@@ -84,7 +85,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Inspired by ISS Detector, this app is a tribute and an expansion of its brilliance."
+                android:text="@string/more_par_2"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -94,7 +95,7 @@
             android:id="@+id/about_developer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Developed By Dror Sheffer"
+            android:text="@string/developed_by"
             android:textColor="@color/secondary"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -112,7 +113,7 @@
                 android:id="@+id/about_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="✉️ dror8464@gmail.com"
+                android:text="@string/mail_link"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:autoLink="email"
@@ -123,7 +124,7 @@
                 android:id="@+id/about_github"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="🌐 github.com/Delta7Actual/SatFinder"
+                android:text="@string/github_link"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:autoLink="web"
@@ -134,7 +135,7 @@
                 android:id="@+id/about_feedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="[ Contribute, Star &amp; Fork on GitHub! ]"
+                android:text="@string/more_contribute"
                 android:textColor="@color/secondary_light"
                 android:textSize="15sp"
                 android:layout_marginTop="8dp" />
@@ -145,7 +146,7 @@
             android:id="@+id/about_acknowledgements_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Special Thanks"
+            android:text="@string/special_thanks"
             android:textColor="@color/secondary"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -155,7 +156,7 @@
             android:id="@+id/about_thanks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="• ISS Detector — Inspiring this app's vision\n• N2YO — Satellite tracking suite\n• FlatIcons &amp; Pixabay — Graphical assets"
+            android:text="@string/special_thanks_list"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:layout_marginBottom="32dp" />
@@ -167,7 +168,7 @@
             android:layout_height="wrap_content"
             android:background="@color/primary_dark"
             android:textColor="@color/white"
-            android:text="Back"
+            android:text="@string/back"
             android:textSize="16sp"
             android:layout_marginTop="12dp"/>
     </LinearLayout>
