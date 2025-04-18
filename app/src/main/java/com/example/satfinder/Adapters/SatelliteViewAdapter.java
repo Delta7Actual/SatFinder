@@ -20,7 +20,7 @@ import java.util.List;
 
 public class SatelliteViewAdapter extends RecyclerView.Adapter<SatelliteViewAdapter.ViewHolder> {
 
-    private static final String TAG = "SatelliteViewAdapter";
+    private static final String TAG = "SatViewAdapter";
     private final List<SatelliteTLEResponse> satelliteList;
 
     public SatelliteViewAdapter(List<SatelliteTLEResponse> satelliteList) {

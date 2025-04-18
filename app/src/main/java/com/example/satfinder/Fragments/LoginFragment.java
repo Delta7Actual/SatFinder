@@ -1,6 +1,7 @@
 package com.example.satfinder.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,55 +16,55 @@ import com.example.satfinder.R;
 
 public class LoginFragment extends Fragment {
 
-    public LoginFragment() {
-        // Required empty public constructor
-    }
+    private static final String TAG = "SatLoginF";
 
     private EditText etEmail, etPassword;
-    private Button btnLogin, btnForgotPassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        setupUI(view);
+        return view;
+    }
+
+    private void setupUI(View view) {
+        Log.d(TAG, "Setting up UI components...");
 
         etEmail = view.findViewById(R.id.et_email);
         etPassword = view.findViewById(R.id.et_password);
 
-        btnLogin = view.findViewById(R.id.button_login);
-        btnForgotPassword = view.findViewById(R.id.btn_forgot_password);
+        Button btnLogin = view.findViewById(R.id.button_login);
+        Button btnForgotPassword = view.findViewById(R.id.btn_forgot_password);
 
         btnLogin.setOnClickListener(v -> handleLogin());
         btnForgotPassword.setOnClickListener(v -> handlePasswordReset());
-
-        return view;
     }
 
     private void handlePasswordReset() {
-        String email = String.valueOf(etEmail.getText());
+        String email = etEmail.getText().toString().trim();
 
-        if (email.isEmpty())
-        {
-            Toast.makeText(LoginFragment.this.getContext(), "Fill in recovery email address!", Toast.LENGTH_LONG).show();
+        if (email.isEmpty()) {
+            Log.w(TAG, "handlePasswordReset: Email field is empty");
+            Toast.makeText(getContext(), "Fill in recovery email address!", Toast.LENGTH_LONG).show();
             return;
         }
 
-        // Call LoginActivity method -> Preserve separation of concerns
+        Log.d(TAG, "Requesting password reset for " + email);
         ((LoginActivity) requireActivity()).recoverPassword(email);
     }
 
-    private void handleLogin()
-    {
-        String email = String.valueOf(etEmail.getText());
-        String password = String.valueOf(etPassword.getText());
+    private void handleLogin() {
+        String email = etEmail.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
 
-        if (email.isEmpty() || password.isEmpty())
-        {
-            Toast.makeText(LoginFragment.this.getContext(), "All input fields must be filled!", Toast.LENGTH_LONG).show();
+        if (email.isEmpty() || password.isEmpty()) {
+            Log.w(TAG, "handleLogin: One or more input fields are empty");
+            Toast.makeText(getContext(), "All input fields must be filled!", Toast.LENGTH_LONG).show();
             return;
         }
-        // Call LoginActivity method -> Preserve separation of concerns
-        ((LoginActivity) requireActivity()).loginUser(email, password);
 
+        Log.d(TAG, "Attempting login with email: " + email);
+        ((LoginActivity) requireActivity()).loginUser(email, password);
     }
 }

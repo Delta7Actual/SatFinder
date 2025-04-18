@@ -1,5 +1,6 @@
 package com.example.satfinder.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,24 +28,24 @@ import com.example.satfinder.R;
 
 public class SearchFragment extends Fragment {
 
-    private static final String TAG = "SatFinder_SearchFragment";
+    private static final String TAG = "SatSearchF";
 
     private EditText etSatelliteId;
-    private Button btnSearch;
     private DetailsFragment detailsFragment;
     private FrameLayout detailsFragmentContainer;
 
-    public SearchFragment() {
-        // Required empty constructor
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: Initializing SearchFragment");
         View view = inflater.inflate(R.layout.fragment_search, container, false);
+        setupUI(view);
+        return view;
+    }
+
+    private void setupUI(View view) {
+        Log.d(TAG, "Setting up UI components...");
 
         etSatelliteId = view.findViewById(R.id.et_satellite_id);
-        btnSearch = view.findViewById(R.id.btn_search);
+        Button btnSearch = view.findViewById(R.id.btn_search);
         detailsFragmentContainer = view.findViewById(R.id.fragment_container);
 
         // Initialize DetailsFragment
@@ -54,8 +55,6 @@ public class SearchFragment extends Fragment {
                 .commit();
 
         btnSearch.setOnClickListener(v -> handleSearch());
-
-        return view;
     }
 
     private void searchFailure(String message) {
@@ -86,6 +85,7 @@ public class SearchFragment extends Fragment {
                 , () -> getSatelliteData(satelliteId));
     }
 
+    // Try to fetch data from cache first, then from API
     private void getSatelliteData(int satelliteId) {
         StorageManager storageManager = StorageManager.getInstance(getContext());
 
@@ -119,6 +119,8 @@ public class SearchFragment extends Fragment {
             fetchSatellitePosition(satelliteId, storageManager.spGetUserLocation());
         }
     }
+
+    // API calls
 
     private void fetchSatelliteTLE(int satelliteId) {
         SatelliteManager manager = SatelliteManager.getInstance();
@@ -207,11 +209,12 @@ public class SearchFragment extends Fragment {
                 });
     }
 
+    @SuppressLint("DefaultLocale")
     private void displayTLEData(String tleData) {
         try {
             String[] tleParts = tleData.split(",");
             if (tleParts.length >= 3) {
-                SatelliteTLE tle = new SatelliteTLE(tleParts[0]);
+                SatelliteTLE tle = new SatelliteTLE(tleParts[0]); // The TLE string
                 detailsFragment.updateSatelliteDetails(
                         tleParts[2],  // Satellite name
                         String.format("%.2f°", tle.getInclination())
@@ -242,6 +245,7 @@ public class SearchFragment extends Fragment {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private void displaySatellitePosition(String posData) {
         try {
             String[] posParts = posData.split(",");

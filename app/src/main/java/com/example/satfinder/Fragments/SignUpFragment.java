@@ -1,6 +1,7 @@
 package com.example.satfinder.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +16,23 @@ import com.example.satfinder.R;
 
 public class SignUpFragment extends Fragment {
 
-    public SignUpFragment() {
-        // Required empty public constructor
-    }
+    private static final String TAG = "SatSignUpF";
 
-    private EditText etName, etEmail, etPassword, etConfirmPassword;
+    private EditText etName;
+    private EditText etEmail;
+    private EditText etPassword;
+    private EditText etConfirmPassword;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        setupUI(view);
+        return view;
+    }
+
+    private void setupUI(View view) {
+        Log.d(TAG, "Setting up UI components...");
 
         etName = view.findViewById(R.id.et_name);
         etEmail = view.findViewById(R.id.et_email);
@@ -33,8 +41,6 @@ public class SignUpFragment extends Fragment {
 
         Button buttonSignUp = view.findViewById(R.id.button_signup);
         buttonSignUp.setOnClickListener(v -> handleSignUp());
-
-        return view;
     }
 
     private void handleSignUp() {
@@ -44,10 +50,12 @@ public class SignUpFragment extends Fragment {
         String confirmPassword = etConfirmPassword.getText().toString().trim();
 
         if (name.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            Log.w(TAG, "Received some empty fields!");
             Toast.makeText(SignUpFragment.this.getContext(), "All input fields must be filled!", Toast.LENGTH_LONG).show();
             return;
         }
-        // Call LoginActivity method -> Preserve separation of concerns
+
+        Log.d(TAG, "Signing up " + name + " with email: " + email);
         ((LoginActivity) requireActivity()).signUpUser(name, email, password, confirmPassword);
     }
 }

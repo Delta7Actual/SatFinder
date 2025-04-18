@@ -59,7 +59,7 @@ public class BottomNavigationFragment extends Fragment {
     }
 
     private boolean isNotCurrentActivity(Context context, Class<?> targetActivity) {
-        // Check if the current activity is of the target type
+        // Make sure the context is not the target activity
         return !context.getClass().equals(targetActivity);
     }
 }
