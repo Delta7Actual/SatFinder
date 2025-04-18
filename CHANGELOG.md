@@ -6,6 +6,16 @@
 
 ---
 
+### [1.6.0] - 2025-04-20 - "The Dust-Off Update"
+- 🔧 Separated UI, service, and data logic for better maintainability  
+- 🔧 Standardized navigation and layout structure
+- 🧰 Added utility methods to streamline repetitive code  
+- 💥 Centralized all string literals into string resources  
+- 💥 Removed deprecated code and unused layout elements  
+- 🐛 Fixed multiple small UI and state bugs  
+
+---
+
 ### [1.5.7] - 2025-04-18
 - 🐛 Fixed bug in user deletion process
 - 🎨 Improved UI and UX
