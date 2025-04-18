@@ -1,5 +1,7 @@
 package com.example.satfinder.Objects;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -7,13 +9,13 @@ import com.google.gson.annotations.SerializedName;
  */
 public class SatelliteInfo {
     @SerializedName("satid")
-    private int satid;
+    private final int satid;
 
     @SerializedName("satname")
-    private String satname;
+    private final String satname;
 
     @SerializedName("transactionscount")
-    private int transactionscount;
+    private final int transactionscount;
 
     public SatelliteInfo(int satid, String satname) {
         this.satid = satid;
@@ -33,6 +35,7 @@ public class SatelliteInfo {
         return transactionscount;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SatelliteInfo{" +

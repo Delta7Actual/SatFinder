@@ -1,5 +1,7 @@
 package com.example.satfinder.Objects;
 
+import androidx.annotation.NonNull;
+
 /**
  * Represents the response from the N2YO API for satellite TLE data.
  * Contains satellite information and a TLE string.
@@ -30,6 +32,7 @@ public class SatelliteTLEResponse implements com.example.satfinder.Objects.Inter
         this.tle = tle;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SatelliteTLEResponse{" +

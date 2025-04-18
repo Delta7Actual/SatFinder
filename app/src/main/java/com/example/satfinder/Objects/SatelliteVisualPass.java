@@ -1,5 +1,7 @@
 package com.example.satfinder.Objects;
 
+import androidx.annotation.NonNull;
+
 /**
  * Represents a visual pass for a given satellite.
  */
@@ -80,6 +82,7 @@ public class SatelliteVisualPass {
         return maxUTC;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SatelliteVisualPass{" +

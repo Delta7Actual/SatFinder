@@ -71,6 +71,4 @@ public interface IN2YOApiService {
             @Path("id") int id,
             @Query("apiKey") String apiKey
     );
-
-    // TODO: add more methods for other API endpoints
 }

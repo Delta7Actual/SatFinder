@@ -1,5 +1,7 @@
 package com.example.satfinder.Objects;
 
+import androidx.annotation.NonNull;
+
 /**
  * Represents a position for a given satellite.
  */
@@ -50,6 +52,7 @@ public class SatellitePosition {
         return satlongitude;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SatellitePosition{" +

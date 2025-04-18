@@ -1,5 +1,7 @@
 package com.example.satfinder.Objects;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 /**
@@ -23,6 +25,7 @@ public class SatellitePositionsResponse implements com.example.satfinder.Objects
         return positions;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SatellitePositionsResponse{" +

@@ -120,6 +120,4 @@ public class N2YOClientService {
         Call<SatelliteTLEResponse> call = apiService.getSatelliteTLE(id, apiKey);
         call.enqueue(callback);
     }
-
-    // TODO: add more methods for other API endpoints
 }

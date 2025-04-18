@@ -1,5 +1,7 @@
 package com.example.satfinder.Objects;
 
+import androidx.annotation.NonNull;
+
 /**
  * Represents the TLE data for a specific satellite.
  * Handles mathematical calculations for orbital parameters.
@@ -61,6 +63,7 @@ public class SatelliteTLE {
         return line2;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SatelliteTLE{" +

@@ -1,5 +1,7 @@
 package com.example.satfinder.Objects;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 /**
@@ -23,6 +25,7 @@ public class SatelliteVisualPassesResponse implements com.example.satfinder.Obje
         return passes;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SatelliteVisualPassesResponse{" +
