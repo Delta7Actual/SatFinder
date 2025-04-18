@@ -3,146 +3,172 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_background"
-    android:padding="16dp">
+    android:background="@drawable/app_background">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="16dp">
 
-        <!-- App icon -->
-        <ImageView
-            android:id="@+id/about_app_icon"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:src="@mipmap/ic_final"
-            android:contentDescription="@string/app_name"
+        <!-- Glow + Icon -->
+        <FrameLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginTop="32dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="4dp">
 
-        <!-- App name -->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/glow_background"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/about_app_icon"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/ic_final"
+                android:contentDescription="@string/app_name"
+                android:elevation="6dp" />
+        </FrameLayout>
+
+        <!-- App Title + Tagline -->
         <TextView
             android:id="@+id/about_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SatFinder"
-            android:textSize="40sp"
+            android:textSize="36sp"
             style="@style/TextAppearance.SatFinder.Light"
-            android:textColor="@color/secondary"
-            android:layout_marginBottom="4dp" />
+            android:textColor="@color/secondary" />
 
-        <!-- Version -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Satellite Location Reimagined"
+            android:textSize="14sp"
+            android:textColor="@color/secondary_light"
+            android:layout_marginBottom="12dp" />
+
         <TextView
             android:id="@+id/about_version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Version 1.5.5"
+            android:text="Version 1.5.6"
             android:textColor="@color/white"
             android:background="@color/primary"
             android:padding="6dp"
-            android:layout_marginBottom="24dp"
-            android:textSize="14sp" />
+            android:textSize="13sp"
+            android:layout_marginBottom="24dp" />
 
-        <!-- Description block -->
+        <!-- About Description -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@color/background_light"
-            android:padding="12dp"
-            android:layout_marginBottom="24dp">
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp">
 
             <TextView
-                android:id="@+id/about_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="SatFinder helps users accurately locate satellites using device sensors, third-party services, and orbital mathematics."
+                android:text="SatFinder helps you locate satellites using built-in sensors, orbital math, and N2YO's satellite tracking data."
                 android:textColor="@color/white"
-                android:textAlignment="center"
                 android:textSize="14sp"
                 android:layout_marginBottom="12dp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="This app is an attempt to recreate and expand on the spirit of ISS Detector. Much respect to its creators for inspiring this work."
+                android:text="Inspired by ISS Detector, this app is a tribute and an expansion of its brilliance."
                 android:textColor="@color/white"
-                android:textAlignment="center"
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Developer -->
+        <!-- Developer Info -->
         <TextView
             android:id="@+id/about_developer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Developed by Dror Sheffer"
-            android:textColor="@color/secondary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
-
-        <!-- Contact -->
-        <TextView
-            android:id="@+id/about_contact"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email: dror8464@gmail.com"
-            android:autoLink="email"
-            android:textColor="@color/white"
-            android:layout_marginLeft="24dp"
-            android:layout_marginBottom="4dp" />
-
-        <!-- GitHub -->
-        <TextView
-            android:id="@+id/about_github"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Github: https://github.com/Delta7Actual/SatFinder"
-            android:autoLink="web"
-            android:layout_marginLeft="24dp"
-            android:textColor="@color/white"
-            android:layout_marginBottom="16dp" />
-
-        <!-- Feedback -->
-        <TextView
-            android:id="@+id/about_feedback"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="[ Feel free to collaborate on GitHub! ]"
-            android:textColor="@color/secondary_light"
-            android:textSize="14sp"
-            android:layout_marginBottom="22dp"
-            android:textAlignment="center" />
-
-        <!-- Acknowledgements -->
-        <TextView
-            android:id="@+id/about_acknowledgements_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thanks To"
+            android:text="Developed By Dror Sheffer"
             android:textColor="@color/secondary"
             android:textStyle="bold"
             android:textSize="18sp"
             android:layout_marginBottom="12dp" />
 
+        <!-- Contact & Links as Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/about_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="✉️ dror8464@gmail.com"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:autoLink="email"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/about_github"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="🌐 github.com/Delta7Actual/SatFinder"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:autoLink="web"
+                android:textSize="14sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/about_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="[ Contribute, Star &amp; Fork on GitHub! ]"
+                android:textColor="@color/secondary_light"
+                android:textSize="15sp"
+                android:layout_marginTop="8dp" />
+        </LinearLayout>
+
+        <!-- Acknowledgements Section -->
+        <TextView
+            android:id="@+id/about_acknowledgements_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Special Thanks"
+            android:textColor="@color/secondary"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginBottom="10dp" />
+
         <TextView
             android:id="@+id/about_thanks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="* ISS Detector — for inspiring this app\n* N2YO.com — for satellite tracking services\n* FlatIcons.com &amp; Pixabay — for assets"
+            android:text="• ISS Detector — Inspiring this app's vision\n• N2YO — Satellite tracking suite\n• FlatIcons &amp; Pixabay — Graphical assets"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:layout_marginLeft="24dp"
             android:layout_marginBottom="32dp" />
 
+        <!-- Back Button -->
         <Button
             android:id="@+id/btn_back_more"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/primary"
-            android:text="Back"/>
+            android:background="@color/primary_dark"
+            android:textColor="@color/white"
+            android:text="Back"
+            android:textSize="16sp"
+            android:layout_marginTop="12dp"/>
     </LinearLayout>
 </ScrollView>

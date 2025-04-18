@@ -4,47 +4,64 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center|top"
     android:orientation="vertical"
+    android:gravity="top|center"
     android:background="@drawable/app_background"
     tools:context=".Activities.LoginActivity">
 
-    <TextView
-        android:id="@+id/tv_title_login"
+    <!-- Title Section -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="24dp"
         android:background="@color/primary"
-        android:padding="20dp"
-        android:text="Welcome to SatFinder!"
-        android:textAlignment="center"
-        android:textSize="24sp" />
+        android:gravity="center">
+        <TextView
+            android:id="@+id/tv_title_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome to "
+            android:textColor="@color/white"
+            android:textSize="28sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SatFinder"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:gravity="center"
+            style="@style/TextAppearance.SatFinder.Light"/>
+    </LinearLayout>
 
+    <!-- Switch between Login and Signup -->
     <TextView
         android:id="@+id/tv_login_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/secondary"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="12dp"
         android:text="Sign Up:"
-        android:textSize="32sp"/>
+        android:textColor="@color/secondary"
+        android:textSize="32sp"
+        android:layout_marginTop="32dp"
+        android:gravity="center"/>
 
+    <!-- Fragment Container -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
+    <!-- Switch Button (Login/Signup toggle) -->
     <Button
         android:id="@+id/btn_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_margin="8dp"
-        android:padding="10dp"
         android:text="Already have an account?"
-        android:layout_gravity="center"
+        android:textColor="@color/white"
         android:background="@color/primary"
-        android:textSize="16sp" />
-
+        android:textSize="16sp"
+        android:layout_margin="16dp"
+        android:padding="14dp"
+        android:layout_gravity="center" />
 </LinearLayout>

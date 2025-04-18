@@ -20,7 +20,7 @@
     <FrameLayout
         android:id="@+id/browser_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_gravity="bottom"
         android:layout_weight="1">
         <fragment
@@ -33,9 +33,11 @@
         android:id="@+id/btn_locate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Locate this satellite!"
+        android:text="Locate This Satellite!"
+        android:textColor="@color/white"
         android:background="@color/primary"
-        android:layout_margin="8dp"/>
+        android:padding="14dp"
+        android:textSize="18sp"/>
 
     <FrameLayout
         android:id="@+id/bottom_navigation_container"
