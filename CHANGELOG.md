@@ -6,6 +6,12 @@
 
 ---
 
+### [1.6.4] - 2025-04-18
+- 🚀 Added new custom functionality to notifications
+- 💥 Reworked how the alarm and notification system works
+- 🎨 Code cleanup and documentation
+- 🎨 Cleaned up some user actions
+
 ### [1.6.3] - 2025-04-18
 - 🎨 Improved documentation and cleaned up the code
 - 🔧 Improved and refactored the handling of alarms and notifications
