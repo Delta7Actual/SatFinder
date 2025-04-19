@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateWithClosestISSPass() {
         Log.d(TAG, "Fetching closest ISS pass...");
 
+        // Try to get from cache first
         StorageManager storageManager = StorageManager.getInstance(this);
         storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> {
             try {
@@ -134,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
     private void updateSavedSatelliteList() {
         Log.d(TAG, "Fetching saved satellites...");
 
+        // Try to get from cache first
         StorageManager storageManager = StorageManager.getInstance(this);
         storageManager.spSaveAndUpdateSatelliteData(SatelliteManager.getInstance()
                 , () -> storageManager.getFavouriteSatelliteIds(new IStorageCallback<List<String>>() {

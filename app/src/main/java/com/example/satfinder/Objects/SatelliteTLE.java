@@ -9,8 +9,8 @@ import androidx.annotation.NonNull;
 public class SatelliteTLE {
     private final String line1;
     private final String line2;
-    private final double stdEarthGrav = 398600.4418; // km^3/s^2
-    private final double stdEarthRad = 6378.137; // km
+    private static final double stdEarthGrav = 398600.4418; // G * Me [km^3/s^2]
+    private static final double stdEarthRad = 6378.137; // [km]
 
     public SatelliteTLE(String tle) {
         if (tle == null) {
@@ -35,7 +35,7 @@ public class SatelliteTLE {
     }
 
     private double getSemiMajorAxis() {
-        double meanMotion = getMeanMotion() * 2 * Math.PI / 86400; // convert orbits/day to radians/sec
+        double meanMotion = getMeanMotion() * 2 * Math.PI / (60 * 60 * 24); // convert orbits/day to radians/sec
         return Math.pow(stdEarthGrav / (meanMotion * meanMotion), 1.0 / 3.0); // km
     }
 
@@ -52,7 +52,7 @@ public class SatelliteTLE {
     }
 
     public double getOrbitalPeriod() {
-        return 86400 / getMeanMotion(); // seconds per orbit
+        return (60 * 60 * 24) / getMeanMotion(); // seconds per orbit
     }
 
     public String getLine1() {
