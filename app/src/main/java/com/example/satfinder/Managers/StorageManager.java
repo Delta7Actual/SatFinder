@@ -28,11 +28,8 @@ import java.util.List;
  *  STORAGE STRUCTURE OVERVIEW
  * ============================
  * 1. SharedPreferences ("user_data")
- * └── userLocation : String
+ * └── user_loc : String
  *     └── Format: "timestamp,Lat,Long,Alt"
- *
- * └── app_theme : String
- *      └── Format: "Theme"
  *
  * └── fav_sat : String
  *     └── Comma-separated list of favorite satellite IDs
@@ -103,7 +100,7 @@ public class StorageManager {
      */
     public void spSaveUserLocation(ObserverLocation location) {
         sharedPreferences.edit()
-                .putString("userLocation",  System.currentTimeMillis()
+                .putString("user_loc",  System.currentTimeMillis()
                         + "," + location.getLatitude()
                         + "," + location.getLongitude()
                         + "," + location.getAltitude())
@@ -115,7 +112,7 @@ public class StorageManager {
      * @return The user's current location.
      */
     public ObserverLocation spGetUserLocation() {
-        String location = sharedPreferences.getString("userLocation", null);
+        String location = sharedPreferences.getString("user_loc", null);
         if (location != null) {
             String[] parts = location.split(",");
             if (parts.length == 4) {
@@ -130,7 +127,7 @@ public class StorageManager {
      * @return The UTC timestamp of the last location update.
      */
     public long spGetUserLocationTime() {
-        String location = sharedPreferences.getString("userLocation", null);
+        String location = sharedPreferences.getString("user_loc", null);
         if (location != null) {
             String[] parts = location.split(",");
             if (parts.length == 4) {

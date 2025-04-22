@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
  * Represents the location of an observer.
  */
 public class ObserverLocation {
-    float latitude;
-    float longitude;
-    float altitude;
+    private float latitude;
+    private float longitude;
+    private float altitude;
 
     public ObserverLocation(float longitude, float latitude, float altitude) {
         this.latitude = latitude;

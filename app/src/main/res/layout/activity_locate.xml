@@ -9,19 +9,6 @@
     android:background="@drawable/app_background"
     android:gravity="center">
 
-    <!-- Toolbar -->
-    <FrameLayout
-        android:id="@+id/toolbar_container"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/primary_dark">
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/toolbar_fragment"
-            android:name="com.example.satfinder.Fragments.ToolBarFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </FrameLayout>
-
     <!-- Instructions -->
     <TextView
         android:id="@+id/tv_greeting"
