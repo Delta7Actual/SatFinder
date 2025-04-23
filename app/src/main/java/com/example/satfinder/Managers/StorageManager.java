@@ -270,7 +270,7 @@ public class StorageManager {
      */
     private void spSaveSatellitePasses(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
         Log.d(TAG, "Updating data for ID: " + id);
-        manager.fetchSatelliteVisualPasses(id, curr.getLatitude(), curr.getLongitude(), curr.getAltitude(), 7, 60, new IN2YOCallback() {
+        manager.fetchSatelliteVisualPasses(id, curr, 7, 60, new IN2YOCallback() {
             @Override
             public void onSuccess(ISatelliteResponse response) {
                 SatelliteVisualPassesResponse svpResponse = (SatelliteVisualPassesResponse) response;
@@ -302,7 +302,7 @@ public class StorageManager {
      */
     private void spSaveSatellitePositions(SharedPreferences.Editor editor, SatelliteManager manager, int id, ObserverLocation curr) {
         Log.d(TAG, "Updating data for ID: " + id);
-        manager.fetchSatellitePositions(id, curr.getLatitude(), curr.getLongitude(), curr.getAltitude(), 1, new IN2YOCallback() {
+        manager.fetchSatellitePositions(id, curr, 1, new IN2YOCallback() {
             @Override
             public void onSuccess(ISatelliteResponse response) {
                 SatellitePositionsResponse spResponse = (SatellitePositionsResponse) response;

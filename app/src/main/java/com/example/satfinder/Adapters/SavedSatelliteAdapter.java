@@ -97,9 +97,7 @@ public class SavedSatelliteAdapter extends RecyclerView.Adapter<SavedSatelliteAd
 
             manager.fetchSatelliteVisualPasses(
                     Integer.parseInt(satId),
-                    observerLocation.getLatitude(),
-                    observerLocation.getLongitude(),
-                    observerLocation.getAltitude(),
+                    observerLocation,
                     7,
                     60,
                     new IN2YOCallback() {

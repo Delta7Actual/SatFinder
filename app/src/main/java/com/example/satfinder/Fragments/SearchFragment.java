@@ -149,9 +149,7 @@ public class SearchFragment extends Fragment {
     private void fetchSatelliteVisualPass(int satelliteId, ObserverLocation observerLocation) {
         SatelliteManager manager = SatelliteManager.getInstance();
         manager.fetchSatelliteVisualPasses(satelliteId
-                ,observerLocation.getLatitude()
-                ,observerLocation.getLongitude()
-                ,observerLocation.getAltitude()
+                , observerLocation
                 ,7
                 ,30
                 , new IN2YOCallback() {
@@ -182,9 +180,7 @@ public class SearchFragment extends Fragment {
     private void fetchSatellitePosition(int satelliteId, ObserverLocation observerLocation) {
         SatelliteManager manager = SatelliteManager.getInstance();
         manager.fetchSatellitePositions(satelliteId
-                , observerLocation.getLatitude()
-                , observerLocation.getLongitude()
-                , observerLocation.getAltitude()
+                , observerLocation
                 , 1
                 , new IN2YOCallback() {
                     @Override

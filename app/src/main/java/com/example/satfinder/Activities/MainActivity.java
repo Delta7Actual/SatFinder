@@ -102,9 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
         ObserverLocation observerLocation = storageManager.spGetUserLocation();
         satelliteManager.fetchSatelliteVisualPasses(25544,
-                observerLocation.getLatitude(),
-                observerLocation.getLongitude(),
-                observerLocation.getAltitude(),
+                observerLocation,
                 7,
                 30,
                 new IN2YOCallback() {

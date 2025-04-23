@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.satfinder.Objects.Interfaces.IN2YOCallback;
+import com.example.satfinder.Objects.ObserverLocation;
 import com.example.satfinder.Objects.SatellitePositionsResponse;
 import com.example.satfinder.Objects.SatelliteTLEResponse;
 import com.example.satfinder.Objects.SatelliteVisualPassesResponse;
@@ -42,29 +43,21 @@ public class SatelliteManager {
      * Fetches visual passes for a specified satellite and observer location.
      *
      * @param satelliteId   The ID of the satellite.
-     * @param latitude      The observer's latitude.
-     * @param longitude     The observer's longitude.
-     * @param altitude      The observer's altitude in meters.
+    *  @param location      The observer's location.
      * @param days          The number of days to fetch passes for.
      * @param minVisibility The minimum visibility threshold in seconds.
      * @param callback      The callback to notify with the result or error.
      */
-    public void fetchSatelliteVisualPasses(int satelliteId,
-                                           double latitude,
-                                           double longitude,
-                                           double altitude,
-                                           int days,
-                                           int minVisibility,
-                                           final IN2YOCallback callback) {
+    public void fetchSatelliteVisualPasses(int satelliteId, ObserverLocation location, int days, int minVisibility, final IN2YOCallback callback) {
 
         Log.d(TAG, String.format("Requesting visual passes -> Satellite ID: %d, Lat: %.2f, Lng: %.2f, Alt: %.2f, Days: %d, Min Visibility: %d",
-                satelliteId, latitude, longitude, altitude, days, minVisibility));
+                satelliteId, location.getLatitude(), location.getLongitude(), location.getAltitude(), days, minVisibility));
 
         clientService.getSatellitePasses(
                 satelliteId,
-                (float) latitude,
-                (float) longitude,
-                (float) altitude,
+                (float) location.getLatitude(),
+                (float) location.getLongitude(),
+                (float) location.getAltitude(),
                 days,
                 minVisibility,
                 new Callback<SatelliteVisualPassesResponse>() {
@@ -94,26 +87,22 @@ public class SatelliteManager {
      * Fetches the next [seconds] positions of a specified satellite.
      *
      * @param id            The ID of the satellite.
-     * @param observer_lat  The observer's latitude.
-     * @param observer_lng  The observer's longitude.
-     * @param observer_alt  The observer's altitude in meters.
+     *
      * @param seconds       The duration in seconds to fetch positions for.
      * @param callback      The callback to notify with the result or error.
      */
     public void fetchSatellitePositions(int id,
-                                        float observer_lat,
-                                        float observer_lng,
-                                        float observer_alt,
+                                        ObserverLocation location,
                                         int seconds,
                                         final IN2YOCallback callback) {
 
         Log.d(TAG, String.format("Requesting satellite positions -> Satellite ID: %d, Lat: %.2f, Lng: %.2f, Alt: %.2f, Seconds: %d",
-                id, observer_lat, observer_lng, observer_alt, seconds));
+                id, location.getLatitude(), location.getLongitude(), location.getAltitude(), seconds));
 
         clientService.getSatellitePositions(id,
-                observer_lat,
-                observer_lng,
-                observer_alt,
+                location.getLatitude(),
+                location.getLongitude(),
+                location.getAltitude(),
                 seconds,
                 new Callback<SatellitePositionsResponse>() {
 

@@ -97,9 +97,7 @@ public class BrowserActivity extends AppCompatActivity {
         // Fetch satellite position from API
         SatelliteManager.getInstance().fetchSatellitePositions(
                 satId,
-                currentLocation.getLatitude(),
-                currentLocation.getLongitude(),
-                currentLocation.getAltitude(),
+                currentLocation,
                 1,
                 new IN2YOCallback() {
                     @Override
