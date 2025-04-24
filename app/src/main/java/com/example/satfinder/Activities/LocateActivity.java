@@ -124,6 +124,7 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
             ivNeedle.setColorFilter(getResources().getColor(R.color.green, getTheme()));
         } else {
             ivCompass.clearColorFilter();
+            ivNeedle.clearColorFilter();
         }
 
         Log.d(TAG, "Azimuth offset from satellite: " + offset + "°");
