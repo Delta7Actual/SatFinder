@@ -30,12 +30,11 @@ public final class MathUtils {
      * @return The local time
      */
     public static String convertUTCToLocalTime(long utcMillis) {
-        Instant instant = Instant.ofEpochMilli(utcMillis); // FIX: use milliseconds!
+        Instant instant = Instant.ofEpochMilli(utcMillis);
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM HH:mm");
         return localDateTime.format(formatter);
     }
-
 
     /**
      * Turn float azimuth into string direction

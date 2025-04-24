@@ -119,8 +119,9 @@ public class LocateActivity extends AppCompatActivity implements SensorEventList
 
         ivNeedle.setRotation(currentAzimuth);
 
-        if (Math.abs(offset) < 10f) {
+        if (Math.abs(offset) < 10f) { // Turn graphic green
             ivCompass.setColorFilter(getResources().getColor(R.color.green, getTheme()));
+            ivNeedle.setColorFilter(getResources().getColor(R.color.green, getTheme()));
         } else {
             ivCompass.clearColorFilter();
         }

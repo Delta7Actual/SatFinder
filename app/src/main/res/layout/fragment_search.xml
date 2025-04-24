@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/enter_satellite_id"
         android:importantForAutofill="no"
-        android:inputType="textEmailAddress"
+        android:inputType="number"
         android:textColor="@color/secondary"
         android:textColorHint="@color/secondary"
         android:textSize="18sp"

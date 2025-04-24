@@ -113,9 +113,7 @@ public class N2YOClientService {
      * @param id the satellite's unique identifier.
      * @param callback the callback to handle the response.
      */
-    public void getSatelliteTLE(
-            int id,
-            Callback<SatelliteTLEResponse> callback) {
+    public void getSatelliteTLE(int id, Callback<SatelliteTLEResponse> callback) {
 
         Call<SatelliteTLEResponse> call = apiService.getSatelliteTLE(id, apiKey);
         call.enqueue(callback);
