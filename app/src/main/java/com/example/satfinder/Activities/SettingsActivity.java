@@ -74,7 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void updateCache() {
-        Log.d(TAG, "Update Cache button clicked. Retrieving and updaing cache...");
+        Log.d(TAG, "Update Cache button clicked. Retrieving and updating cache...");
         StorageManager.getInstance(this).spSaveAndUpdateSatelliteData(SatelliteManager.getInstance(), () -> {
             Toast.makeText(SettingsActivity.this, "Cache updated successfully!", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "Cache save and update complete");
