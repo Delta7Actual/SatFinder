@@ -6,7 +6,6 @@
     android:titleTextColor="@android:color/white"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <!-- Add a TextView with the static "Hi" text -->
     <TextView
         android:id="@+id/toolbar_title"
         android:layout_width="wrap_content"
