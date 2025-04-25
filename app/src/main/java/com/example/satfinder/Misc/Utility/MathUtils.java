@@ -30,7 +30,7 @@ public final class MathUtils {
      * @return The local time
      */
     public static String convertUTCToLocalTime(long utcMillis) {
-        Instant instant = Instant.ofEpochMilli(utcMillis);
+        Instant instant = Instant.ofEpochSecond(utcMillis);
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM HH:mm");
         return localDateTime.format(formatter);

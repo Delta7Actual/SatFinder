@@ -278,7 +278,7 @@ public class StorageManager {
                 if (svpResponse.getPasses() == null) return;
                 if (svpResponse.getPasses().isEmpty()) return;
 
-                String passData = System.currentTimeMillis() + "," + svpResponse.getPasses().get(0).getStartUTC();
+                String passData = System.currentTimeMillis() / 1000 + "," + svpResponse.getPasses().get(0).getStartUTC();
                 Log.d(TAG, "onSuccess: " + passData);
                 editor.putString("sat_pass_" + id, passData);
                 editor.apply();
@@ -310,7 +310,7 @@ public class StorageManager {
                 if (spResponse.getPositions() == null) return;
                 if (spResponse.getPositions().isEmpty()) return;
 
-                String posData = System.currentTimeMillis() + "," + spResponse.getPositions().get(0).getSatlatitude() + "," + spResponse.getPositions().get(0).getSatlongitude() + "," + spResponse.getPositions().get(0).getSataltitude();
+                String posData = System.currentTimeMillis() / 1000 + "," + spResponse.getPositions().get(0).getSatlatitude() + "," + spResponse.getPositions().get(0).getSatlongitude() + "," + spResponse.getPositions().get(0).getSataltitude();
                 Log.d(TAG, "onSuccess: " + posData);
                 editor.putString("sat_pos_" + id, posData);
                 editor.apply();
