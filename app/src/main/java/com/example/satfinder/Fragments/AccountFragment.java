@@ -86,9 +86,12 @@ public class AccountFragment extends Fragment {
     private void saveDisplayName() {
         String newName = etDisplayName.getText().toString().trim();
         if (!newName.isEmpty()) {
+            if (newName.length() > 20) {
+                newName = newName.substring(0, 20);
+                Log.w(TAG, "Display name truncated to 20 characters");
+            }
             Log.d(TAG, "Saving new display name: " + newName);
             ((ProfileActivity) requireActivity()).setUserDisplayName(newName);
-            Toast.makeText(requireContext(), "Display name updated!", Toast.LENGTH_SHORT).show();
             reloadUserDetails();
         } else {
             Log.w(TAG, "Attempted to save empty display name");

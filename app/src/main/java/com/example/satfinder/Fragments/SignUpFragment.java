@@ -55,6 +55,12 @@ public class SignUpFragment extends Fragment {
             return;
         }
 
+        if (name.length() > 20) {
+            Log.w(TAG, "Name should be shorter than 20 characters!");
+            Toast.makeText(SignUpFragment.this.getContext(), "Name must be less than 20 characters!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Log.d(TAG, "Signing up " + name + " with email: " + email);
         ((LoginActivity) requireActivity()).signUpUser(name, email, password, confirmPassword);
     }
