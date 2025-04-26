@@ -26,11 +26,11 @@ public final class MathUtils {
 
     /**
      * Convert UTC time to local time
-     * @param utcMillis The UTC time
+     * @param utcSecs The UTC time
      * @return The local time
      */
-    public static String convertUTCToLocalTime(long utcMillis) {
-        Instant instant = Instant.ofEpochSecond(utcMillis);
+    public static String convertUTCToLocalTime(long utcSecs) {
+        Instant instant = Instant.ofEpochSecond(utcSecs);
         LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM HH:mm");
         return localDateTime.format(formatter);
